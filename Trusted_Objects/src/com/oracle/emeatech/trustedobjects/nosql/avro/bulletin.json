@@ -1,0 +1,23 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.callcentre.bulletinboard",
+    "name": "Bulletin",
+    "fields": [
+        {
+            "name": "timestamp",
+            "type": "long",
+            "default": 0
+        },
+        {
+            "name": "senderId",
+            "type": "string",
+            "default": "null"
+        },
+        {
+            "name": "contents",
+            "type": "string",
+            "default": "null"
+        }
+    ]
+
+}

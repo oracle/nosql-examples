@@ -1,0 +1,17 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.callcentre.paymentcard",
+    "name": "EncodedPaymentCard",
+    "fields": [
+        {
+            "name": "cardNumber",
+            "type": "bytes",
+            "default": ""
+        },
+        {
+            "name": "cvv",
+            "type": "bytes",
+            "default": ""
+        }
+    ]
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : my-pof-config.xml
+    Created on : 08 April 2013, 09:57
+    Author     : ewan
+    Description:
+        POF config for custom types.
+-->
+
+<pof-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://xmlns.oracle.com/coherence/coherence-pof-config"
+   xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-pof-config
+   coherence-pof-config.xsd">
+    <user-type-list>
+        <include>coherence-pof-config.xml</include>
+
+      <!-- User types must be above 1000 -->
+        <user-type>
+            <type-id>1001</type-id>
+            <class-name>com.oracle.emeatech.coherence.utility.IntegerSequence</class-name>
+        </user-type>
+
+        <user-type>
+            <type-id>1002</type-id>
+            <class-name>com.oracle.emeatech.callcentre.bulletinboard.Bulletin</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.callcentre.coherence.BulletinSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1003</type-id>
+            <class-name>com.oracle.emeatech.callcentre.bulletinboard.EncodedBulletinWrapper</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.callcentre.coherence.EncodedBulletinWrapperSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1004</type-id>
+            <class-name>com.oracle.emeatech.callcentre.paymentcard.DigitField</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.callcentre.coherence.DigitFieldSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1005</type-id>
+            <class-name>com.oracle.emeatech.trustedobjects.SignedWrapper</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.trustedobjects.coherence.SignedWrapperSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1006</type-id>
+            <class-name>com.oracle.emeatech.trustedobjects.SealedWrapper</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.trustedobjects.coherence.SealedWrapperSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1009</type-id>
+            <class-name>com.oracle.emeatech.trustedobjects.SecretKeyWrapper</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.trustedobjects.coherence.SecretKeyWrapperSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1010</type-id>
+            <class-name>com.oracle.emeatech.trustedobjects.coherence.CoherenceDomainHeader</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.trustedobjects.coherence.CoherenceDomainHeaderSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1011</type-id>
+            <class-name>com.oracle.emeatech.trustedobjects.PublicKeyRecord</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.trustedobjects.coherence.CoherencePublicKeyRecordSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1012</type-id>
+            <class-name>com.oracle.emeatech.callcentre.paymentcard.EncodedPaymentCard</class-name>
+            <serializer>
+                <class-name>com.oracle.emeatech.callcentre.coherence.EncodedPaymentCardSerializer</class-name>
+            </serializer>
+        </user-type>
+
+        <user-type>
+            <type-id>1013</type-id>
+            <class-name>com.oracle.emeatech.callcentre.paymentcard.CardType</class-name>
+            <serializer>
+                <class-name>com.tangosol.io.pof.EnumPofSerializer</class-name>
+            </serializer>
+        </user-type>
+
+    </user-type-list>
+</pof-config>

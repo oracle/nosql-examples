@@ -1,0 +1,22 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.callcentre.bulletinboard",
+    "name": "EncodedBulletinWrapper",
+    "fields": [
+        {
+            "name": "timestamp",
+            "type": "long",
+            "default": 0
+        },
+        {
+            "name": "senderId",
+            "type": "string",
+            "default": "null"
+        },
+        {
+            "name": "signedSealedContent",
+            "type": "bytes",
+            "default": "null"
+        }
+    ]
+}

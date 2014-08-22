@@ -1,0 +1,12 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.callcentre.paymentcard",
+    "name": "EncodedPaymentCard.nameOnCard",
+    "fields": [
+        {
+            "name": "nameOnCard",
+            "type": "string",
+            "default": "null"
+        }
+    ]
+}

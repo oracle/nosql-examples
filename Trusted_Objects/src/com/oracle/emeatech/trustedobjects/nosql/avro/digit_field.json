@@ -1,0 +1,12 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.callcentre.paymentcard",
+    "name": "DigitField",
+    "fields": [
+        {
+            "name": "digitsAsString",
+            "type": "string",
+            "default": "null"
+        }
+    ]
+}
