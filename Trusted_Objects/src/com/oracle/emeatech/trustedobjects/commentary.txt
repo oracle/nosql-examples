@@ -1,0 +1,26 @@
+Trusted objects - can be signed or sealed or both.
+
+Ideally, I'd like to be able to plug this in at a much lower level into the Coherence fabric.
+
+Also, I considered an annotation based approach, but rejected this on the grounds that in a secure environment you should tie down your security policies to avoid
+letting reflection read private fields.  And reflection makes security analysis much more complicated than it already is!!!
+
+The initial use case is the protection of credit card numbers and CVV numbers for the purposes of PCI-DSS.
+
+One consequence of encrypting a field is that one then cannot query for the value.  However, in the initial use case, this should not be a problem and based on
+my experience of a real - world credit call centre application, this could be seen as an advantage.
+
+However other fields can still be queried, and the object could be enriched with additional "meta data" to support querying
+(provided the meta data itself did not compromise the encrypted data).  YMMV.
+
+Keys and key management - the "business objects" are encrypted using symmetric (Secret Key) encryption to minimise performance overhead.  There is a mechanism for
+distributing the Secret Keys using Private and Public Keys.
+
+Distribution of public and private keys (i.e. keyserver type functionality) is outside of the scope of the project at this time
+(but could be added if there was felt to be value in it).  Hence this is done in the demo application, but not the main package.
+
+Potential for confusion - be very careful with the word "key" in a Coherence and encryption discussion :-)
+
+Definitions
+Domain: a set of objects protected by a shared secret key
+Scheme: the set of metadata required to support encryption and decryption operations (algorithm, key length etc.)

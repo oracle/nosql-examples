@@ -1,0 +1,27 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.trustedobjects.nosql",
+    "name": "NoSQLDomainHeader",
+    "fields": [
+        {
+            "name": "domainName",
+            "type": "string",
+            "default": "null"
+        },
+        {
+            "name": "domainOwner",
+            "type": "string",
+            "default": "null"
+        },
+        {
+            "name": "ownerPubKeyBytes",
+            "type": "bytes",
+            "default": ""
+        },
+        {
+            "name": "ownerPubKeyAlgorithm",
+            "type": "string",
+            "default": "null"
+        }
+    ]
+}

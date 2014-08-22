@@ -1,0 +1,18 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.trustedobjects",
+    "name": "PublicKeyRecord",
+    "doc": "An encoded public key",
+    "fields": [
+        {
+            "name": "encodedKey",
+            "type": "bytes",
+            "default": ""
+        },
+        {
+            "name":"algorithm",
+            "type":"string",
+            "default": "null"
+        }
+    ]
+}

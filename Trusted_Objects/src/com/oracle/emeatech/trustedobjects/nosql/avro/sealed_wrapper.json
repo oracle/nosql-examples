@@ -1,0 +1,12 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.trustedobjects",
+    "name": "SealedWrapper",
+    "fields": [
+        {
+            "name": "payload",
+            "type": "bytes",
+            "default": ""
+        }
+    ]
+}

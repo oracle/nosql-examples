@@ -1,0 +1,27 @@
+{
+    "type": "record",
+    "namespace": "com.oracle.emeatech.trustedobjects",
+    "name": "SignedWrapper",
+    "fields": [
+        {
+            "name": "payload",
+            "type": "bytes",
+            "default": ""
+        },
+        {
+            "name": "signature",
+            "type": "bytes",
+            "default": ""
+        },
+        {
+            "name": "siglen",
+            "type": "int",
+            "default": 0
+        },
+        {
+            "name": "senderId",
+            "type": "string",
+            "default": "null"
+        }
+    ]
+}
