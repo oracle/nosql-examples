@@ -1,0 +1,6 @@
+EXTRACT NOSQLT2
+SOURCEDEFS ./dirsql/t2.sql
+CUserExit ./libggjava_ue.so CUSEREXIT PassThru IncludeUpdateBefores
+GETUPDATEBEFORES
+TABLE gha.t2;
+

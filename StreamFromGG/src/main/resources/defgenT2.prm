@@ -1,0 +1,4 @@
+DEFSFILE ./dirsql/t2.sql
+userid system,password welcome1
+SOURCECATALOG orcl
+table gha.t2;
