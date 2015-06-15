@@ -1,0 +1,10 @@
+EXTRACT E_ghat2
+
+TARGETDEFS ./dirsql/t2.sql
+SETENV (ORACLE_SID=cdb)
+userid c##ogg, password ogg
+exttrail /u01/ogg/dirdat/T2
+GETUPDATEBEFORES
+table orcl.gha.t2  TARGET gha.t2;
+
+
