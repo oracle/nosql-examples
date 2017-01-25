@@ -26,15 +26,12 @@ To Run File Storage demo application
 
 5. Once you are in your Oracle NoSQL Store, run the following command to create the table.
 
-#Create fileinfo table
 execute 'CREATE TABLE fileinfo (id STRING,date STRING,owner STRING,file BINARY, PRIMARY KEY (id))'
 
 6. Modify config.properties in src/main/resources to update the 
 
 storeName=mystore
-#store config should be specified as series of host:port for eg xyz:5000,abc:6000
 storeconfig=localhost:5000
-#Name of the table which should be already created in KV.
 tableName=fileinfo
 		
 7. This project is build using Maven. So you need to ensure that in eclipse you have Maven plugin installed and configured.
