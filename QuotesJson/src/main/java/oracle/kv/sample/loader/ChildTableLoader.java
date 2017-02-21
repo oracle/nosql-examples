@@ -267,9 +267,9 @@ public class ChildTableLoader {
 			
 			for (int i = 0; i < columnData.length; i++) {
 			    if (columnData[i].equals("qid")) {
-				row.put("qid", new Long(cidNumber.get()));
+				row.put("qid", new Long(columnValue[i]).longValue());
 				row.put("id",
-						new Long(cidNumber.get()));
+						new Long(columnValue[i]).longValue());
 			    } else if (columnData[i].equals("quotes")) {
 				row.putJson(columnData[i], columnValue[i]);
 			    }

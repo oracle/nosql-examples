@@ -67,10 +67,11 @@ public class QuotesReader implements Runnable {
 	
 	// add each line from the TXT file to the Blocking Queue
 	try {
-		line = br.readLine();
+		//line = br.readLine();
 	    
-		for (i=1;i<=1000000;i++) {
-			if (i==1000000){
+		for (i=1;i<10;i++) {
+			line = br.readLine();
+			if (i==9 || line==null){
 				queueList[i].put("EOF");
 			}else{
 				queueList[i++].put(line);

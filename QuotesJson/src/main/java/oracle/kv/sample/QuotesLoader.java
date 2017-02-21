@@ -176,7 +176,7 @@ public class QuotesLoader extends BaseLoader {
 	// Create Primary key with the value passed as argument
 	PrimaryKey myKey = table.createPrimaryKey();
 	
-	myKey.put("id", new Integer(id).intValue());
+	myKey.put("id", new Long(id).longValue());
 	
 	// Add Child table to multi row options so that all rows related to the
 	// given parent table is also retrieved.
@@ -214,7 +214,7 @@ public class QuotesLoader extends BaseLoader {
 	//
 	// Get the results in the current decade
 	for (RecordValue record : result) {
-	    System.out.println("id: " + record.get("id").asInteger().get());
+	    System.out.println("id: " + record.get("id").asLong().get());
 	    System.out
 		    .println("email: " + record.get("email").asString().get());
 	    System.out
@@ -229,7 +229,7 @@ public class QuotesLoader extends BaseLoader {
 	// Execute the statement
 	StatementResult ctresult = kvStore.executeSync(ctStmt);
 	for (RecordValue record1 : ctresult) {
-	    System.out.println("qid: " + record1.get("qid").asString().get());
+	    System.out.println("qid: " + record1.get("qid").asLong().get());
 	    System.out.println(
 		    "quotes: " + record1.get("quotes").asMap().toString());
 	}

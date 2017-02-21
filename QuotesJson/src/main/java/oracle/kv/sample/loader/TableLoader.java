@@ -262,7 +262,7 @@ public class TableLoader {
 			for (int i = 0; i < columnData.length; i++) {
 			    if (columnData[i].equals("id")) {
 				row.put("id",
-					new Long(idNo.get()));
+					new Long(columnValue[i]).longValue());
 			    } else if (columnData[i].equals("age")) {
 				row.put("age",
 					new Integer(columnValue[i]).intValue());

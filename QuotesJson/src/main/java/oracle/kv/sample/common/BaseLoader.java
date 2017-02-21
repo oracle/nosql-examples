@@ -47,6 +47,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import oracle.kv.FaultException;
 import oracle.kv.KVStore;
@@ -91,6 +92,7 @@ public abstract class BaseLoader {
     protected static AtomicLong cidNumber = new AtomicLong(1);
     protected final static AtomicLong startTime = new AtomicLong();
     protected final static AtomicLong endTime = new AtomicLong();
+    
     
     /**
      * Parses command line args and opens the KVStore.
@@ -246,8 +248,17 @@ public abstract class BaseLoader {
      * @return
      */
     private static KVStore getKVConnection() {
+    long sockTout  = 0;
+    long reqTout = 1000000;
+    KVStoreConfig kvconfig = new KVStoreConfig(storeName, kvhosts);
+	kvconfig.setRequestTimeout(reqTout, MILLISECONDS);
+
+    sockTout  = kvconfig.getSocketReadTimeout(MILLISECONDS);
+    if (sockTout < reqTout) {
+        kvconfig.setSocketReadTimeout(reqTout, MILLISECONDS);
+    }
 	if (kvStore == null) {
-	    kvStore = KVStoreFactory.getStore(new KVStoreConfig(storeName, kvhosts));
+	    kvStore = KVStoreFactory.getStore(kvconfig);
 	}
 	if (tableh == null) {
 	    tableh = kvStore.getTableAPI();
