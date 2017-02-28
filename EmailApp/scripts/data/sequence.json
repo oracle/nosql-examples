@@ -1,0 +1,18 @@
+{
+  "name": "User.Folder",
+  "current": 60,
+  "increment": 1,
+  "cache": 20
+}
+{
+  "name": "Message",
+  "current": 60,
+  "increment": 1,
+  "cache": 20
+}
+{
+  "name": "User",
+  "current": 40,
+  "increment": 1,
+  "cache": 20
+}

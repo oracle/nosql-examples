@@ -1,0 +1,72 @@
+{
+  "userId": "UO3",
+  "name": "Inbox",
+  "messageId": "MO1",
+  "read": false
+}
+{
+  "userId": "UO3",
+  "name": "Sent",
+  "messageId": "MOl",
+  "read": false
+}
+{
+  "userId": "UO3",
+  "name": "Trash",
+  "messageId": "MOl",
+  "read": false
+}
+{
+  "userId": "UO8",
+  "name": "Inbox",
+  "messageId": "MOF",
+  "read": false
+}
+{
+  "userId": "UO8",
+  "name": "Sent",
+  "messageId": "MOG",
+  "read": false
+}
+{
+  "userId": "UO8",
+  "name": "Trash",
+  "messageId": "MOH",
+  "read": false
+}
+{
+  "userId": "UO1",
+  "name": "Inbox",
+  "messageId": "MOG",
+  "read": false
+}
+{
+  "userId": "UO1",
+  "name": "Sent",
+  "messageId": "MOH",
+  "read": false
+}
+{
+  "userId": "UO1",
+  "name": "Trash",
+  "messageId": "MOl",
+  "read": false
+}
+{
+  "userId": "UO1",
+  "name": "Inbox",
+  "messageId": "MO1",
+  "read": false
+}
+{
+  "userId": "UO1",
+  "name": "Sent",
+  "messageId": "MOF",
+  "read": false
+}
+{
+  "userId": "UO10",
+  "name": "Trash",
+  "messageId": "MOH",
+  "read": false
+}

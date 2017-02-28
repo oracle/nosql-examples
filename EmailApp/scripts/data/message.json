@@ -1,0 +1,60 @@
+{
+  "messageId": "MOG",
+  "toId": "ravi.singh@email.com,foo.bar@email.com",
+  "fromId": "ravi.singh@email.com",
+  "cc": null,
+  "bcc": null,
+  "subject": "RE: Hi Ravi",
+  "body": "SGkgQW51aiwgZ29vZCB0byBoZWFyIGZyb20geW91IGFmdGVyIHNvIGxvbmcuIFllcyBsZXQncyBjYXRjaHVwLiAtUmF2aQoKLS0tIE9uIDA0LzE2LzIwMTQgMTU6MjY6NDUsYW51ai5zYWhuaUBlbWFpbC5jb20gd3JvdGU6ICAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpSYXZpLCBkaWQgeW91IHJlY2VpdmUgbXkgbWVzc2FnZSB5ZXN0ZXJkYXk/IEkgd2lsbCBiZSBpbiBTRk8uIFlvdSB3b3VsZCBsaWtlIHRvIGNhdGNodXAgPyAtQW51ag==",
+  "attachment": null,
+  "createdOn": 1397687286968,
+  "modifiedOn": 1397687286968
+}
+{
+  "messageId": "MO1",
+  "toId": "sara.william@email.com",
+  "fromId": "foo.bar@email.com",
+  "cc": null,
+  "bcc": null,
+  "subject": "Hi",
+  "body": "SG93J3MgZ29pbmc/IC1BbnVq",
+  "attachment": null,
+  "createdOn": 1397674799759,
+  "modifiedOn": 1397674799759
+}
+{
+  "messageId": "MOH",
+  "toId": "adi.walia@email.com,foo.bar@email.com",
+  "fromId": "ravi.singh@email.com",
+  "cc": null,
+  "bcc": null,
+  "subject": "Fwd: RE: Hi Ravi",
+  "body": "RllJCgotLS0gT24gMDQvMTYvMjAxNCAxNToyODowNixyYXZpLnNpbmdoQGVtYWlsLmNvbSB3cm90ZTogIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkhpIEFudWosIGdvb2QgdG8gaGVhciBmcm9tIHlvdSBhZnRlciBzbyBsb25nLiBZZXMgbGV0J3MgY2F0Y2h1cC4gLVJhdmkKCi0tLSBPbiAwNC8xNi8yMDE0IDE1OjI2OjQ1LGFudWouc2FobmlAZW1haWwuY29tIHdyb3RlOiAgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KUmF2aSwgZGlkIHlvdSByZWNlaXZlIG15IG1lc3NhZ2UgeWVzdGVyZGF5PyBJIHdpbGwgYmUgaW4gU0ZPLiBZb3Ugd291bGQgbGlrZSB0byBjYXRjaHVwID8gLUFudWo=",
+  "attachment": null,
+  "createdOn": 1397687341952,
+  "modifiedOn": 1397687341952
+}
+{
+  "messageId": "MOF",
+  "toId": "ravi.singh@email.com",
+  "fromId": "foo.bar@email.com",
+  "cc": null,
+  "bcc": null,
+  "subject": "Hi Ravi",
+  "body": "UmF2aSwgZGlkIHlvdSByZWNlaXZlIG15IG1lc3NhZ2UgeWVzdGVyZGF5PyBJIHdpbGwgYmUgaW4gU0ZPLiBZb3Ugd291bGQgbGlrZSB0byBjYXRjaHVwID8gLUFudWo=",
+  "attachment": null,
+  "createdOn": 1397687205192,
+  "modifiedOn": 1397687205192
+}
+{
+  "messageId": "MOl",
+  "toId": "sara.william@email.com,foo.bar@email.com",
+  "fromId": "sara.william@email.com",
+  "cc": null,
+  "bcc": null,
+  "subject": "RE: Hi",
+  "body": "SSBhbSBkb2luZyBnb29kLiBIb3cgYWJvdXQgeW91cnNlbGY/IC1TYXJhCgotLS0gT24gMDQvMTYvMjAxNCAxMTo1OTo1OSxhbnVqLnNhaG5pQGVtYWlsLmNvbSB3cm90ZTogIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkhvdydzIGdvaW5nPyAtQW51ag==",
+  "attachment": null,
+  "createdOn": 1397675150395,
+  "modifiedOn": 1397675150395
+}

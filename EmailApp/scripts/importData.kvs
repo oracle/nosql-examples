@@ -1,0 +1,6 @@
+connect store -name kvstore
+put table -name users -file data/user.json
+put table -name users.folder -file data/user.folder.json
+put table -name message -file data/message.json
+put table -name sequence -file data/sequence.json
+put table -name users.folder.message -file data/user.folder.message.json

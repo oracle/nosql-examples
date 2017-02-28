@@ -1,0 +1,212 @@
+#JSON for the users table
+
+{
+	"userId": "UO5",
+	"email": "john.parker@email.com",
+	"name": {
+		"first": "John",
+		"middle": "R",
+		"last": "Parker"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 32,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO1",
+	"email": "foo.bar@email.com",
+	"name": {
+		"first": "Foo",
+		"middle": "",
+		"last": "Bar"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 36,
+	"createdOn": 1397674692401,
+	"modifiedOn": 1397674692401
+}
+{
+	"userId": "UO4",
+	"email": "andy.tug@email.com",
+	"name": {
+		"first": "Andy",
+		"middle": "S",
+		"last": "Tug"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 32,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO6",
+	"email": "john.smith@email.com",
+	"name": {
+		"first": "John",
+		"middle": "K",
+		"last": "Smith"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": false,
+	"age": 15,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO2",
+	"email": "john.miller@email.com",
+	"name": {
+		"first": "John",
+		"middle": "",
+		"last": "Miller"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 17,
+	"createdOn": 1397674717616,
+	"modifiedOn": 1397674717616
+}
+{
+	"userId": "UO7",
+	"email": "bethi.yu@email.com",
+	"name": {
+		"first": "Bethi",
+		"middle": "K",
+		"last": "Yu"
+	},
+	"gender": "F",
+	"password": "welcome1",
+	"active": true,
+	"age": 32,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO12",
+	"email": "susan.wang@email.com",
+	"name": {
+		"first": "Susan",
+		"middle": "",
+		"last": "Wang"
+	},
+	"gender": "F",
+	"password": "welcome1",
+	"active": true,
+	"age": 15,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO3",
+	"email": "sara.william@email.com",
+	"name": {
+		"first": "Sara",
+		"middle": "",
+		"last": "William"
+	},
+	"gender": "F",
+	"password": "welcome1",
+	"active": true,
+	"age": 22,
+	"createdOn": 1397674745328,
+	"modifiedOn": 1397674745328
+}
+{
+	"userId": "UO11",
+	"email": "mike.smith@email.com",
+	"name": {
+		"first": "Mike",
+		"middle": "K",
+		"last": "Smith"
+	},
+	"gender": "F",
+	"password": "welcome1",
+	"active": true,
+	"age": 42,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UOl",
+	"email": "twinkle.star@email.com",
+	"name": {
+		"first": "Twinkle",
+		"middle": "",
+		"last": "Star"
+	},
+	"gender": "F",
+	"password": "welcome1",
+	"active": true,
+	"age": 31,
+	"createdOn": 1397771037184,
+	"modifiedOn": 1397771037184
+}
+{
+	"userId": "UO10",
+	"email": "adi.walia@email.com",
+	"name": {
+		"first": "Adi",
+		"middle": "",
+		"last": "Walia"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 32,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO13",
+	"email": "cris.smith@email.com",
+	"name": {
+		"first": "Cris",
+		"middle": "",
+		"last": "Smith"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": false,
+	"age": 16,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO9",
+	"email": "jim.nelson@email.com",
+	"name": {
+		"first": "Jim",
+		"middle": "K",
+		"last": "Nelson"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 17,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}
+{
+	"userId": "UO8",
+	"email": "ravi.singh@email.com",
+	"name": {
+		"first": "Ravi",
+		"middle": "V",
+		"last": "Singh"
+	},
+	"gender": "M",
+	"password": "welcome1",
+	"active": true,
+	"age": 30,
+	"createdOn": 1397590281239,
+	"modifiedOn": 1397590281239
+}

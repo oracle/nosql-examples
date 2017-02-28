@@ -1,0 +1,36 @@
+KVLite: exception in start: java.rmi.server.ExportException: Port already in use: 5000; nested exception is: 
+	java.net.BindException: Address already in use
+	at sun.rmi.transport.tcp.TCPTransport.listen(TCPTransport.java:330)
+	at sun.rmi.transport.tcp.TCPTransport.exportObject(TCPTransport.java:238)
+	at sun.rmi.transport.tcp.TCPEndpoint.exportObject(TCPEndpoint.java:411)
+	at sun.rmi.transport.LiveRef.exportObject(LiveRef.java:147)
+	at sun.rmi.server.UnicastServerRef.exportObject(UnicastServerRef.java:208)
+	at sun.rmi.registry.RegistryImpl.setup(RegistryImpl.java:152)
+	at sun.rmi.registry.RegistryImpl.<init>(RegistryImpl.java:112)
+	at java.rmi.registry.LocateRegistry.createRegistry(LocateRegistry.java:239)
+	at oracle.kv.impl.sna.StorageNodeAgent.createRegistry(StorageNodeAgent.java:1157)
+	at oracle.kv.impl.sna.StorageNodeAgent.startupRegistered(StorageNodeAgent.java:858)
+	at oracle.kv.impl.sna.StorageNodeAgent.start(StorageNodeAgent.java:639)
+	at oracle.kv.impl.sna.StorageNodeAgentImpl.start(StorageNodeAgentImpl.java:164)
+	at oracle.kv.util.kvlite.KVLite.startSNA(KVLite.java:306)
+	at oracle.kv.util.kvlite.KVLite.start(KVLite.java:476)
+	at oracle.kv.util.kvlite.KVLite.start(KVLite.java:465)
+	at oracle.kv.util.kvlite.KVLite.main(KVLite.java:570)
+	at oracle.kv.impl.util.KVStoreMain$1.run(KVStoreMain.java:216)
+	at oracle.kv.impl.util.KVStoreMain.main(KVStoreMain.java:503)
+Caused by: java.net.BindException: Address already in use
+	at java.net.PlainSocketImpl.socketBind(Native Method)
+	at java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:382)
+	at java.net.ServerSocket.bind(ServerSocket.java:375)
+	at java.net.ServerSocket.<init>(ServerSocket.java:237)
+	at java.net.ServerSocket.<init>(ServerSocket.java:181)
+	at oracle.kv.impl.util.registry.ClearServerSocketFactory.instantiateServerSocket(ClearServerSocketFactory.java:175)
+	at oracle.kv.impl.util.registry.ServerSocketFactory.createServerSocketInternal(ServerSocketFactory.java:276)
+	at oracle.kv.impl.util.registry.ServerSocketFactory.commonCreateServerSocket(ServerSocketFactory.java:235)
+	at oracle.kv.impl.util.registry.ClearServerSocketFactory.createServerSocket(ClearServerSocketFactory.java:120)
+	at sun.rmi.transport.tcp.TCPEndpoint.newServerSocket(TCPEndpoint.java:666)
+	at sun.rmi.transport.tcp.TCPTransport.listen(TCPTransport.java:319)
+	... 17 more
+
+Created new kvlite store with args:
+-root /u02/kvroot -store kvstore -host localhost -port 5000 -admin 5001

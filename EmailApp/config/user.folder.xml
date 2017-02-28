@@ -1,0 +1,55 @@
+<config version="1">
+  <component name="publish" type="params">
+    <!-- Fill in appropriate values for
+	oracle.kv.exttab.connection.url and oracle.kv.exttab.connection.user
+       -->
+    <property name="oracle.kv.exttab.connection.url"
+	      value="jdbc:oracle:thin:/@localhost:1521:XE"
+	      type="STRING"/>
+    <property name="oracle.kv.exttab.connection.user"
+	      value="nosqluser" type="STRING"/>
+    <property name="oracle.kv.exttab.tableName" value="CUSTOMER_FOLDER"
+	      type="STRING"/>
+    <!-- If you use a wallet to access your Oracle Instance, uncomment
+	 this and fill in a suitable value for the
+
+	      oracle.kv.exttab.connection.wallet_location
+
+	 property. -->
+    <!--
+    <property name="oracle.kv.exttab.connection.wallet_location"
+	      value="PATHNAME TO YOUR WALLET DIRECTORY" type="STRING"/>
+    -->
+  </component>
+  <component name="nosql_table" type="params">
+    <!-- required propeties -->
+    <property name="oracle.kv.kvstore"
+	      value="kvstore"
+	      type="STRING"/>
+    <property name="oracle.kv.hosts"
+	      value="localhost:5000"
+	      type="STRING"/>
+    <property name="oracle.kv.tableName"
+	      value="USER.FOLDER"
+	      type="STRING"/>
+
+    <!-- optional properties     
+    <property name="oracle.kv.formatterClass"
+	      value="com.orale.formatterClass"
+	      type="STRING"/>
+    -->
+    <!-- other optional properties that are not needed for the cookbook
+	     example. -->
+    <!--
+    <property name="oracle.kv.consistency"
+	      value="tIme(10 seconds, 10 seconds)"
+	      type="STRING"/>
+    <property name="oracle.kv.timeout"
+	      value="10 seconds"
+	      type="STRING"/>
+    <property name="oracle.kv.batchSize"
+	      value="100"
+	      type="INT"/>
+	-->
+  </component>
+</config>
