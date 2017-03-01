@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="FleetControl">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../u01/app/eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="FleetControl.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/jcommon-1.0.16.jar"/>
+        <pathelement location="lib/jfreechart-1.0.13.jar"/>
+        <pathelement location="../../../u01/nosql/kvhome/lib/avro.jar"/>
+        <pathelement location="../../../u01/nosql/kvhome/lib/jackson-core.jar"/>
+        <pathelement location="../../../u01/nosql/kvhome/lib/jackson-core-asl.jar"/>
+        <pathelement location="../../../u01/nosql/kvhome/lib/jackson-mapper-asl.jar"/>
+        <pathelement location="../../../u01/nosql/kvhome/lib/kvclient.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="content">
+                <include name="**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="content"/>
+            <include name="**"/>
+            <classpath refid="FleetControl.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="FleetPanel">
+        <java classname="com.oracle.fleet.gui.FleetPanel" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="FleetDAO">
+        <java classname="com.oracle.fleet.dao.FleetDAO" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="AggregateDAO">
+        <java classname="com.oracle.fleet.dao.AggregateDAO" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="CreateSchema (1)">
+        <java classname="com.oracle.fleet.init.CreateSchema" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="ChartPlotter">
+        <java classname="com.oracle.fleet.gui.ChartPlotter" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="StringUtil">
+        <java classname="com.oracle.fleet.util.StringUtil" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="FeedTO">
+        <java classname="com.oracle.fleet.to.FeedTO" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="BaseDAO">
+        <java classname="com.oracle.fleet.dao.BaseDAO" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="FeedLoader">
+        <java classname="com.oracle.fleet.util.FeedLoader" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="MileageDAO">
+        <java classname="com.oracle.fleet.dao.MileageDAO" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+    <target name="XYLineDemo">
+        <java classname="com.oracle.fleet.gui.chart.XYLineDemo" failonerror="true" fork="yes">
+            <classpath refid="FleetControl.classpath"/>
+        </java>
+    </target>
+</project>
