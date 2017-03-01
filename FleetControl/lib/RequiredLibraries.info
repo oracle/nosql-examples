@@ -1,0 +1,10 @@
+avro.jar
+commons-codec-1.8.jar
+commons-io-2.4.jar
+jackson-core-asl.jar
+jackson-mapper-asl.jar
+jcommon-1.0.16.jar
+jfreechart-1.0.13.jar
+json-simple-1.1.1.jar
+kvclient.jar
+kvstore.jar
