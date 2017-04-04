@@ -1,0 +1,13 @@
+### Begin Script ########################################## 
+plan deploy-zone -name "Dallas" -rf 1 -wait
+
+
+###### Deploy Fifth Storage Node  #########################
+plan deploy-sn -znname "Dallas" -port 4000 -wait -host kvhost05
+
+
+topology clone -current -name 4x4
+topology redistribute -name 4x4 -pool AllStorageNodes 
+topology preview -name 4x4
+plan deploy-topology -name 4x4 -wait
+

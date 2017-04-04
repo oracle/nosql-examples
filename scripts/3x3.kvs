@@ -1,0 +1,22 @@
+### Begin Script ########################################## 
+configure -name kvstore 
+plan deploy-zone -name "Houston" -rf 3 -wait 
+
+####### Deploy First Storage Node  #########################
+plan deploy-sn -znname "Houston" -port 5000 -wait -host kvhost01
+plan deploy-admin -sn sn1 -wait 
+
+###### Deploy Second Storage Node ##########################
+plan deploy-sn -znname "Houston" -port 6000 -wait -host kvhost02
+plan deploy-admin -sn sn2 -wait 
+
+###### Deploy Third Storage Node ###########################
+plan deploy-sn -znname "Houston" -port 7000 -wait -host kvhost03
+plan deploy-admin -sn sn3 -wait
+
+####### Create topology, preview it and then deploy it #####
+topology create -name 3x3 -pool AllStorageNodes -partitions 120 
+topology preview -name 3x3 
+plan deploy-topology -name 3x3 -wait 
+### End Script ############################################
+

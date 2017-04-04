@@ -1,0 +1,9 @@
+###### Deploy Fourth Storage Node  #########################
+plan deploy-sn -znname "Houston" -port 8000 -wait -host kvhost04
+
+topology clone -current -name 4x3
+topology redistribute -name 4x3 -pool AllStorageNodes 
+topology preview -name 4x3
+plan deploy-topology -name 4x3 -wait
+
+

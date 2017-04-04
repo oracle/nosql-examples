@@ -1,0 +1,8 @@
+Failed to start SNA: Port already in use: 5000; nested exception is: 
+	java.net.BindException: Address already in use
+Failed to start SNA: Port already in use: 7000; nested exception is: 
+	java.net.BindException: Address already in use
+Failed to start SNA: Port already in use: 6000; nested exception is: 
+	java.net.BindException: Address already in use
+Failed to start SNA: Port already in use: 8000; nested exception is: 
+	java.net.BindException: Address already in use
