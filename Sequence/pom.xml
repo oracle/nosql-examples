@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>oracle.kv.sample</groupId>
+	<artifactId>rmw</artifactId>
+	<packaging>jar</packaging>
+	<version>0.2</version>
+
+	<name>rmw</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<scm.url>https://www.oracle.com/database/nosql</scm.url>
+	</properties>
+
+
+	<description></description>
+
+	<organization>
+		<name>Oracle Corp.</name>
+		<url>http::/www.oracle.com/</url>
+	</organization>
+	
+	<developers>
+		<developer>
+			<name>Pinaki Poddar</name>
+			<organization>Oracle</organization>
+		</developer>
+	</developers>
+	
+	<url></url>
+	
+	<build>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.oracle.kv</groupId>
+			<artifactId>oracle-nosql-client</artifactId>
+			<version>4.0.9</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+          <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+		
+	</dependencies>
+
+	<scm>
+		<connection>scm:git:${scm.url}</connection>
+		<developerConnection>scm:${scm.url}</developerConnection>
+		<tag>HEAD</tag>
+		<url>scm:${scm.url}</url>
+	</scm>
+
+	
+	
+	
+
+</project>
