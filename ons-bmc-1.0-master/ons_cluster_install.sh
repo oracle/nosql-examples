@@ -250,7 +250,10 @@ plan="$TMP/plan"
 
 cat > $plan <<EOF
 configure -name $STORE
-change-policy -params "rnMaxActiveRequests=10000 rnNodeLimitPercent=90 rnRequestThresholdPercent=95 systemPercent=100"
+change-policy -params "rnMaxActiveRequests=10000"
+change-policy -params "rnNodeLimitPercent=90"
+change-policy -params "rnRequestThresholdPercent=95"
+change-policy -params "systemPercent=100"
 plan deploy-zone -name $ZONE -rf 3 -wait
 EOF
 
