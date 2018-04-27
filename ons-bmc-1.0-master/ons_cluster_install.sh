@@ -2,8 +2,7 @@
 
 #  ons_cluster_install.sh
 #  Oracle NoSQL Database on Oracle Bare Metal Cloud
-#
-#  Created by Rick George 2016-2017
+#  Created by Rick Geroge 2016-2018. 
 #  All rights reserved
 
 DIR="${BASH_SOURCE%/*}"
@@ -37,12 +36,12 @@ while [[ $# -gt 0 ]]; do
 		STORE="$2"; shift 2;;
 	-u|--username)
 		username="$2";
-		require_username $username 
-		shift 2;;		
+		require_username $username
+		shift 2;;
 	-P)
 		passphrase="$2";
-		require_passphrase $passphrase 
-		shift 2;;		
+		require_passphrase $passphrase
+		shift 2;;
 	*)
 		require_ipaddr $1
 		[ -z "$NODES" ] && NODES=$1 || NODES="$NODES $1"
@@ -245,11 +244,13 @@ do
 done
 
 # create deploy plan
+# Turn off offheap cache
 
 plan="$TMP/plan"
 
 cat > $plan <<EOF
 configure -name $STORE
+change-policy -params "rnMaxActiveRequests=10000 rnNodeLimitPercent=90 rnRequestThresholdPercent=95 systemPercent=100"
 plan deploy-zone -name $ZONE -rf 3 -wait
 EOF
 
