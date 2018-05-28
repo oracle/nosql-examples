@@ -249,6 +249,7 @@ done
 plan="$TMP/plan"
 
 cat > $plan <<EOF
+hidden
 configure -name $STORE
 change-policy -params "rnMaxActiveRequests=10000"
 change-policy -params "rnNodeLimitPercent=90"
