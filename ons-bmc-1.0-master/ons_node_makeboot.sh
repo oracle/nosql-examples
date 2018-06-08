@@ -4,6 +4,7 @@
 #  Oracle NoSQL Database on Oracle Bare Metal Cloud
 #
 #  Created by Rick George 2016-2017
+#  Updated by Loic Lefevre 2018
 #  All rights reserved
 
 TMP=/tmp/ons
@@ -56,6 +57,8 @@ do
 done
 
 passphrase="$passphrase"
+
+export MALLOC_ARENA_MAX=1
 
 if [ "$security" == "off" ]; then
 	cmd="java -jar $KVHOME/lib/kvstore.jar makebootconfig -root $KVROOT -port 5000 -host $KVHOST -harange 5010,5025 -servicerange 5030,5045 -store-security none -capacity $KVCAP $KVDIRS"
