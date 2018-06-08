@@ -4,6 +4,7 @@
 #  Oracle NoSQL Database on Oracle Bare Metal Cloud
 #
 #  Created by Rick George 2016-2017
+#  Updated by Loic Lefevre 2018
 #  All rights reserved
 
 TMP=/tmp/ons
@@ -53,7 +54,9 @@ version_pattern="([[:digit:]]\.[[:digit:]])"
 [[ `cat /etc/redhat-release` =~ $version_pattern ]] && rhrel_version="${BASH_REMATCH[1]}"
 
 if [[ $rhrel_version > "7" ]]; then
-	sudo firewall-cmd --permanent --zone=public --add-rich-rule=’rule family="ipv4" source address="10.0.0.0/27" port protocol="tcp" port="5000-5050" accept’
+	sudo firewall-cmd --permanent --zone=public --add-rich-rule="rule family=ipv4 source address=10.0.0.0/27 port port=5000-5050 protocol=tcp accept"
+	# eventually stop firewall-cmd or add missing ports (ICMP?)
+	#sudo service firewalld stop
 else
 	sudo /sbin/iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
 	sudo /sbin/iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
@@ -110,6 +113,7 @@ KVROOT=$PWD/KVROOT
 
 echo "export KVHOME=$KVHOME" >> ~/.bashrc
 echo "export KVROOT=$KVROOT" >> ~/.bashrc
+echo "export MALLOC_ARENA_MAX=1" >> ~/.bashrc
 
 if [ "$security" == "off" ]; then
 	echo 'alias runadmin="java -Xmx256m -Xms256m -jar $KVHOME/lib/kvstore.jar runadmin -port 5000 -host `hostname`"' >> ~/.bashrc
