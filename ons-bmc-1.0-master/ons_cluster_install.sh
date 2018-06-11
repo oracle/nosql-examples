@@ -2,7 +2,9 @@
 
 #  ons_cluster_install.sh
 #  Oracle NoSQL Database on Oracle Bare Metal Cloud
-#  Created by Rick Geroge 2016-2018. 
+#
+#  Created by Rick George 2016-2017
+#  Updated by Loic Lefevre 2018
 #  All rights reserved
 
 DIR="${BASH_SOURCE%/*}"
@@ -171,9 +173,10 @@ for node in $NODES
 do
 	$ssh_ opc@$node "mkdir -p $TMP/log"
 	host=`$ssh_ opc@$node hostname`
+	domain=`$ssh_ opc@$node hostname -d`
 	route=`$ssh_ opc@$node "sudo ip route get 1 | head -1"`
 	ip=`echo $route | awk '{print \$NF;exit}'`
-	echo "$ip $host #@dbhost" >> $tmp_hosts
+	echo "$ip $host.$domain $host #@dbhost" >> $tmp_hosts
 	$scp_ $DIR/ons_node_init.sh opc@$node:$TMP/
 	$ssh_ opc@$node "$TMP/ons_node_init.sh"
 done
