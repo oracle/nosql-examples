@@ -4,6 +4,7 @@
 #  Oracle NoSQL Database on Oracle Bare Metal Cloud
 #
 #  Created by Rick George 2016-2017
+#  Updated by Loic Lefevre 2018
 #  All rights reserved
 
 TMP=/tmp/ons
@@ -52,6 +53,7 @@ KVROOT=$PWD/KVROOT
 
 echo "export KVHOME=$KVHOME" >> ~/.bashrc
 echo "export KVROOT=$KVROOT" >> ~/.bashrc
+echo "export MALLOC_ARENA_MAX=1" >> ~/.bashrc
 
 if [ ! -z $helper_hosts ]; then
 	if [ "$security" == "off" ]; then
@@ -62,5 +64,3 @@ if [ ! -z $helper_hosts ]; then
 fi
 
 exit 0
-
-
