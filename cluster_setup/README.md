@@ -69,6 +69,7 @@ There are many situations where this script will fail. Most are due to network c
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
 * Optionally download a release distribution of the Oracle NoSQL Database Proxy (if accessing the database via HTTP is desired) to your laptop
 * Download `cluster_setup.sh` and make it executable
+  * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
 * Run `cluster_setup.sh`.  This will guide you through the setup of a NoSQL Cluster on your OCI nstances
   * `./cluster_setup.sh`
@@ -87,6 +88,7 @@ There are many situations where this script will fail. Most are due to network c
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
 * Optionally download a release distribution of the Oracle NoSQL Database Proxy (if accessing the database via HTTP is desired) to your laptop
 * Download `cluster_setup.sh` and make it executable
+  * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
 * Run `cluster_setup.sh`.  This will guide you through the setup of a NoSQL Cluster on your EC2 instances
   * `./cluster_setup.sh`
@@ -103,6 +105,7 @@ There are many situations where this script will fail. Most are due to network c
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
 * Optionally download a release distribution of the Oracle NoSQL Database Proxy (if accessing the database via HTTP is desired) to your laptop
 * Download `cluster_setup.sh` and make it executable
+  * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
 * Run `cluster_setup.sh`.  This will guide you through the setup of a NoSQL Cluster on your Azure instances
   * `./cluster_setup.sh`
