@@ -14,7 +14,7 @@ Before you can run the cluster_setup.sh script, you'll need the following minimu
 
 3. ssh access to the above machines (with no passphrase) from the host in #1 (this may require some setup in ~/.ssh/config - or not: ssh options can be given in the cluster_setup.sh script)
 
-4. Java 8+ installed on target host(s)
+4. Java 8 or greater installed on target host(s). The minimum version is 8, any installed java version 8 or above works fine.
 
 5. file system location director(ies) to store NoSQL data on each of the hosts in #2. Many paths can be specified. NVMe is preferred for best performance, but any mounted drive (network or otherwise) with sufficient space for NoSQL data will suffice.
 
@@ -38,7 +38,7 @@ The script is designed to do the following tasks:
 * Ask for the desired cluster data replication factor (if installing on more than one host)
 * Check ssh connections from your local host to all target hosts
 * Gather information from all hosts
-* Verify java 8+ installations
+* Verify java 8 or greater installations
 * Ask for (optional) security information (for secure store setup)
 * Optionally check network connectivity on several ports between all target hosts
 * Show all parameters and ask for confirmation
@@ -63,7 +63,7 @@ There are many situations where this script will fail. Most are due to network c
 * Make sure that the port range 5000-5100 is open.
   * Refer to your local sysadmins for guidance on this. An example of how to do this in some systems may be:
   * `sudo firewall-cmd --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-* Install Java 8 on each the hosts
+* Install Java 8 on each the hosts (if a version 8 or greater is not already installed)
   * `sudo yum install java`
 * Download a release distribution of Oracle NoSQL Database to your laptop
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
@@ -81,7 +81,8 @@ There are many situations where this script will fail. Most are due to network c
 * Spin up one or more virtual machines – **Red Hat Linux**.  NOTE: You will need something more powerful than a micro, otherwise requests might timeout
 * Make sure that the port range 5000-5100 is open
   * Add a rule to the security group opening these ports
-* Install java 8 on each VM
+* Install java 8 on each VM (if a version 8 or greater is not already installed)
+  * many EC2 instances have java7 installed. To get java 8, do:
   * `sudo yum remove java`
   * `sudo yum install java-1.8.0-openjdk`
 * Download a release distribution of Oracle NoSQL Database to your laptop
@@ -99,7 +100,7 @@ There are many situations where this script will fail. Most are due to network c
 * Make sure that the port range 5000-5100 is open.
   * Refer to your local sysadmins for guidance on this. An example of how to do this in some systems may be:
   * `sudo iptables -I INPUT -p tcp -m tcp --dport 5000:5100 -j ACCEPT`
-* Install Java 8 on each the VMs
+* Install Java 8 on each the VMs (if a version 8 or greater is not already installed)
   * `sudo yum install java`
 * Download a release distribution of Oracle NoSQL Database to your laptop
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
