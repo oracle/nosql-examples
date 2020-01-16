@@ -60,9 +60,10 @@ There are many situations where this script will fail. Most are due to network c
 
 ### Oracle Cloud Infrastructure (OCI):
 * Spin up one or more compute instances – **Oracle Linux 7.x**
-* Make sure that the port range 5000-5100 is open.
+* Make sure that the port range 5000-5100 is open between all instances.
   * Refer to your local sysadmins for guidance on this. An example of how to do this in some systems may be:
   * `sudo firewall-cmd --permanent --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
+  * `sudo firewall-cmd --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
 * Install Java 8 on each the hosts (if a version 8 or greater is not already installed)
   * `sudo yum install java`
 * Download a release distribution of Oracle NoSQL Database to your laptop
