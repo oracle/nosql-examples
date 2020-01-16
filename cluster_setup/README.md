@@ -55,6 +55,7 @@ The script is designed to do the following tasks:
 ## What if it fails?
 There are many situations where this script will fail. Most are due to network connectivity or ssh issues. You can rerun the script over and over, fixing issues as you encounter them. If you get completely stuck or have issues you just can't get to work, please send an email to `oraclenosql-info_ww@oracle.com` with "Oracle NoSQL Database cluster script" in the subject line, and someone will get back to you as soon as possible.
 
+The most common failures when using this script are due to network ports not being open across the target hosts. See the note about ports at the end of this document.
 
 ## Notes for specific environments:
 
@@ -121,3 +122,15 @@ The script accepts a few command-line options for debugging and convenience. Use
 - `-d`: Debug. This will run all scripts with `-x` added and dump a LOT of strange output to your console. May be useful for advanced sysadmins.
 - `-v`: Verbose. Show a bit more about what's going on.
 - `-t`: Test. Used internally at Oracle for automatic regression testing of this script. probably not useful otherwise.
+
+
+## A note about ports
+
+Oracle NoSQL uses a range of ports for its communication. The main starting port is used for client-server communication, and a range of additional ports are used for various server-server (and some client-server) features.
+
+The actual range of ports needed depends on the capacity of each of the target hosts (machines with many NVMe drives and lots of RAM, for example, will use more ports) and whether security is enabled or not. A large installation with high capacity hosts may use 100 or more ports. Most installations typically use less than 30. The script determines the port range needed and can optionally test those port ranges across the hosts.
+
+The script does not, however, make any attempt to change firewall rules or open ports in any way. Oracle recommends you work with your sysadmins to determine the proper steps / commands / processes to open ports in your environment.
+
+The example firewall/port commands given above in this document may not be adequate or correct for your environment. Please contact your local system administrators for help with ports and firewall rules.
+
