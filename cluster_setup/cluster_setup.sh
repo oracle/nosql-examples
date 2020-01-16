@@ -104,7 +104,7 @@ function askcontinue ()
 	[ $dotest -eq 1 ] && return
 	read yorn
 	[ "$yorn" = "" ] && yorn=$defval
-	[ "$yorn" != "y" ] && exit 0
+	[ "$yorn" != "y" -a "$yorn" != "Y" ] && exit 0
 }
 
 function save_vals ()
@@ -159,7 +159,7 @@ function get_prev_settings ()
 	echo -n "Use cached values from last program run? (y/n) [y]: "
 	read yorn
 	[ "$yorn" = "" ] && yorn=y
-	[ "$yorn" != "y" ] && /bin/rm -f $SVARS && return
+	[ "$yorn" != "y" -a "$yorn" != "Y" ] && /bin/rm -f $SVARS && return
 	source $SVARS
 	echo ""
 	echo "Previous cached values imported. Values will show in brackets ([]) at"
@@ -642,7 +642,7 @@ EOT
 			echo ""
 			echo -n "Overwrite? (y/n) [n]: "
 			read yorn
-			[ "$yorn" != "y" ] && exit 1
+			[ "$yorn" != "y" -a "$yorn" != "Y" ] && exit 1
 		fi
 		will_overwrite=1
 	fi
@@ -845,13 +845,13 @@ function get_secure_passwds ()
 	echo ""
 	echo -n "Set up secure store (y/n) [y]: "
 	read yorn
-	if [ "$yorn" != "" -a "$yorn" != "y" ] ; then
+	if [ "$yorn" != "" -a "$yorn" != "y" -a "$yorn" != "Y" ] ; then
 		echo ""
 		echo "Are you sure you want to set up an unrestricted, insecure store?"
 		echo ""
 		echo -n "Set up insecure store? (y/n) [n]: "
 		read yorn
-		if [ "$yorn" = "y" ] ; then
+		if [ "$yorn" = "y" -o "$yorn" = "Y" ] ; then
 			secure_store=0
 			return
 		fi
@@ -871,7 +871,7 @@ function get_secure_passwds ()
 	echo ""
 	echo -n "auto-generate user passwords? (y/n) [y]: "
 	read yorn
-	if [ "$yorn" != "n" ] ; then
+	if [ "$yorn" != "n" -a "$yorn" != "N" ] ; then
 		admpass=$(random_password)
 		nosqlpass=$(random_password)
 		autogen=1
@@ -1093,7 +1093,7 @@ function check_network_connectivity ()
 	if [ $dotest -eq 0 ] ; then
 		read yorn
 		[ "$yorn" = "" ] && yorn=y
-		[ "$yorn" != "y" ] && return
+		[ "$yorn" != "y" -a "$yorn" != "Y" ] && return
 	fi
 	[ "$do_network" = "no" ] && return
 
@@ -2404,7 +2404,7 @@ function run_extended_test ()
 	if [ $dotest -eq 0 ] ; then
 		echo -n "Run extended test? (y/n) [y]: "
 		read yorn
-		[ "$yorn" = "n" ] && return
+		[ "$yorn" = "n" -o "$yorn" = "N" ] && return
 	fi
 
 	echo ""
