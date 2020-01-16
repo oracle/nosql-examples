@@ -1066,7 +1066,6 @@ function check_network_host ()
 function check_network_connectivity ()
 {
 	[ $numhosts -le 1 ] && return
-	[ $force_overwrite -eq 1 ] && return
 	clear_screen
 	echo ""
 	echo "The port range selected for this installation is ${startport}-$arbservhigh."
