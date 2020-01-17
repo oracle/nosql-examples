@@ -1,54 +1,54 @@
 # cluster_setup.sh
 
-The purpose of this script is to allow a user to set up a reasonably small cluster (1-10 machines) quickly, for use in proof-of-concepts, small on premise installations, and cluster installations in cloud environments (OCI, AWS, Azure). It's intended to be run from a host that is not part of the cluster hosts - typically a user laptop or other separate machine (something with a unix-like environment where bash can run - macOS is fine).
+This script lets a user set up a small cluster (1-10 machines) quickly, for use in proof-of-concepts, small on premise installations, and cluster installations in cloud environments (OCI, AWS, Azure). It's intended to be run from a setup host that is not in the set of cluster hosts, typically a user laptop or other separate machine. The setup host should have a unix-like environment where bash can run. MacOS is fine.
 
-You do not have to edit this script or pass any command-line parameters to it. It will prompt you for various information as it runs. All inputs will be saved so that running the script again will use the values from the previous run, so you don't have to retype everything if you run the script multiple times (you can change inputs when you run it again).
+You do not have to edit this script or pass any command-line parameters to it. It will prompt you for various inputs as it runs. All inputs will be saved, and running the script again will use the values from the previous run, so you don't have to retype everything if you run the script multiple times. You can change inputs when you run it again.
 
 ## Prerequisites
 
-Before you can run the cluster_setup.sh script, you'll need the following minimum requirements to be met:
+Before you can run the cluster_setup.sh script, you'll need to meet the following minimum requirements:
 
-1. a location to run the script from: something capable of running bash in a unix-like environment (linux, macOS, cygwin, etc.)
+1. A setup host, from which you run the script, such as your laptop. The setup host must be capable of running bash in a unix-like environment (linux, macOS, cygwin, etc.)
 
-2. One or more host target machines to set up NoSQL on. These can be in OCI, or Amazon EC2, or... wherever. They must be running Linux. It's best if they all have the same hardware resources (cpu, ram, disk).
+2. One or more target host machines to where the NoSQL database engine will reside. These can be in OCI, or Amazon EC2, or... wherever. They must be running Linux. It's best if they all have the same hardware resources (cpu, ram, disk).
 
-3. ssh access to the above machines (with no passphrase) from the host in #1 (this may require some setup in ~/.ssh/config - or not: ssh options can be given in the cluster_setup.sh script)
+3. Ssh access, with no passphrase, to the target host machines from the setup host. This may require some setup in ~/.ssh/config, or alternatively, ssh options can be given in the cluster_setup.sh script.
 
-4. Java 8 or greater installed on target host(s). The minimum version is 8, any installed java version 8 or above works fine.
+4. Java 8 or greater installed on the target host(s). The minimum version is 8. Any installed java version 8 or above works fine.
 
-5. One or more file system paths for the location(s) to store NoSQL data on each of the hosts in #2. NVMe will result in the best performance, but any mounted drive (network or otherwise) will suffice. The amount of free space required varies greatly with the size and number of records you plan to store. In general, a minimum of 10GB free space is recommended.
+5. One or more file system paths which specify the location(s) on the target hosts to be used to store NoSQL data. NVMe will result in the best performance, but any mounted drive (network or otherwise) will suffice. The amount of free space required varies greatly with the size and number of records you plan to store. In general, a minimum of 10GB free space is recommended.
 
-6. (optional): separate director(ies) for logs, similar to #5.
+6. (optional): Separate director(ies) for NoSQL logs, similar to #5.
 
-7. A `tar.gz` or `zip` Oracle NoSQL kv file downloaded to the host in #1 (for example: `kv-ee-19.5.13.tar.gz`). Downloads available from https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
+7. A `tar.gz` or `zip` Oracle NoSQL kv installation file downloaded to the setup host.(For example: `kv-ee-19.5.13.tar.gz`). Downloads are available from https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
 
-8. (optional): a downloaded `tar.gz` or `zip` file for httpproxy, if you desire an httpproxy to be installed for use with client drivers in addition to java (for example: `oracle-nosql-proxy-5.1.10.tar.gz`)
+8. (optional): A `tar.gz` or `zip` Oracle NoSQL Proxy installation file downloaded to the setup host, if you want to deploy a httpproxy to support the NoSQL http drivers. (For example: `oracle-nosql-proxy-5.1.10.tar.gz`). Downloads are available from <I don't know where>
 
 ## What the script does
 
-The script is designed to do the following tasks:
+The script will do the following tasks:
 
 * Ask for the path to the downloaded Oracle NoSQL kv `tar.gz/.zip` file
-* Ask for the (optional) path to the downloaded httpproxy `tar.gz/.zip` file
+* Ask for the (optional) path to the downloaded Oracle NoSQL Proxy `tar.gz/.zip` file
 * Ask for all hostnames (or IP addresses) of target hosts, and ssh username/options
 * Ask for the installation directory for NoSQL binaries/libraries
 * Ask for the name of the store to be configured
-* Ask for the data and log directory locations to store data/logs on each host
+* Ask for the data and log directory locations to store data/logs on each target host
 * Ask for the starting port number for cluster communications
-* Ask for the desired cluster data replication factor (if installing on more than one host)
-* Check ssh connections from your local host to all target hosts
-* Gather information from all hosts (memory, cpu, etc.)
-* Verify java 8 or greater installations
+* Ask for the desired cluster data replication factor (if installing on more than one target host)
+* Check ssh connections from your setup host to all target hosts
+* Gather information from all target hosts (memory, cpu, etc.)
+* Verify Java 8 or greater installations
 * Ask for (optional) security information (for secure store setup)
 * Optionally check network connectivity on several ports between all target hosts
-* Show install parameters and ask for confirmation
-* Copy `.tar.gz/.zip` files to all hosts in parallel
-* Set up each host, one by one, to run NoSQL Storage Nodes
-* Create helper scripts in KVHOME/scripts for various operations
+* Show installation parameters and ask for confirmation
+* Copy `.tar.gz/.zip` files to all target hosts in parallel
+* Set up each target host, one by one, to run NoSQL Storage Nodes
+* Create helper scripts in KVHOME/scripts for various operations <-- Is this on the setup host, or the target host?
 * Deploy cluster topology and start all cluster Replication Nodes (this can take a while)
 * Run a simple test to verify basic operation
-* Set up optional httpproxy running on each host
-* Optionally run a longer extended test to get some basic performance indicators
+* Set up the optional Oracle NoSQL Proxy running on each host <-- eh? Why is there a proxy on each target host? Only need 1-3 proxy installations.
+* Optionally run a longer extended test to get basic performance indicators
 * Display store parameters for access to the newly running store
 
 
@@ -65,11 +65,11 @@ The most common failures when using this script are due to network ports not bei
   * Refer to your local sysadmins for guidance on this. An example of how to do this in some systems may be:
   * `sudo firewall-cmd --permanent --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
   * `sudo firewall-cmd --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-* Install Java 8 on each the hosts (if a version 8 or greater is not already installed)
+* Install Java 8 or greater on each the hosts (if a version 8 or greater is not already installed)
   * `sudo yum install java`
-* Download a release distribution of Oracle NoSQL Database to your laptop
+* Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-* Optionally download a release distribution of the Oracle NoSQL Database Proxy (if accessing the database via HTTP is desired) to your laptop
+* Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host. (If using the NoSQL http based drivers) <-- The application itself isn't using http. Http is in the protocol between the driver and the proxy, but the application doesn't directly do http calls
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
@@ -87,9 +87,9 @@ The most common failures when using this script are due to network ports not bei
   * many EC2 instances have java7 installed. To get java 8, do:
   * `sudo yum remove java`
   * `sudo yum install java-1.8.0-openjdk`
-* Download a release distribution of Oracle NoSQL Database to your laptop
+* Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-* Optionally download a release distribution of the Oracle NoSQL Database Proxy (if accessing the database via HTTP is desired) to your laptop
+* Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host. (If using the NoSQL http based drivers)
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
@@ -104,9 +104,9 @@ The most common failures when using this script are due to network ports not bei
   * `sudo iptables -I INPUT -p tcp -m tcp --dport 5000:5100 -j ACCEPT`
 * Install Java 8 on each the VMs (if a version 8 or greater is not already installed)
   * `sudo yum install java`
-* Download a release distribution of Oracle NoSQL Database to your laptop
+* Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-* Optionally download a release distribution of the Oracle NoSQL Database Proxy (if accessing the database via HTTP is desired) to your laptop
+* Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host. (If using the NoSQL http based drivers)
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
@@ -121,14 +121,14 @@ The script accepts a few command-line options for debugging and convenience. Use
 - `-f`: Force installation, stopping and overwriting any existing installation. This may be useful if the script had errors partway through and the cluster is in an unknown state.
 - `-d`: Debug. This will run all scripts with `-x` added and dump a LOT of strange output to your console. May be useful for advanced sysadmins.
 - `-v`: Verbose. Show a bit more about what's going on.
-- `-t`: Test. Used internally at Oracle for automatic regression testing of this script. probably not useful otherwise.
+- `-t`: Test. Used internally at Oracle for automatic regression testing of this script. Probably not useful otherwise.
 
 
 ## A note about ports
 
 Oracle NoSQL uses a range of ports for its communication. The main starting port is used for client-server communication, and a range of additional ports are used for various server-server (and some client-server) features.
 
-The actual range of ports needed depends on the capacity of each of the target hosts (machines with many NVMe drives and lots of RAM, for example, will use more ports) and whether security is enabled or not. A large installation with high capacity hosts may use 100 or more ports. Most installations typically use less than 30. The script determines the port range needed and can optionally test those port ranges across the hosts.
+The actual range of ports needed depends on the capacity of each of the target hosts (machines with many NVMe drives and lots of RAM, for example, will use more ports) and whether security is enabled or not. A large installation with high capacity hosts may use 100 or more ports. Most installations typically use less than 30. The script determines the port range needed and can optionally test those port ranges across the target hosts.
 
 The script does not, however, make any attempt to change firewall rules or open ports in any way. Oracle recommends you work with your sysadmins to determine the proper steps / commands / processes to open ports in your environment.
 
