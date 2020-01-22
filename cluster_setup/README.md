@@ -4,6 +4,8 @@ This script lets a user set up a small cluster (1-10 machines) quickly, for use 
 
 You do not have to edit this script or pass any command-line parameters to it. It will prompt you for various inputs as it runs. All inputs will be saved, and running the script again will use the values from the previous run, so you don't have to retype everything if you run the script multiple times. You can change inputs when you run it again.
 
+Direct script download link: <a href=https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh>cluster_setup.sh</a>
+
 ## Prerequisites
 
 Before you can run the cluster_setup.sh script, you'll need to meet the following minimum requirements:
