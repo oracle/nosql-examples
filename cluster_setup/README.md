@@ -63,19 +63,14 @@ The most common failures when using this script are due to network ports not bei
 
 ### Oracle Cloud Infrastructure (OCI):
 * Spin up one or more compute instances – **Oracle Linux 7.x**
-* Make sure that the port range 5000-5100 is open between all instances.
-  * Refer to your local sysadmins for guidance on this. An example of how to do this in some systems may be:
-  * `sudo firewall-cmd --permanent --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-  * `sudo firewall-cmd --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport 5000:5100 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT`
-* Install Java 8 or greater on each the hosts (if a version 8 or greater is not already installed)
-  * `sudo yum install java`
+* Note: for OCI instances, the cluster_setup script will automatically install java, optionally configure network settings, and optionally set up raw NVMe drives.
 * Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
 * Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host, if using the NoSQL http based drivers.
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
-* Run `cluster_setup.sh`.  This will guide you through the setup of a NoSQL Cluster on your OCI nstances
+* Run `cluster_setup.sh`.  This will guide you through the setup of a NoSQL Cluster on your OCI instances
   * `./cluster_setup.sh`
 
 
@@ -132,6 +127,7 @@ Oracle NoSQL uses a range of ports for its communication. The main starting port
 
 The actual range of ports needed depends on the capacity of each of the target hosts (machines with many NVMe drives and lots of RAM, for example, will use more ports) and whether security is enabled or not. A large installation with high capacity hosts may use 100 or more ports. Most installations typically use less than 30. The script determines the port range needed and can optionally test those port ranges across the target hosts.
 
-The script does not, however, make any attempt to change firewall rules or open ports in any way. Oracle recommends you work with your sysadmins to determine the proper steps / commands / processes to open ports in your environment.
+If you are running Oracle OCI instances, this script can set up minimal firewall rules for you, if you select to do so.
+In all other environments it does not make any attempt to change firewall rules or open ports in any way. Oracle recommends you work with your sysadmins to determine the proper steps / commands / processes to open ports in your environment.
 
 The example firewall/port commands given above in this document may not be adequate or correct for your environment. Please contact your local system administrators for help with ports and firewall rules.
