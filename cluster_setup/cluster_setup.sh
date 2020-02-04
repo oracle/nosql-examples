@@ -37,6 +37,8 @@ debug=0
 force_overwrite=0
 proxy_only=0
 dotest=0
+secure_store=1
+autogen=0
 test_vars=""
 
 while [ "$1" != "" ] ; do
@@ -90,7 +92,7 @@ function clear_screen ()
 	clear
 }
 
-function askcontinue () 
+function askcontinue ()
 {
 	defval=$1
 	if [ "$defval" = "any" ] ; then
@@ -121,6 +123,7 @@ function save_vals ()
   echo "startport=$startport" >> $SVARS
   echo "repfactor=$repfactor" >> $SVARS
   echo "proxyport=$proxyport" >> $SVARS
+  echo "secure_store=$secure_store" >> $SVARS
   declare -p ipaddrs >> $SVARS 2>/dev/null
 }
 
@@ -168,7 +171,7 @@ function get_prev_settings ()
 	askcontinue any
 }
 
-function splash_screen () 
+function splash_screen ()
 {
 	clear_screen
 	echo ""
@@ -236,7 +239,7 @@ function get_ipaddr_cached ()
 
 	# see if we have it cached
 	local i=0
-	while [ $i -lt ${#hosts[*]} ] ; do 
+	while [ $i -lt ${#hosts[*]} ] ; do
 		if [ "${hosts[$i]}" = "$host" ] ; then
 			cached_ipaddr=${ipaddrs[$i]}
 			return
@@ -245,7 +248,7 @@ function get_ipaddr_cached ()
 	done
 }
 
-function get_targzfile () 
+function get_targzfile ()
 {
 	clear_screen
 	echo ""
@@ -272,7 +275,7 @@ function get_targzfile ()
 	save_vals
 }
 
-function get_proxygzfile () 
+function get_proxygzfile ()
 {
 	clear_screen
 	if [ "$proxygzfile" = "" ] ; then
@@ -327,6 +330,309 @@ function get_storename ()
 	storename=$sname
 	save_vals
 }
+
+
+function check_host_oci ()
+{
+	local host=$1
+
+	# ssh into the host, see if we have unmounted nvmes
+cat > $TMPDIR/nosql_check_oci.sh.$$ << EOT
+#!/bin/bash
+[ $debug -eq 1 ] && set -x
+export LANG=C
+
+# sometimes users have PATH/etc in bash_profile and not in bashrc. Hmmm.
+[ -s ~/.bashrc ] && source ~/.bashrc > /dev/null 2>&1
+[ -s ~/.bash_profile ] && source ~/.bash_profile > /dev/null 2>&1
+
+# Is this an OCI instance?
+ls /etc/oci-util* > /dev/null 2>&1
+[ \$? -ne 0 ] && exit 9
+
+# check sudo
+have_sudo=0
+sudo -n echo ok > /dev/null 2>&1
+[ \$? -ne 0 ] && exit 10
+
+
+# what nvme drives are available, and are they already mounted?
+drives=\$(sudo fdisk -l 2>/dev/null | grep nvme | sort | cut -f 2 -d ' ' | sed 's/://g')
+[ "\$drives" = "" ] && exit 11
+
+# if all are mounted, bail out
+unmounted=""
+for i in \$drives ; do
+	mount | grep \$i > /dev/null 2>&1
+	[ \$? -ne 0 ] && unmounted="\$unmounted \$i"
+done
+[ "\$unmounted" = "" ] && exit 12
+
+echo -n "host_nvmes=\\"" > /tmp/nosql_drives
+for i in \$unmounted ; do
+	echo -n "\$i " >> /tmp/nosql_drives
+done
+echo "\\"" >> /tmp/nosql_drives
+
+exit 0
+EOT
+
+	#echo "Checking on $host..."
+	scp $sshopts $TMPDIR/nosql_check_oci.sh.$$ ${sshat}$host:nosql_check_oci.sh > /dev/null
+	if [ $? -ne 0 ] ; then
+		echo ""
+		echo ""
+		echo "There appears to be a problem with your ssh credentials."
+		echo "Please verify that you can run the following command with"
+		echo "no errors, then run this script again."
+		echo ""
+		echo "   ssh $sshopts ${sshat}$host \"echo ok\""
+		echo ""
+		exit 1
+	fi
+	is_oci_instance=0
+	ssh $sshopts ${sshat}$host "chmod 755 ./nosql_check_oci.sh ; ./nosql_check_oci.sh ; ret=\$? ; rm -f ./nosql_check_oci.sh ; exit \$ret"
+	ret=$?
+	[ $ret -ge 10 -a $ret -le 12 ] && is_oci_instance=1
+	[ $ret -ge 9 -a $ret -le 12 ] && return $ret
+	if [ $ret -ne 0 ] ; then
+		exit 1
+	fi
+	is_oci_instance=1
+	scp $sshopts ${sshat}$host:/tmp/nosql_drives $TMPDIR/nosql_drives.$$ > /dev/null 2>&1
+	if [ $? -ne 0 ] ; then
+		nvme_drives=""
+		#echo ""
+		#echo "Error: can't collect NVMe drive data from $host"
+		return 1
+	fi
+	ssh $sshopts ${sshat}$host "rm -f /tmp/nosql_drives" >/dev/null 2>&1
+
+	source $TMPDIR/nosql_drives.$$
+	/bin/rm -f $TMPDIR/nosql_drives.$$
+
+	if [ "$nvme_drives" = "" ] ; then
+		nvme_drives="$host_nvmes"
+		return 0
+	fi
+
+	if [ "$host_nvmes" != "$nvme_drives" ] ; then
+		nvme_drives=""
+		#echo ""
+		#echo "$host appears to have different NVMe drives than others. Skipping OCI checks."
+		return 1
+	fi
+
+	return 0
+}
+
+function check_all_hosts_oci ()
+{
+	i=0
+	while [ $i -lt $numhosts ] ; do
+		host=${hosts[$i]}
+		check_host_oci $host
+		ret=$?
+		[ $ret -eq 9 ] && return 1
+		[ $ret -ne 0 ] && return 2
+		i=$(expr $i + 1)
+	done
+	return 0
+}
+
+function mount_drives_on_host ()
+{
+	local host=$1
+	local drives="$2"
+
+cat > $TMPDIR/nosql_mount_nvmes.sh.$$ << EOT
+#!/bin/bash
+[ $debug -eq 1 ] && set -x
+export LANG=C
+
+trap "/bin/rm -f /tmp/*.\$\$" exit
+
+# sometimes users have PATH/etc in bash_profile and not in bashrc. Hmmm.
+[ -s ~/.bashrc ] && source ~/.bashrc > /dev/null 2>&1
+[ -s ~/.bash_profile ] && source ~/.bash_profile > /dev/null 2>&1
+
+echo ""
+echo "Setting up NVMe drives on $host..."
+
+myid=\$(whoami)
+/bin/rm -f /tmp/nosql_fstab
+for drive in $drives ; do
+	echo "  formatting and mounting \$drive..."
+	echo -e "n\\np\\n1\\n\\n\\nw" | sudo fdisk -u -c \$drive > /tmp/nosql.\$\$ 2>&1
+	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
+	sudo mkfs.ext4 -F \$drive > /tmp/nosql.\$\$ 2>&1
+	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
+	mount_dir=\$(echo \$drive | sed 's/dev/nosql/g')
+	sudo mkdir -p \$mount_dir  > /tmp/nosql.\$\$ 2>&1
+	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
+	sudo mount \$drive \$mount_dir > /tmp/nosql.\$\$ 2>&1
+	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
+	sudo chown \$myid:\$myid \$mount_dir > /tmp/nosql.\$\$ 2>&1
+	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
+	printf "\$drive\\t\$mount_dir\\text4\\tdefaults\\t0\\t0\\n" >> /tmp/nosql_fstab
+done
+sudo /bin/bash -c "cat /tmp/nosql_fstab >> /etc/fstab"
+/bin/rm -f /tmp/nosql_fstab
+
+exit 0
+EOT
+
+	scp $sshopts $TMPDIR/nosql_mount_nvmes.sh.$$ ${sshat}$host:nosql_mount_nvmes.sh > /dev/null
+	if [ $? -ne 0 ] ; then
+		echo ""
+		echo ""
+		echo "There appears to be a problem with your ssh credentials."
+		echo "Please verify that you can run the following command with"
+		echo "no errors, then run this script again."
+		echo ""
+		echo "   ssh $sshopts ${sshat}$host \"echo ok\""
+		echo ""
+		exit 1
+	fi
+	ssh $sshopts ${sshat}$host "chmod 755 ./nosql_mount_nvmes.sh ; ./nosql_mount_nvmes.sh ; ret=\$? ; rm -f ./nosql_mount_nvmes.sh ; exit \$ret"
+	return $?
+}
+
+
+function setup_raw_oci_drives ()
+{
+	# skip if we're just adding proxy setup
+	[ $proxy_only -eq 1 ] && return
+	# skip if we can tell we're not on oci
+	[ "$sshuser" = "ec2-user" ] && return
+
+	clear_screen
+	echo ""
+	echo -n "Checking if all target hosts are running in Oracle OCI..."
+	check_all_hosts_oci
+	ret=$?
+	[ $ret -eq 1 ] && echo "no" && sleep 1 && return
+	echo "yes"
+	[ $ret -ne 0 -o "$nvme_drives" = "" ] && sleep 1 && return
+
+	echo ""
+	echo ""
+	echo "It appears that the target hosts have raw, unmounted NVMe drives."
+	echo ""
+	echo "Would you like this program to attempt to format and mount them"
+	echo "for use in the Oracle NoSQL cluster?"
+	echo ""
+	echo -n "Format and mount NVMe drives on all target hosts? (y/n): "
+	read yorn
+	if [ "$yorn" != "y" -a "$yorn" != "Y" ] ; then
+		echo ""
+		echo "Skipping NVMe mounting."
+		echo ""
+		sleep 1
+		return
+	fi
+
+	local i=0
+	while [ $i -lt $numhosts ] ; do
+		host=${hosts[$i]}
+		mount_drives_on_host $host "$nvme_drives"
+		[ $? -ne 0 ] && exit 1
+		i=$(expr $i + 1)
+	done
+	local dp=""
+	for nvme in $nvme_drives ; do
+		mount_dir=$(echo $nvme | sed 's/dev/nosql/g')
+		dp="$dp $mount_dir"
+	done
+	all_data_paths="$dp"
+	echo ""
+	echo "NVMe drives mounted successfully."
+	echo ""
+	echo "The following paths will be used for Oracle NoSQL data:"
+	echo ""
+	echo "$all_data_paths"
+	echo ""
+	skip_data_paths=1
+	skip_log_paths=1
+	askcontinue any
+}
+
+
+function setup_firewall_on_host ()
+{
+	local host=$1
+	local ipbits=$2
+	local startport=$3
+	local endport=$4
+
+	echo ""
+	echo "Setting up firewall rules for ports ${startport}-${endport} on $host..."
+
+cat > $TMPDIR/nosql_setup_firewall.sh.$$ << EOT
+#!/bin/bash
+[ $debug -eq 1 ] && set -x
+export LANG=C
+
+trap "/bin/rm -f /tmp/*.\$\$" exit
+
+# sometimes users have PATH/etc in bash_profile and not in bashrc. Hmmm.
+[ -s ~/.bashrc ] && source ~/.bashrc > /dev/null 2>&1
+[ -s ~/.bash_profile ] && source ~/.bash_profile > /dev/null 2>&1
+
+sudo firewall-cmd --permanent --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport $startport:$endport -s $ipbits -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+[ \$? -ne 0 ] && exit 1
+sudo firewall-cmd --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport $startport:$endport -s $ipbits -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+exit \$?
+EOT
+
+	scp $sshopts $TMPDIR/nosql_setup_firewall.sh.$$ ${sshat}$host:nosql_setup_firewall.sh > /dev/null
+	if [ $? -ne 0 ] ; then
+		echo ""
+		echo ""
+		echo "There appears to be a problem with your ssh credentials."
+		echo "Please verify that you can run the following command with"
+		echo "no errors, then run this script again."
+		echo ""
+		echo "   ssh $sshopts ${sshat}$host \"echo ok\""
+		echo ""
+		exit 1
+	fi
+	ssh $sshopts ${sshat}$host "chmod 755 ./nosql_setup_firewall.sh ; ./nosql_setup_firewall.sh ; ret=\$? ; rm -f ./nosql_setup_firewall.sh ; exit \$ret"
+	return $?
+}
+
+function get_lowest_bitmask ()
+{
+	# determine smallest bitmask to use to get all hosts in one IP range
+	/bin/rm -f $TMPDIR/ips.$$
+	for desthost in ${hosts[*]} ; do
+		get_ipaddr_cached $desthost
+		echo "$cached_ipaddr" >> $TMPDIR/ips.$$
+	done
+
+    # don't allow a bitmask less than 16
+    q1=($(cat $TMPDIR/ips.$$ | cut -d. -f 1 | sort -u))
+    [ ${#q1[*]} -ne 1 ] && bitmask="" && return 1
+    q2=($(cat $TMPDIR/ips.$$ | cut -d. -f 2 | sort -u))
+    [ ${#q2[*]} -ne 1 ] && bitmask="" && return 1
+
+    q3=($(cat $TMPDIR/ips.$$ | cut -d. -f 3 | sort -u))
+    [ ${#q3[*]} -ne 1 ] && bitmask="$q1.$q2.0.0/16" && return 0
+    bitmask="$q1.$q2.$q3.0/24"
+    return 0
+}
+
+function setup_firewall_rules ()
+{
+	local startport=$1
+	local endport=$2
+
+	for desthost in ${hosts[*]} ; do
+		setup_firewall_on_host $desthost $bitmask $startport $endport
+	done
+}
+
 
 function get_installdir ()
 {
@@ -394,7 +700,7 @@ function get_hosts ()
 	defprompt "$sshopts"
 	read -e sopts
 	[ "$sopts" != "" ] && sshopts="$sopts"
-	
+
 	save_vals
 }
 
@@ -508,7 +814,25 @@ if [ "\$myip" = "" ] ; then
 	echo "Hostname \$myhost on $host does not resolve to any ip address."
 	echo "This will likely cause subsequent steps to fail."
 	echo ""
-fi 
+fi
+
+function increase_user_limits ()
+{
+	# if on OCI, try to increase proc/file limits
+	[ "$is_oci_instance" != "1" -o \$have_sudo -ne 1 ] && return
+	myid=\$(whoami)
+	grep "^\$myid.*nproc" /etc/security/limits.conf > /dev/null 2>&1
+	[ \$? -eq 0 ] && return
+
+	echo "Increasing file/process limits for user \"\$myid\"..."
+	echo "# \$myid entries created by Oracle NoSQL cluster install" > /tmp/nosql_limits
+	echo "\$myid   hard   nproc   20000" >> /tmp/nosql_limits
+	echo "\$myid   soft   nproc   20000" >> /tmp/nosql_limits
+	echo "\$myid   hard   nofile   100000" >> /tmp/nosql_limits
+	echo "\$myid   soft   nofile   100000" >> /tmp/nosql_limits
+	sudo /bin/bash -c "cat /tmp/nosql_limits >> /etc/security/limits.conf"
+	/bin/rm -f /tmp/nosql_limits
+}
 
 function get_local_memgb ()
 {
@@ -522,32 +846,20 @@ function get_local_memgb ()
 
 function get_java_homedir ()
 {
-	local host=\$1
-
-	# note local vs remote substitution here
-	[ "$javahome" != "" ] && javahome=$javahome && return 0
-
-	echo "Determining JAVA_HOME on $host..."
-
 	javahome=\$(java -XshowSettings:properties -version 2>&1 | grep 'java.home = ' | awk '{print \$3}')
 	[ "\$javahome" != "" ] && return 0
 
-	local jp=""
-	which java >/dev/null 2>&1
-	if [ \$? -eq 0 ] ; then
-		jp=\$(which java)
+	if [ "$is_oci_instance" = "1" ] ; then
+		# see if we can install java
+		sudo yum install -y java > /dev/null 2>&1
+		if [ \$? -eq 0 ] ; then
+			javahome=\$(java -XshowSettings:properties -version 2>&1 | grep 'java.home = ' | awk '{print \$3}')
+			[ "\$javahome" != "" ] && return 0
+		fi
 	fi
-	for i in \$jp /usr/local/bin/java /opt/bin/java /usr/bin/java /bin/java ; do
-		javahome=\$(readlink -e \$i 2>/dev/null)
-		[ "\$javahome" != "" ] && break
-	done
-	if [ "\$javahome" = "" ] ; then
-		echo ""
-		echo -n "Enter the path to JAVA_HOME on $host: "
-		read javahome
-	else
-		javahome=\$(echo \$jhome | sed -e 's#/bin/java##')
-	fi
+
+	echo "Error: java does not seem to be installed on $host."
+	exit 1
 }
 
 echo "Checking java installation..."
@@ -582,6 +894,7 @@ which nc > /dev/null 2>&1
 [ \$? -eq 0 ] && have_nc=1
 
 get_local_memgb
+increase_user_limits
 
 echo "have_sudo=\$have_sudo" > nosql_vars
 echo "javahome=\$javahome" >> nosql_vars
@@ -665,6 +978,7 @@ function collect_all_hosts_data ()
 
 function get_data_paths ()
 {
+	[ "$skip_data_paths" = "1" -a "$all_data_paths" != "" ] && return
 	clear_screen
 	echo ""
 	echo "Enter the directory path(s) on the hosts where you want to store NoSQL data."
@@ -691,6 +1005,7 @@ function get_data_paths ()
 
 function get_log_paths ()
 {
+	[ "$skip_log_paths" = "1" -a "$all_data_paths" != "" ] && return
 	clear_screen
 	echo ""
 	echo "If you wish to store nosql log files in a separate location than the"
@@ -733,7 +1048,7 @@ function read_integer_port ()
 	fi
 	#echo $defport
 }
-	
+
 function get_start_port ()
 {
 	clear_screen
@@ -798,7 +1113,7 @@ function read_passwd ()
 		echo ""
 		if [ "$password" = "$password2" ] ; then
 			passdone=1
-		else 
+		else
 			echo "passwords don't match."
 			echo ""
 		fi
@@ -837,6 +1152,8 @@ function get_secure_passwds ()
 		nosqlpass=$(random_password)
 		return
 	fi
+
+	[ $proxy_only -eq 1 ] && return
 
 	clear_screen
 	echo ""
@@ -943,7 +1260,7 @@ function get_rep_factor ()
 	save_vals
 }
 
-function set_min_capcity ()
+function set_min_capacity ()
 {
 	# if RF>1, set minimum capacity to <RF>.
 	# This will spread masters across different hosts.
@@ -963,7 +1280,7 @@ function calculate_port_ranges ()
 	clear_screen
 	echo ""
 	echo "Calculating port ranges..."
-	
+
 	if [ $secure_store -eq 1 ] ; then
 		snports=4
 		rnports=$(expr $max_host_capacity \* 3)
@@ -1063,53 +1380,8 @@ function check_network_host ()
 	done
 }
 
-function check_network_connectivity ()
+function run_network_tests ()
 {
-	[ $numhosts -le 1 ] && return
-	clear_screen
-	echo ""
-	echo "The port range selected for this installation is ${startport}-$arbservhigh."
-	echo ""
-	echo "This program can optionally verify network port connectivity between"
-	echo "hosts. Doing so will use the \"netcat\" utility (\"nc\") to verify"
-	echo "connections. "
-	if [ $have_sudo -eq 0 -a $have_nc -eq 0 ] ; then
-		echo ""
-		echo "It appears that \"nc\" is not installed on the target host(s)."
-		echo "Unable to verify port connectivity."
-		echo ""
-		askcontinue y
-		return
-	fi
-	if [ $have_sudo -eq 1 -a $have_nc -eq 0 ] ; then
-		echo ""
-		echo "If netcat is not installed, this program will attempt to"
-		echo "install it by calling \"sudo yum install -y nc\"."
-	fi
-	echo ""
-	echo "Would you like this program to try verifying network connectivity?"
-	echo -n "(y/n) [y]: "
-	if [ $dotest -eq 0 ] ; then
-		read yorn
-		[ "$yorn" = "" ] && yorn=y
-		[ "$yorn" != "y" -a "$yorn" != "Y" ] && return
-	fi
-	[ "$do_network" = "no" ] && return
-
-	if [ $have_nc -eq 0 ] ; then
-		for host in ${hosts[*]} ; do
-			verify_nc_installed $host
-			[ $? -ne 0 ] && return
-		done
-	fi
-
-	# Method 1: check each connection one by one in series
-	#for host in ${hosts[*]} ; do
-		#check_network_host $host
-	#done
-
-	#return
-
 	# Method 2: check all at once
 	# create script that runs on all hosts, verifying all connectivity in parallel
 
@@ -1206,6 +1478,43 @@ EOT
 	echo "Stopping listeners and removing scripts all hosts in parallel..."
 	cat $TMPDIR/hosts.$$ | xargs -P 30 -I HOST ssh $sshopts ${sshat}HOST "./stop_listeners.sh.$$ ; /bin/rm -f ./*.sh.$$"
 
+	bitmask=
+	get_lowest_bitmask
+	if [ $ret -ne 0 -a "$bitmask" != "" -a "$is_oci_instance" = "1" -a "$inside_net_check" != "1" ] ; then
+		echo ""
+		echo "Network connectivity tests failed."
+		echo ""
+		echo "Since the target hosts are running in an OCI environment, this"
+		echo "program can attempt to set up simple firewall rules to fix the"
+		echo "network connectivity issues."
+		echo ""
+		echo ""
+		echo "NOTE: The firewall settings that this program can set up may violate"
+		echo "      your company security policies and potentially leave your"
+		echo "      instances vulnerable to security issues. If you are unsure"
+		echo "      about this, do not have this program modify firewall settings."
+		echo ""
+		echo -n "Have this program modify firewall settings? (y/n) [n]: "
+		[ $dotest -ne 1 ] && read yorn
+		[ $dotest -eq 1 ] && yorn=y
+		if [ "$yorn" = "y" -o "$yorn" = "Y" ] ; then
+			inside_net_check=1
+			setup_firewall_rules $startport $arbservhigh
+			run_network_tests
+		else
+			echo ""
+			echo "please consult your local sysadmins to enable communication to/from all"
+			echo "hosts via tcp on ports $startport - $arbservhigh."
+			echo ""
+			echo ""
+			echo "Cluster setup and operation will likely fail; would you like to"
+			echo "continue with cluster setup anyway?"
+			echo ""
+			askcontinue n
+			return
+		fi
+	fi
+
 	if [ $ret -ne 0 ] ; then
 		echo ""
 		echo "Network connectivity tests failed."
@@ -1225,6 +1534,51 @@ EOT
 	fi
 }
 
+function check_network_connectivity ()
+{
+	[ $numhosts -le 1 ] && return
+	clear_screen
+	echo ""
+	echo "The port range selected for this installation is ${startport}-$arbservhigh."
+	echo ""
+	echo "This program can optionally verify network port connectivity between"
+	echo "hosts. Doing so will use the \"netcat\" utility (\"nc\") to verify"
+	echo "connections. "
+	if [ $have_sudo -eq 0 -a $have_nc -eq 0 ] ; then
+		echo ""
+		echo "It appears that \"nc\" is not installed on the target host(s)."
+		echo "Unable to verify port connectivity."
+		echo ""
+		askcontinue y
+		return
+	fi
+	if [ $have_sudo -eq 1 -a $have_nc -eq 0 ] ; then
+		echo ""
+		echo "If netcat is not installed, this program will attempt to"
+		echo "install it by calling \"sudo yum install -y nc\"."
+	fi
+	echo ""
+	echo "Would you like this program to try verifying network connectivity?"
+	echo -n "(y/n) [y]: "
+	if [ $dotest -eq 0 ] ; then
+		read yorn
+		[ "$yorn" = "" ] && yorn=y
+		[ "$yorn" != "y" -a "$yorn" != "Y" ] && return
+	fi
+	[ "$do_network" = "no" ] && return
+
+	if [ $have_nc -eq 0 ] ; then
+		for host in ${hosts[*]} ; do
+			verify_nc_installed $host
+			[ $? -ne 0 ] && return
+		done
+	fi
+
+	inside_net_check=0
+
+	run_network_tests
+}
+
 function show_parameters ()
 {
 	echo ""
@@ -1240,7 +1594,7 @@ function show_parameters ()
 	echo "  security:   $secure_store"
 	echo "  repfactor:  $repfactor"
 	echo ""
-	
+
 	if [ $will_overwrite -ne 0 ] ; then
 		echo "WARNING: Continuing past this point will remove/destroy any existing"
 		echo "         Oracle NoSQL data!"
@@ -1373,7 +1727,7 @@ function adjust_paths ()
 	else
 		all_data_paths="$all_data_paths"
 	fi
-	
+
 	# adjust logdirs based on rnsperhost (capacity)
 	if [ "$all_log_paths" = "" ] ; then
 		for path in \$all_data_paths ; do
@@ -1423,8 +1777,6 @@ cd $installdir
 [ -L kvstore ] && rm -f kvstore
 ln -s \$kvdir kvstore
 cd \$homedir
-export JAVA_HOME=$javahome
-export PATH=$javahome/bin:\$PATH
 export KVHOME=$installdir/kvstore
 export KVROOT=$installdir/kvroot
 java -jar \$KVHOME/lib/kvstore.jar version
@@ -1611,12 +1963,31 @@ if [ $repfactor -eq 2 ] ; then
 	[ \$? -ne 0 ] && cat \$CFGOUT && echo "Can't create arbiter config" && exit 1
 fi
 
+# if on OCI, make sure ntpd is running
+if [ "$is_oci_instance" = "1" -a $have_sudo -eq 1 ] ; then
+	echo "Verifying ntpd running..."
+	sudo systemctl list-unit-files | grep 'ntpd.service.*enabled' > /dev/null 2>&1
+	if [ \$? -ne 0 ] ; then
+		# install ntp
+		sudo yum -y install ntp > /dev/null 2>&1
+		# configure ntp
+		# force time sync on start
+		sudo sed -i 's/^OPTIONS=\"-u/OPTIONS=\"-x -u/' /etc/sysconfig/ntpd
+		# uncomment local config
+		sudo sed -i 's/^.*192.168.1.0 mask.*$/restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap/' /etc/ntp.conf
+		# use us.pool servers
+		sudo sed -i 's/^\(server [0-3]\).*$/\1.us.pool.ntp.org/g' /etc/ntp.conf
+
+		# start ntp and add to boot config
+		sudo service ntpd start > /dev/null 2>&1
+		sudo chkconfig ntpd on > /dev/null 2>&1
+	fi
+fi
+
 
 # Create start/stop/admin scripts, execute start script
 SCR=\$KVHOME/scripts/start_kvstore.sh
 echo "#!/bin/bash" > \$SCR
-echo "export JAVA_HOME=$javahome" >> \$SCR
-echo "export PATH=$javahome/bin:\$PATH" >> \$SCR
 echo "export KVHOME=$installdir/kvstore" >> \$SCR
 echo "export KVROOT=$installdir/kvroot" >> \$SCR
 
@@ -1832,17 +2203,17 @@ function create_admin_script ()
 	for host in ${hosts[*]} ; do
 		get_ipaddr_cached $host
 		local ipaddr=$cached_ipaddr
-    	echo "plan deploy-sn -zn zn1 -host $ipaddr -port $startport -wait" >> $ADM
-    	echo "plan deploy-admin -sn sn$i -wait" >> $ADM
-    	echo "pool join -name ${storename}Pool -sn sn$i" >> $ADM
+		echo "plan deploy-sn -zn zn1 -host $ipaddr -port $startport -wait" >> $ADM
+		echo "plan deploy-admin -sn sn$i -wait" >> $ADM
+		echo "pool join -name ${storename}Pool -sn sn$i" >> $ADM
 		i=$(expr $i + 1)
 	done
 	if [ $repfactor -eq 2 ] ; then
 		for host in ${hosts[*]} ; do
 			get_ipaddr_cached $host
 			local ipaddr=$cached_ipaddr
-    		echo "plan deploy-sn -zn zn1 -host $ipaddr -port $arbport -wait" >> $ADM
-    		echo "pool join -name ${storename}Pool -sn sn$i" >> $ADM
+			echo "plan deploy-sn -zn zn1 -host $ipaddr -port $arbport -wait" >> $ADM
+			echo "pool join -name ${storename}Pool -sn sn$i" >> $ADM
 			i=$(expr $i + 1)
 		done
 	fi
@@ -1863,7 +2234,8 @@ function run_admin_script_on_host ()
 	echo ""
 	echo "Running topology setup script on $host..."
 	echo ""
-	if [ $numhosts -gt 1 ] ; then
+	local datapaths=($all_data_paths)
+	if [ $numhosts -gt 1 -o ${#datapaths[*]} -gt 3 ] ; then
 		echo "NOTE: this may take several minutes. Do not kill this program"
 		echo "      while this step is running."
 		echo ""
@@ -1928,7 +2300,7 @@ function verify_store_on_host ()
 	echo ""
 }
 
-function success_screen () 
+function success_screen ()
 {
 	clear_screen
 	echo ""
@@ -1960,7 +2332,7 @@ function success_screen ()
 	fi
 }
 
-function proxy_success_screen () 
+function proxy_success_screen ()
 {
 	echo ""
 	echo "httpproxy(s) successfully started. Use the following parameters when"
@@ -2001,8 +2373,6 @@ function run_smoke_test ()
 # create kvstore_sql.sh on host
 SQL=$installdir/kvstore/scripts/kvstore_sql.sh
 echo "#!/bin/bash" > \$SQL
-echo "export JAVA_HOME=$javahome" >> \$SQL
-echo "export PATH=$javahome/bin:\$PATH" >> \$SQL
 echo "export KVHOME=$installdir/kvstore" >> \$SQL
 echo "export KVROOT=$installdir/kvroot" >> \$SQL
 if [ $secure_store -eq 1 ] ; then
@@ -2046,6 +2416,19 @@ function get_proxy_port ()
 	save_vals
 }
 
+function get_nosql_passwd ()
+{
+	clear_screen
+	echo ""
+	echo "Enter the password for the \"nosql\" user that was used in the previous"
+	echo "invokation of this script to set up the cluster."
+	echo ""
+	echo -n "nosql user password: "
+	read -s password
+	[ "$password" = "" ] && exit 1
+	nosqlpass="$password"
+}
+
 
 function setup_proxy_on_host ()
 {
@@ -2064,7 +2447,6 @@ function setup_proxy_on_host ()
 	local ipaddr=$cached_ipaddr
 	proxygzbase=$(basename $proxygzfile)
 
-	
 	echo ""
 	echo "Creating proxy setup script for $host..."
 	echo ""
@@ -2136,8 +2518,6 @@ cd $installdir
 [ -L proxy ] && rm -f proxy
 ln -s \$proxydir proxy
 cd \$homedir
-export JAVA_HOME=$javahome
-export PATH=$javahome/bin:\$PATH
 export PROXYHOME=$installdir/proxy
 export KVHOME=$installdir/kvstore
 export KVROOT=$installdir/kvroot
@@ -2213,7 +2593,7 @@ if [ $secure_store -eq 1 -a $isfirst -eq 1 ] ; then
 	cp \$KVROOT/security/client.security \$PSECUREDIR/proxylogin.security
 	echo "oracle.kv.auth.username=proxy" >> \$PSECUREDIR/proxylogin.security
 	echo "oracle.kv.auth.\$pprop" >> \$PSECUREDIR/proxylogin.security
-	
+
 	echo ""
 	echo "Setting up proxy SSL certificate..."
 	echo ""
@@ -2288,8 +2668,6 @@ fi
 # create proxy start/stop scripts
 SCR=\$PROXYHOME/scripts/start_proxy.sh
 echo "#!/bin/bash" > \$SCR
-echo "export JAVA_HOME=$javahome" >> \$SCR
-echo "export PATH=$javahome/bin:\$PATH" >> \$SCR
 echo "export PROXYHOME=$installdir/proxy" >> \$SCR
 echo "cd \$PROXYHOME/log" >> \$SCR
 dosudo=""
@@ -2717,13 +3095,14 @@ else
 	get_hosts
 	get_installdir
 	get_storename
+	setup_raw_oci_drives
 	get_data_paths
 	get_log_paths
 	get_start_port
 	get_rep_factor
 fi
 max_host_capacity=0
-set_min_capcity
+set_min_capacity
 collect_all_hosts_data
 get_secure_passwds
 calculate_port_ranges
@@ -2752,6 +3131,7 @@ askcontinue y
 
 # proxy setup
 [ $dotest -eq 0 ] && get_proxy_port
+[ $proxy_only -eq 1 -a "$nosqlpass" = "" -a $dotest -eq 0 ] && get_nosql_passwd
 setup_proxy_on_hosts
 run_extended_test
 cleanup_temp_files
