@@ -112,7 +112,6 @@ function askcontinue ()
 function save_vals ()
 {
   echo "targzfile=$targzfile" > $SVARS
-  echo "proxygzfile=$proxygzfile" >> $SVARS
   echo "installdir=\"$installdir\"" >> $SVARS
   echo "storename=$storename" >> $SVARS
   echo "allhosts=\"$allhosts\"" >> $SVARS
@@ -180,11 +179,9 @@ function splash_screen ()
 	echo ""
 	echo " 1) ssh access to host machine(s)"
 	echo " 2) a downloaded Oracle NoSQL release .tar.gz or .zip file"
-	echo " 3) disk/nvme data drives set up on host machine(s)"
-	echo " 4) Java 8+ installed on host machine(s)"
-	echo ""
-	echo " Optional:"
-	echo " 5) a downloaded Oracle NoSQL httpproxy .tar.gz or .zipfile"
+	echo " If not running in Oracle OCI environment, the following are also required:"
+	echo "    3) disk/nvme data drives set up on host machine(s)"
+	echo "    4) Java 8+ installed on host machine(s)"
 	echo ""
 	echo "Downloads can be obtained from"
 	echo "https://www.oracle.com/database/technologies/nosql-database-server-downloads.html"
@@ -274,35 +271,6 @@ function get_targzfile ()
 	[[ $targzfile =~ kv-ce- ]] && is_community=1
 	save_vals
 }
-
-function get_proxygzfile ()
-{
-	clear_screen
-	if [ "$proxygzfile" = "" ] ; then
-		echo ""
-		echo "Optional: hit <enter> to skip this step"
-	fi
-	echo ""
-	echo "Enter path to the locally downloaded Oracle NoSQL httpproxy "
-	echo "tar.gz or zip file (ex: oracle-nosql-proxy-5.1.10.tar.gz)"
-	echo ""
-	echo -n "tar.gz/.zip file"
-	defprompt $proxygzfile
-	if [ $dotest -eq 0 ] ; then
-		read -e pfile
-		[ "$pfile" = "" ] && pfile=$proxygzfile
-		proxygzfile=$pfile
-	fi
-	if [ "$proxygzfile" != "" ] ; then
-		save_vals
-		# expand "~", etc
-		source $SVARS
-		get_topdir "$proxygzfile" httpproxy.jar
-		proxygztop=$topdir
-	fi
-	save_vals
-}
-
 
 function get_storename ()
 {
@@ -467,7 +435,7 @@ for drive in $drives ; do
 	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
 	sudo mkfs.ext4 -F \$drive > /tmp/nosql.\$\$ 2>&1
 	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
-	mount_dir=\$(echo \$drive | sed 's/dev/nosql/g')
+	mount_dir=\$(echo \$drive | sed 's#/dev#$installdir/data#')
 	sudo mkdir -p \$mount_dir  > /tmp/nosql.\$\$ 2>&1
 	[ \$? -ne 0 ] && cat /tmp/nosql.\$\$ && exit 1
 	sudo mount \$drive \$mount_dir > /tmp/nosql.\$\$ 2>&1
@@ -541,7 +509,7 @@ function setup_raw_oci_drives ()
 	done
 	local dp=""
 	for nvme in $nvme_drives ; do
-		mount_dir=$(echo $nvme | sed 's/dev/nosql/g')
+		mount_dir=$(echo $nvme | sed "s#/dev#$installdir/data#")
 		dp="$dp $mount_dir"
 	done
 	all_data_paths="$dp"
@@ -1581,6 +1549,12 @@ function check_network_connectivity ()
 
 function show_parameters ()
 {
+	local logpaths="$all_log_paths"
+	if [ "$logpaths" = "" ] ; then
+		for path in $all_data_paths ; do
+			logpaths="${all_log_paths}$path/log "
+		done
+	fi
 	echo ""
 	echo "Parameters that will be used for cluster setup:"
 	echo ""
@@ -1590,7 +1564,7 @@ function show_parameters ()
 	echo "  mainport:   $startport"
 	echo "  port_range: ${startport}-$arbservhigh"
 	echo "  datapaths:  $all_data_paths"
-	echo "  logpaths:   $all_log_paths"
+	echo "  logpaths:   $logpaths"
 	echo "  security:   $secure_store"
 	echo "  repfactor:  $repfactor"
 	echo ""
@@ -2406,6 +2380,18 @@ function get_proxy_port ()
 {
 	clear_screen
 	echo ""
+	echo "Oracle recommends configuring a NoSQL httpproxy for use with various"
+	echo "language drivers (python, go, Node.js, etc). This program can set up"
+	echo "the proxy for you."
+	echo ""
+	echo -n "Would you like to set up an httpproxy? (y/n) [y]: "
+	read yorn
+	if [ "$yorn" != "" -a "$yorn" != "y" -a "$yorn" != "Y" ] ; then
+		proxyport=0
+		save_vals
+		return
+	fi
+	echo ""
 	echo "Enter the port number desired to run Oracle NoSQL httpproxy on. This"
 	echo "port will be used by various language drivers to connect to the store."
 	echo ""
@@ -2445,7 +2431,6 @@ function setup_proxy_on_host ()
 
 	get_ipaddr_cached $host
 	local ipaddr=$cached_ipaddr
-	proxygzbase=$(basename $proxygzfile)
 
 	echo ""
 	echo "Creating proxy setup script for $host..."
@@ -2490,33 +2475,20 @@ function make_dir ()
 	return 0
 }
 
-echo "Unpacking $proxygzbase on $host..."
-make_dir $installdir
-[ \$? -ne 0 ] && echo "Can't create $installdir on $host" && exit 1
-homedir=\`pwd\`
-cd $installdir
-[ \$? -ne 0 ] && exit 1
-if [[ $proxygzfile =~ \.zip\$ ]] ; then
-unzip -o \$homedir/$proxygzbase > /tmp/unpack.out.\$\$ 2>&1
-else
-gzip -dc \$homedir/$proxygzbase | tar xvf - > /tmp/unpack.out.\$\$ 2>&1
-fi
-if [ \$? -ne 0 ] ; then
-cat /tmp/unpack.out.\$\$
-echo "Error unpacking $proxygzbase on $host"
-exit 1
-fi
-
 if [ $force_overwrite -eq 1 -a -s $installdir/proxy/scripts/stop_proxy.sh ] ; then
 	$installdir/proxy/scripts/stop_proxy.sh
 	sleep 1
 fi
 
-echo "Validating Oracle NoSQL installation..."
-proxydir=$proxygztop
+echo "Setting up httpproxy on $host..."
+homedir=\`pwd\`
 cd $installdir
-[ -L proxy ] && rm -f proxy
-ln -s \$proxydir proxy
+[ \$? -ne 0 ] && exit 1
+rm -rf proxy
+make_dir proxy
+[ \$? -ne 0 ] && echo "Can't create $installdir/proxy on $host" && exit 1
+cd proxy
+ln -s $installdir/kvstore/lib .
 cd \$homedir
 export PROXYHOME=$installdir/proxy
 export KVHOME=$installdir/kvstore
@@ -2738,16 +2710,6 @@ function check_is_ipaddr ()
 
 function setup_proxy_on_hosts ()
 {
-	# use xargs to manage parallel executions
-	write_words_to_file "$allhosts" $TMPDIR/hosts.$$
-	cat $TMPDIR/hosts.$$ | xargs -P 30 -I HOST bash -c "copy_tarfile_to_host HOST $proxygzfile $sshuser \"$sshopts\""
-	if [ $? -ne 0 ] ; then
-		echo ""
-		echo "Error copying httpproxy release to host(s)"
-		exit 1
-	fi
-	/bin/rm -f $TMPDIR/hosts.$$
-
 	# set up subjectAltNames strings based on hostnames/ips
 	local sans="DNS:OracleNoSQLProxy,DNS:localhost,IP:127.0.0.1"
 	for host in ${hosts[*]} ; do
@@ -3086,12 +3048,10 @@ if [ $dotest -eq 1 ] ; then
 	[ "$sshuser" != "" ] && sshat="${sshuser}@"
 	[ $debug -eq 1 ] && set -x
 	get_targzfile
-	get_proxygzfile
 else
 	splash_screen
 	get_prev_settings
 	get_targzfile
-	get_proxygzfile
 	get_hosts
 	get_installdir
 	get_storename
@@ -3116,21 +3076,17 @@ run_admin_script_on_host ${hosts[0]} $TMPDIR/runadmin.txt.$$
 setup_user_privs_on_host ${hosts[0]}
 verify_store_on_host ${hosts[0]}
 run_smoke_test ${hosts[0]}
+askcontinue any
 fi
 
-if [ "$proxygzfile" = "" ] ; then
+# proxy setup
+[ $dotest -eq 0 ] && get_proxy_port
+if [ "$proxyport" = "" -o "$proxyport" = "0" ] ; then
 	run_extended_test
 	cleanup_temp_files
 	success_screen
 	exit 0
 fi
-
-echo "Next: httpproxy setup"
-echo ""
-askcontinue y
-
-# proxy setup
-[ $dotest -eq 0 ] && get_proxy_port
 [ $proxy_only -eq 1 -a "$nosqlpass" = "" -a $dotest -eq 0 ] && get_nosql_passwd
 setup_proxy_on_hosts
 run_extended_test
