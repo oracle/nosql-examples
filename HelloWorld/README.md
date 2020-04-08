@@ -1,4 +1,4 @@
-This 15-minute tutorial walks you through the steps to connect to Oracle NoSQL Database Cloud Service and do basic table level operations using a sample application.
+This 15-minute tutorial walks you through the steps to connect to Oracle NoSQL Database Cloud Service and do basic table level operations using a sample HelloWord application. This application is referenced in the [blog](https://blogs.oracle.com/nosql/15-minutes-to-hello-world)
 
 # Background
 
