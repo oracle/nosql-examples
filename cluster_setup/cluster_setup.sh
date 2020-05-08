@@ -847,7 +847,7 @@ if [ "\$version" = "" ] ; then
 	echo "\$javahome on $host does not appear to point to valid java installation."
 	exit 1
 fi
-if [ \$version -lt 8 -o \$version -gt 13 ] ; then
+if [ \$version -lt 8 -o \$version -gt 15 ] ; then
 	echo ""
 	echo "Oracle NoSQL requires java version 8 or higher. The java installation on"
 	echo "$host is \$version."
