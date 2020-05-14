@@ -2378,6 +2378,12 @@ EOT
 
 function get_proxy_port ()
 {
+	if [ "$is_community" = "1" ] ; then
+		proxyport=0
+		save_vals
+		return
+	fi
+
 	clear_screen
 	echo ""
 	echo "Oracle recommends configuring a NoSQL httpproxy for use with various"
