@@ -266,9 +266,9 @@ function get_targzfile ()
 	get_topdir "$targzfile" kvstore.jar
 	targztop=$topdir
 	is_enterprise=0
-	is_community=0
+	is_old_community=0
 	[[ $targzfile =~ kv-ee- ]] && is_enterprise=1
-	[[ $targzfile =~ kv-ce- ]] && is_community=1
+	[[ $targzfile =~ kv-ce-18 ]] && is_old_community=1
 	save_vals
 }
 
@@ -2358,8 +2358,8 @@ chmod 755 \$SQL
 
 # create simple put/get/etc
 echo "CREATE TABLE IF NOT EXISTS test_data (id LONG, data JSON, PRIMARY KEY(id));" > cmds.sql
-[ $is_community -eq 0 ] && echo "INSERT INTO test_data VALUES (12345, '{\"test\":\"data\"}');" >> cmds.sql
-[ $is_community -eq 0 ] && echo "SELECT * FROM test_data;" >> cmds.sql
+[ $is_old_community -eq 0 ] && echo "INSERT INTO test_data VALUES (12345, '{\"test\":\"data\"}');" >> cmds.sql
+[ $is_old_community -eq 0 ] && echo "SELECT * FROM test_data;" >> cmds.sql
 echo "DROP TABLE test_data;" >> cmds.sql
 \$SQL -timeout 60000 load -file cmds.sql
 ret=\$?
@@ -2378,7 +2378,7 @@ EOT
 
 function get_proxy_port ()
 {
-	if [ "$is_community" = "1" ] ; then
+	if [ "$is_old_community" = "1" ] ; then
 		proxyport=0
 		save_vals
 		return
