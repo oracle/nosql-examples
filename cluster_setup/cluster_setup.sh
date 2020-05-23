@@ -1958,6 +1958,25 @@ if [ "$is_oci_instance" = "1" -a $have_sudo -eq 1 ] ; then
 	fi
 fi
 
+# if on OCI, make sure chronyd is running
+if [ "$is_oci_instance" = "1" -a $have_sudo -eq 1 ] ; then
+	echo "Verifying chronyd running..."
+	sudo systemctl list-unit-files | grep 'chronyd.service.*enabled' > /dev/null 2>&1
+	if [ \$? -ne 0 ] ; then
+		# install chrony
+		sudo yum -y install chrony > /dev/null 2>&1
+		# configure chrony
+		# force time sync on start
+		sudo sed -i 's/^OPTIONS=\"-u/OPTIONS=\"-x -u/' /etc/sysconfig/chronyd
+		# uncomment local config
+		sudo sed -i 's/^.*192.168.1.0 mask.*$/restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap/' /etc/chrony.conf
+		# use us.pool servers
+		sudo sed -i 's/^\(server [0-3]\).*$/\1.us.pool.ntp.org/g' /etc/chrony.conf
+		# start chrony and add to boot config
+		sudo service chronyd start > /dev/null 2>&1
+		sudo chkconfig chronyd on > /dev/null 2>&1
+	fi
+fi
 
 # Create start/stop/admin scripts, execute start script
 SCR=\$KVHOME/scripts/start_kvstore.sh
