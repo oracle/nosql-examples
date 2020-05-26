@@ -1937,28 +1937,6 @@ if [ $repfactor -eq 2 ] ; then
 	[ \$? -ne 0 ] && cat \$CFGOUT && echo "Can't create arbiter config" && exit 1
 fi
 
-# if on OCI, make sure ntpd is running
-if [ "$is_oci_instance" = "1" -a $have_sudo -eq 1 ] ; then
-	echo "Verifying ntpd running..."
-	sudo systemctl list-unit-files | grep 'ntpd.service.*enabled' > /dev/null 2>&1
-	if [ \$? -ne 0 ] ; then
-		# install ntp
-		sudo yum -y install ntp > /dev/null 2>&1
-		# configure ntp
-		# force time sync on start
-		sudo sed -i 's/^OPTIONS=\"-u/OPTIONS=\"-x -u/' /etc/sysconfig/ntpd
-		# uncomment local config
-		sudo sed -i 's/^.*192.168.1.0 mask.*$/restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap/' /etc/ntp.conf
-		# use us.pool servers
-		sudo sed -i 's/^\(server [0-3]\).*$/\1.us.pool.ntp.org/g' /etc/ntp.conf
-
-		# start ntp and add to boot config
-		sudo service ntpd start > /dev/null 2>&1
-		sudo chkconfig ntpd on > /dev/null 2>&1
-	fi
-fi
-
-
 # Create start/stop/admin scripts, execute start script
 SCR=\$KVHOME/scripts/start_kvstore.sh
 echo "#!/bin/bash" > \$SCR
