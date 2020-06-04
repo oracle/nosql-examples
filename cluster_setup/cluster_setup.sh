@@ -161,13 +161,13 @@ function get_prev_settings ()
 	echo -n "Use cached values from last program run? (y/n) [y]: "
 	read yorn
 	[ "$yorn" = "" ] && yorn=y
-	[ "$yorn" != "y" -a "$yorn" != "Y" ] && /bin/rm -f $SVARS && return
-	source $SVARS
+	[ "$yorn" != "y" -a "$yorn" != "Y" ] && /bin/rm -f $SVARS && return 1
 	echo ""
 	echo "Previous cached values imported. Values will show in brackets ([]) at"
 	echo "the end of each prompt. Hit <enter> to use previous values."
 	echo ""
 	askcontinue any
+	return 0
 }
 
 function splash_screen ()
@@ -250,7 +250,7 @@ function get_targzfile ()
 	clear_screen
 	echo ""
 	echo "Enter path to the locally downloaded Oracle NoSQL release "
-	echo "tar.gz or zip file (ex: kv-ee-19.5.13.tar.gz)"
+	echo "tar.gz or zip file (ex: kv-ee-20.1.6.tar.gz)"
 	echo ""
 	echo -n "tar.gz/.zip file"
 	defprompt $targzfile
@@ -547,9 +547,9 @@ trap "/bin/rm -f /tmp/*.\$\$" exit
 [ -s ~/.bashrc ] && source ~/.bashrc > /dev/null 2>&1
 [ -s ~/.bash_profile ] && source ~/.bash_profile > /dev/null 2>&1
 
-sudo firewall-cmd --permanent --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport $startport:$endport -s $ipbits -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo firewall-cmd --direct --passthrough ipv4 -I INPUT -p tcp --dport $startport:$endport -s $ipbits -m state --state NEW,ESTABLISHED -j ACCEPT
 [ \$? -ne 0 ] && exit 1
-sudo firewall-cmd --direct --passthrough ipv4 -I INPUT_ZONES_SOURCE -p tcp --dport $startport:$endport -s $ipbits -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo firewall-cmd --permanent --direct --passthrough ipv4 -I INPUT -p tcp --dport $startport:$endport -s $ipbits -m state --state NEW,ESTABLISHED -j ACCEPT
 
 exit \$?
 EOT
@@ -3035,6 +3035,9 @@ if [ $dotest -eq 1 ] ; then
 else
 	splash_screen
 	get_prev_settings
+	# note we must source settings in main script - otherwise variables set with
+	# 'declare' do not get global scope
+	[ $? -eq 0 ] && source $SVARS
 	get_targzfile
 	get_hosts
 	get_installdir
