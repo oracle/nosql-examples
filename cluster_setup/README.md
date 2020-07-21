@@ -22,9 +22,7 @@ Before you can run the cluster_setup.sh script, you'll need to meet the followin
 
 6. (optional): Separate director(ies) for NoSQL logs, similar to #5.
 
-7. A `tar.gz` or `zip` Oracle NoSQL kv installation file downloaded to the setup host (for example: `kv-ee-19.5.13.tar.gz`). Downloads are available from https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-
-8. (optional): A `tar.gz` or `zip` Oracle NoSQL Proxy installation file downloaded to the setup host, if you want to deploy a httpproxy to support the NoSQL http drivers (for example: `oracle-nosql-proxy-5.1.10.tar.gz`).
+7. A `tar.gz` or `zip` Oracle NoSQL kv installation file downloaded to the setup host (for example: `kv-ee-20.1.16.tar.gz`). Downloads are available from https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
 
 ## What the script does
 
