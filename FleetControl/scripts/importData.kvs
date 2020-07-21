@@ -1,2 +1,0 @@
-connect store -name kvstore
-put table -name Fleet -file /u02/labs/dev/FleetControl/data/fleet.dat

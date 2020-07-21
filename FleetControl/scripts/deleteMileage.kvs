@@ -1,2 +1,0 @@
-connect store -name kvstore
-delete table -name FLEET.MILEAGE -delete-all
