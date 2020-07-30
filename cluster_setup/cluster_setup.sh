@@ -1640,16 +1640,22 @@ trap "/bin/rm -f /tmp/*.\$\$" exit
 function test_dir ()
 {
 	local dir=\$1
-	touch \$dir/kv.\$\$
-	if [ \$? -ne 0 ] ; then
-		echo ""
-		iam=\$(whoami)
-		echo "Error: user \$iam does not have write permission in \$dir on $host."
-		echo ""
-		exit 1
+	touch \$dir/kv.\$\$ > /dev/null 2>&1
+	if [ \$? -eq 0 ] ; then
+		/bin/rm -f \$dir/kv.\$\$
+		return 0
 	fi
-	/bin/rm -f \$dir/kv.\$\$
-	return 0
+	chmod 755 \$dir > /dev/null 2>&1
+	touch \$dir/kv.\$\$ > /dev/null 2>&1
+	if [ \$? -eq 0 ] ; then
+		/bin/rm -f \$dir/kv.\$\$
+		return 0
+	fi
+	echo ""
+	iam=\$(whoami)
+	echo "Error: user \$iam does not have write permission in \$dir on $host."
+	echo ""
+	exit 1
 }
 
 
@@ -2267,7 +2273,7 @@ function success_screen ()
 		echo "   username=nosql"
 		echo "   password=$pass"
 		echo "   ssl trust file=$installdir/kvroot/security/client.trust"
-		echo "   security proerties file=$installdir/kvroot/security/nosqllogin.security"
+		echo "   security properties file=$installdir/kvroot/security/nosqllogin.security"
 	fi
 	echo ""
 	echo "Start/stop scripts for NoSQL kvstore are located on host(s) at:"
