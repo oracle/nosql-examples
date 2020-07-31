@@ -1,4 +1,4 @@
-# OracleNoSQLBulkgGet
+# OracleNoSQLBulkGet
 
 Table defination
 
