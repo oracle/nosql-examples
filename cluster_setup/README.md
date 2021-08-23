@@ -29,7 +29,6 @@ Before you can run the cluster_setup.sh script, you'll need to meet the followin
 The script will do the following tasks:
 
 * Ask for the path to the downloaded Oracle NoSQL kv `tar.gz/.zip` file
-* Ask for the (optional) path to the downloaded Oracle NoSQL Proxy `tar.gz/.zip` file
 * Ask for all hostnames (or IP addresses) of target hosts, and ssh username/options
 * Ask for the installation directory for NoSQL binaries/libraries
 * Ask for the name of the store to be configured
@@ -47,7 +46,7 @@ The script will do the following tasks:
 * Create helper scripts in KVHOME/scripts on the setup hosts for various operations
 * Deploy cluster topology and start all cluster Replication Nodes (this can take a while)
 * Run a simple test to verify basic operation
-* Set up the optional Oracle NoSQL Proxy running on each setup host
+* Optionally configure Oracle NoSQL Proxy running on each setup host
 * Optionally run a longer extended test to get basic performance indicators
 * Display store parameters for access to the newly running store
 
@@ -64,7 +63,6 @@ The most common failures when using this script are due to network ports not bei
 * Note: for OCI instances, the cluster_setup script will automatically install java, optionally configure network settings, and optionally set up raw NVMe drives.
 * Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-* Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host, if using the NoSQL http based drivers.
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
@@ -84,7 +82,6 @@ The most common failures when using this script are due to network ports not bei
   * `sudo yum install java-1.8.0-openjdk`
 * Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-* Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host, if using the NoSQL http based drivers.
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
@@ -101,7 +98,6 @@ The most common failures when using this script are due to network ports not bei
   * `sudo yum install java`
 * Download a release distribution of Oracle NoSQL Database to your setup host
   * https://www.oracle.com/database/technologies/nosql-database-server-downloads.html
-* Optionally download a release distribution of the Oracle NoSQL Database Proxy to your setup host, if using the NoSQL http based drivers.
 * Download `cluster_setup.sh` and make it executable
   * `curl 'https://raw.githubusercontent.com/oracle/nosql-examples/master/cluster_setup/cluster_setup.sh' > cluster_setup.sh`
   * `chmod +x ./cluster_setup.sh`
