@@ -1,0 +1,9 @@
+CREATE TABLE if not exists demo(
+  fullName     STRING,
+  contactPhone STRING,
+  ticketNo     STRING,
+  confNo       STRING,
+  gender       STRING,
+  bagInfo      JSON,
+ PRIMARY KEY ( ticketNo )
+ )
