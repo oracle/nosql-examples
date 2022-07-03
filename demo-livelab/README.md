@@ -1,7 +1,6 @@
 #  Oracle NoSQL LiveLabs
 
-**Oracle LiveLabs** gives you access to Oracle's tools and technologies to run 
-a wide variety of labs and workshops.
+![This is an image](NoSQL-Database.png)
 
 **Oracle NoSQL Database** is designed for today’s most demanding applications that 
 require low latency responses, flexible data models, and elastic scaling for dynamic workloads. 
@@ -10,6 +9,11 @@ service with on-demand throughput and storage based provisioning.
 
 **Oracle NoSQL Database Cloud Service** is now a fully managed database service running 
 on Gen 2 Oracle Cloud Infrastructure hardware.
+
+![This is an image](LiveLabs.png)
+
+**Oracle LiveLabs** gives you access to Oracle's tools and technologies to run 
+a wide variety of labs and workshops.
 
 In the development world, practice makes master. That is why you must find as many 
 ways to practice as possible. Never stop learning. Follow our LiveLabs
@@ -30,7 +34,8 @@ Oracle NoSQL Database Cloud Service — intermediate level. Intermediate level L
 * [demo-lab-baggage](./demo-lab-baggage) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — expert level.
 Advanced level Livelab will feature Streaming and API gateway
 
-# Oracle LiveLabs 
+#   Oracle LiveLabs 
+
 Oracle LiveLabs gives you access to Oracle's tools and technologies to run a wide variety of labs and workshops.
 
 Experience Oracle's best technology, live!
