@@ -13,9 +13,9 @@ Estimated Time: 50 Minutes
 
 ### Lab
 
-* [setup-environment](./kvlite/setup-environment/setup-environment.md) 
-* [create-populate-tables](./kvlite/create-populate-tables/create-populate-tables.md)  
-* [explore-run-queries](./kvlite/explore-run-queries/explore-run-queries.md)
+* [setup-environment](./demo-nosql-lab-with-kvlite/setup-environment/setup-environment.md) 
+* [create-populate-tables](./demo-nosql-lab-with-kvlite/create-populate-tables/create-populate-tables.md)  
+* [explore-run-queries](./demo-nosql-lab-with-kvlite/explore-run-queries/explore-run-queries.md)
 
 
 ## Learn More
