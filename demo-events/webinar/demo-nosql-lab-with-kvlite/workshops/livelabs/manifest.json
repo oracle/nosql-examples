@@ -1,0 +1,31 @@
+{
+    "workshoptitle": "Discover Oracle NoSQL Database",
+    "include": {"queries.sql":"../../files/queries.sql", "baggage_data_file.json":"../../files/baggage_data_file0.json"},
+      "help": "livelabs-help-db_us@oracle.com",
+      "tutorials": [
+        {
+            "title": "Introduction",
+            "description": "This is the complete template for LiveLabs content developers",
+            "type": "livelabs",
+            "filename": "../../introduction/introduction.md"
+        },
+        {
+            "title": "Lab 1: Prepare Your Environment",
+            "description": "Perform the iniital setup operations",
+            "type": "livelabs",
+            "filename": "../../setup-environment/setup-environment.md"
+        },
+        {
+            "title": "Lab 2: Create Tables, Load Tables",
+            "description": "Create and populate your tables",
+            "type": "livelabs",
+            "filename": "../../create-populate-tables/create-populate-tables.md"
+        },
+        {
+            "title": "Lab 3: Explore Data, Run Queries",
+            "description": "This is the complete template for LiveLabs content developers",
+            "type": "livelabs",
+            "filename": "../../explore-run-queries/explore-run-queries.md"
+        }
+    ]
+}
