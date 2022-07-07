@@ -1,0 +1,4 @@
+Any {
+ALL {resource.type = 'ApiGateway', resource.compartment.id = '<here>'},
+ALL {resource.type = 'fnfunc', resource.compartment.id = '<here>'}
+}

@@ -1,0 +1,14 @@
+{
+        "name": "demo-api",
+        "version": "1.0.0",
+        "description": "Basic demo of fn and API Gateway with Oracle NoSQL",
+        "private": "true",
+        "main": "func.js",
+        "author": "Dario Vega",
+        "license": "Apache-2.0",
+        "dependencies": {
+                "@fnproject/fdk": ">=0.0.15",
+                "url": "^0.11.0",
+                "oracle-nosqldb": "^5.2.0"
+        }
+}

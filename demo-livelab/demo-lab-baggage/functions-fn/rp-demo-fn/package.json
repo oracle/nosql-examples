@@ -1,0 +1,14 @@
+{
+        "name": "rp-demo-fn",
+        "version": "1.0.0",
+        "description": "example function reading RPST",
+        "main": "func.js",
+        "author": "",
+        "license": "Apache-2.0",
+        "dependencies": {
+                "@fnproject/fdk": ">=0.0.18",
+                "http-signature": "^1.3.4",
+                "jssha": "^3.1.0",
+                "oci-secrets": "^1.0.2"
+        }
+}

@@ -1,0 +1,2 @@
+allow service FaaS to read repos in tenancy
+Allow service FaaS to use virtual-network-family in tenancy

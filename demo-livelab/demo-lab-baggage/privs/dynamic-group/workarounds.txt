@@ -1,0 +1,5 @@
+allow service FaaS to read repos in tenancy
+Allow service FaaS to use virtual-network-family in tenancy
+ALLOW dynamic-group nosql_demos to read instance-family in tenancy
+allow dynamic-group nosql_demos to inspect vcns in tenancy
+allow dynamic-group nosql_demos to read secret-family in tenancy
