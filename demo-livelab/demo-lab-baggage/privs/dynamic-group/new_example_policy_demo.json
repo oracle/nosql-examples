@@ -1,0 +1,10 @@
+[
+  "allow service FaaS to read repos in tenancy",
+  "Allow service faas to use virtual-network-family in tenancy",
+  "allow dynamic-group nosql_demos to use functions-family  in compartment id <here> ",
+  "allow dynamic-group nosql_demos to manage all-resources in compartment id <here> ",
+  "allow any-user  to use functions-family   in compartment id <here> where ALL {request.principal.type = 'ApiGateway', request.resource.compartment.id = '<here>'}",
+  "allow any-user to use fn-function in compartment id <here> where all {request.principal.type='serviceconnector',  request.principal.compartment.id='<here>'}",
+  "allow any-user to use fn-invocation in compartment id <here> where all {request.principal.type='serviceconnector',  request.principal.compartment.id='<here>'}",
+  "allow any-user to {STREAM_READ, STREAM_CONSUME} in compartment id <here> where all {request.principal.type='serviceconnector',  target.stream.id='<streamid>',  request.principal.compartment.id='<here>'}"
+]

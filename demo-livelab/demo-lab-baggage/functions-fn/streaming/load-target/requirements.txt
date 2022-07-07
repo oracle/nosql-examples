@@ -1,0 +1,6 @@
+fdk
+requests
+oci
+pandas
+pyarrow
+borneo

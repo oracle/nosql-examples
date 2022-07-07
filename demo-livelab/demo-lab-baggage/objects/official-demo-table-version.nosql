@@ -1,0 +1,7 @@
+CREATE TABLE if not exists demo(
+  ticketNum STRING,
+  name STRING,
+  reservationCode STRING,
+  content JSON
+ PRIMARY KEY ( ticketNum )
+ )

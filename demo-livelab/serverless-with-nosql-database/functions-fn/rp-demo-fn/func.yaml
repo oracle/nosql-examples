@@ -1,0 +1,5 @@
+schema_version: 20180708
+name: rp-demo-fn
+version: 0.0.54
+runtime: node
+entrypoint: node func.js

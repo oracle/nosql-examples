@@ -1,0 +1,7 @@
+schema_version: 20180708
+name: demo-api
+version: 0.0.210
+runtime: docker
+memory: 256
+timeout: 120
+idle_timeout: 1800

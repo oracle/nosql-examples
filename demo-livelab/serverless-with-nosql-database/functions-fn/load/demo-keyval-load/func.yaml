@@ -1,0 +1,7 @@
+schema_version: 20180708
+name: demo-keyval-load
+version: 0.0.27
+runtime: docker
+memory: 256
+timeout: 120
+idle_timeout: 1800

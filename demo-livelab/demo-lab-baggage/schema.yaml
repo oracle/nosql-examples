@@ -1,0 +1,93 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+    title: "demo-lab-baggage serverless architecture and NoSQL Cloud Services"
+    description: "Learn and Discover why NoSQL Cloud Services and OCI native services are compelling"
+    informationalText: "Modern apps benefit from predictable low latency, flexibility, and horizontal scale-out of NoSQL databases. Join us to learn how effortless it is to develop a modern app using Oracle Cloud Infrastructure and Oracle NoSQL Database Cloud Service. This lab is based on data from an airline baggage tracking app"
+    instructions: "Please choose the region Phoenix and Choose "
+    troubleshooting: "Need Help"
+    stackDescription: "Learn and Discover why NoSQL Cloud Services and OCI native services are compelling"
+    schemaVersion: 1.1.0
+    version: "20210101"
+    locale: "en"
+
+
+    variableGroups:
+    - title: General Configuration
+      visible: false
+      variables:
+      - tenancy_ocid
+      - region
+
+    - title: Required Configuration
+      visible: true  
+      variables:
+      - compartment_ocid
+      - ocir_repo_name
+      - ocir_user_name
+      - ocir_user_password
+      - always_free       
+
+    variables:
+
+      compartment_ocid:
+        type: oci:identity:compartment:id
+        required: true
+        visibile: true
+        title: Compartment
+        description: "Compartment where you want to create the solution resources"
+
+      region:
+        type: oci:identity:region:name
+        required: true
+        visibile: true
+        title: Region
+        description: "Region where you want to deploy the resources defined by this stack."
+          
+      ocir_repo_name:
+        type: string
+        required: true
+        visibile: true
+        title: "OCIR repository name"
+        description: "Oracle Cloud Infrastructure Registry repository name (for example nosql_demos)"
+
+      ocir_user_name:
+        type: string
+        required: true
+        visibile: true
+        title: "OCIR username"
+        description: "Oracle Cloud Infrastructure Registry username (your OCI username)" 
+
+      ocir_user_password:
+        type: password
+        required: true
+        visibile: true
+        title: "OCIR user password"
+        description: "Oracle Cloud Infrastructure Registry user password (your OCI user authtoken)" 
+
+      always_free:
+        type: boolean
+        title: "NOSQL always free ?"
+        description: "The NOSQL tables will create with the option always free"
+        visible: true
+        default: true
+        
+    outputs:
+
+      oci_apigateway_deployment_URL:
+        title: "API endpoint URL"
+        displayText: "API endpoint URL example"
+        type: copyableString
+        visible: true
+
+      nosql_table_ddl_statement:
+        title: "nosql table ddl statement"
+        displayText: "NOSQL example"
+        type: copyableString
+        visible: true 
+
+      nosql_kv_table_ddl_statement:
+        title: "nosql table KV ddl statement"
+        displayText: "NOSQL example"
+        type: copyableString
+        visible: true 
