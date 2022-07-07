@@ -1,0 +1,57 @@
+{ "value" : {
+  "fullName" : "Abram Falls",
+  "contactPhone" : "921-284-5378",
+  "ticketNo" : "176233524485",
+  "confNo" : "HP1D4H",
+  "gender" : "F",
+  "bagInfo" : [ {
+    "id" : "79039899127071",
+    "tagNum" : "17657806285185",
+    "routing" : "SYD/SIN/LHR",
+    "lastActionCode" : "OFFLOAD",
+    "lastActionDesc" : "OFFLOAD",
+    "lastSeenStation" : "LHR",
+    "flightLegs" : [ {
+      "flightNo" : "BM254",
+      "flightDate" : "2019.02.28 at 22:00:00 AEDT",
+      "fltRouteSrc" : "SYD",
+      "fltRouteDest" : "SIN",
+      "estimatedArrival" : "2019.03.01 at 03:00:00 SGT",
+      "actions" : [ {
+        "actionAt" : "SYD",
+        "actionCode" : "ONLOAD to SIN",
+        "actionTime" : "2019.02.28 at 22:09:00 AEDT"
+      }, {
+        "actionAt" : "SYD",
+        "actionCode" : "BagTag Scan at SYD",
+        "actionTime" : "2019.02.28 at 21:51:00 AEDT"
+      }, {
+        "actionAt" : "SYD",
+        "actionCode" : "Checkin at SYD",
+        "actionTime" : "2019.02.28 at 20:06:00 AEDT"
+      } ]
+    }, {
+      "flightNo" : "BM272",
+      "flightDate" : "2019.02.28 at 19:09:00 SGT",
+      "fltRouteSrc" : "SIN",
+      "fltRouteDest" : "LHR",
+      "estimatedArrival" : "2019.03.01 at 03:10:00 GMT",
+      "actions" : [ {
+        "actionAt" : "LHR",
+        "actionCode" : "Offload to Carousel at LHR",
+        "actionTime" : "2019.03.01 at 03:01:00 GMT"
+      }, {
+        "actionAt" : "SIN",
+        "actionCode" : "ONLOAD to LHR",
+        "actionTime" : "2019.03.01 at 11:20:00 SGT"
+      }, {
+        "actionAt" : "SIN",
+        "actionCode" : "OFFLOAD from SIN",
+        "actionTime" : "2019.03.01 at 11:10:00 SGT"
+      } ]
+    } ],
+    "lastSeenTimeGmt" : "2019.03.01 at 03:06:00 GMT",
+    "bagArrivalDate" : "2019.03.01 at 03:06:00 GMT"
+  } ]
+}
+}
