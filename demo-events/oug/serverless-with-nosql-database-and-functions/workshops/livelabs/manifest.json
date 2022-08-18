@@ -1,0 +1,47 @@
+{
+    "workshoptitle": "Discover Serverless Apps Using Oracle NoSQL Database Cloud Service",
+    "include": {"queries.sql":"../../files/queries.sql", "baggage_data_file.json":"../../files/baggage_data_file0.json"},
+      "help": "livelabs-help-db_us@oracle.com",
+      "tutorials": [
+        {
+            "title": "Introduction",
+            "description": "This is the complete template for LiveLabs content developers",
+            "type": "livelabs",
+            "filename": "../../introduction/introduction.md"
+        },
+		{
+          "title": "Getting Started",
+          "description": "This is the prerequisites for customers using Free Trial and Paid tenancies, and Always Free accounts (if applicable).",
+          "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/pre-register-free-tier-account.md"
+        },
+        {
+            "title": "Lab 1: Baggage Tracking Demo",
+            "description": "Experience a live baggage tracking demo",
+            "type": "livelabs",
+            "filename": "../../baggage-tracking-demo/baggage-tracking-demo.md"
+        },
+        {
+            "title": "Lab 2: Prepare Your Environment",
+            "description": "Perform the iniital setup operations",
+            "type": "livelabs",
+            "filename": "../../setup-environment/setup-environment.md"
+        },
+        {
+            "title": "Lab 3: Create Tables, Load Tables",
+            "description": "Create and populate your tables",
+            "type": "livelabs",
+            "filename": "../../create-populate-tables/create-populate-tables.md"
+        },
+        {
+            "title": "Lab 4: Explore Data, Run Queries",
+            "description": "This is the complete template for LiveLabs content developers",
+            "type": "livelabs",
+            "filename": "../../explore-run-queries/explore-run-queries.md"
+        },
+        {
+          "title": "Need Help?",
+          "description": "Solutions to Common Problems and Directions for Receiving Live Help",
+          "filename":"https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/need-help/need-help-livelabs.md"
+        }
+    ]
+}
