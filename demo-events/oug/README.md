@@ -29,7 +29,7 @@ In this workshop you will:
 Estimated Time: 50 Minutes
 
 ### Additional steps will be provided by the instructor
-https://github.com/dario-vega/demo-lab-baggage/blob/main/Instructions.md#Step10.CreatetheStream
+https://github.com/oracle/nosql-examples/blob/master/demo-livelab/demo-lab-baggage/Instructions.md#Step10.CreatetheStream
 * Create the Stream
 * Create and configure the Service Connector
 * Create and configure the API Gateway
