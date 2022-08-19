@@ -25,7 +25,7 @@ a wide variety of labs and workshops.
 In the development world, practice makes master. That is why you must find as many 
 ways to practice as possible. Never stop learning. Follow our LiveLabs
 
-* [Get started with tables in Oracle NoSQL Database Cloud Service](https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/view-workshop?p180_id=642)
+* [Get started with tables in Oracle NoSQL Database Cloud Service](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=642)
 * [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://bit.ly/dbwlab23)
 
 > Those labs were specialled designed for Application Developers, Architects, Administrators
