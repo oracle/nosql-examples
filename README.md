@@ -2,7 +2,7 @@ This is a top level repository for code examples related to the use of Oracle No
 
 # Oracle NoSQL Database
 
-![Oracle NoSQL](NoSQL-Database.png)
+![Oracle NoSQL](./demo-livelab/NoSQL-Database.png)
 
 **Oracle NoSQL Database** is designed for today’s most demanding applications that 
 require low latency responses, flexible data models, and elastic scaling for dynamic workloads. 
@@ -19,7 +19,7 @@ for both on-demand and provisioned capacity modes, including 100% compatibility 
 
 # Oracle NoSQL LiveLabs
 
-![NoSQL LiveLabs](LiveLabs.png)
+![NoSQL LiveLabs](./demo-livelab/LiveLabs.png)
 
 **Oracle LiveLabs** gives you access to Oracle's tools and technologies to run 
 a wide variety of labs and workshops.
@@ -54,7 +54,7 @@ https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/home
 
 # Oracle NoSQL Workshops and Examples
 
-![NoSQL Ideas](Ideas.png)
+![NoSQL Ideas](./demo-livelab/Ideas.png)
 
 NoSQL Developers 👨‍💻 👩‍💻
 
