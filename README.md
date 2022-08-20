@@ -136,7 +136,7 @@ https://www.oracle.com/database/nosql/#rc30-cloud-learning
 
 # Other Examples and Resources
 
-![NoSQL Ideas](Ideas.png)
+![NoSQL Ideas](./demo-livelab/Ideas.png)
 
 ## Process media by using serverless job management and ephemeral compute workers
 
