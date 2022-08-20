@@ -1,5 +1,3 @@
-This is a top level repository for code examples related to the use of Oracle NoSQL Database. 
-
 # Oracle NoSQL Database
 
 ![Oracle NoSQL](./demo-livelab/NoSQL-Database.png)
@@ -50,7 +48,7 @@ Oracle LiveLabs gives you access to Oracle's tools and technologies to run a wid
 
 Experience Oracle's best technology, live!
 
-https://developer.oracle.com/livelabs
+[https://developer.oracle.com/livelabs](https://developer.oracle.com/livelabs)
 
 # Oracle NoSQL Workshops and Examples
 
@@ -119,11 +117,11 @@ The NoSQL team is delivering content in Webinars and Events around the world.
 The Oracle Cloud Infrastructure (OCI) provider allows you to use Terraform to interact with Oracle Cloud Infrastructure resources. 
 Wherever you use a Terraform distribution you can use the OCI Terraform provider, including Terraform Cloud and the OCI Resource Manager.
 
-https://github.com/oracle/terraform-provider-oci
+[https://github.com/oracle/terraform-provider-oci](https://github.com/oracle/terraform-provider-oci)
 
 This is a Terraform configuration that creates the NoSQL service on Oracle Cloud Infrastructure.
 
-https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql
+[https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql](https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql)
 
 # Cloud Learning
 
@@ -131,7 +129,7 @@ NoSQL Developers 👨‍💻 👩‍💻
 
 Learn how to Develop Applications Fast and Effortlessly using our resources and videos in the **Cloud Learning** page
 
-https://www.oracle.com/database/nosql/#rc30-cloud-learning
+[https://www.oracle.com/database/nosql/#rc30-cloud-learning](https://www.oracle.com/database/nosql/#rc30-cloud-learning]
 
 
 # Other Examples and Resources
@@ -148,7 +146,7 @@ In scenarios where media processing requests might be ad-hoc and on-demand, leav
 By utilizing Oracle Cloud Infrastructure's (OCI) server-less capabilities, including OCI Functions and OCI NoSQL, 
 we can quickly create a management system for processing media content using ephemeral OCI Compute workers.
 
-https://docs.oracle.com/en/solutions/process-media-using-oci-services/index.html
+[https://docs.oracle.com/en/solutions/process-media-using-oci-services/index.html](https://docs.oracle.com/en/solutions/process-media-using-oci-services/index.html)
 
 Note: You can deploy this pattern using downloadable code or automated provisioning, as described in the Download or Deploy section in the link above.
 
@@ -163,7 +161,7 @@ giving you easy integration with applications or workflows
 
 Oracle NoSQL Database cloud service : This application shows how to interface with Oracle NoSQL Database cloud service.
 
-https://github.com/oracle-samples/oracle-dataflow-samples/
+[https://github.com/oracle-samples/oracle-dataflow-samples/](https://github.com/oracle-samples/oracle-dataflow-samples/)
 
 ## Train and deploy models from massive data sets: fraud detection use case
 
@@ -174,7 +172,7 @@ and eventually prevent credit card fraud are necessary to avoid losses. Since fr
 fraction of all transactions, massive amounts of data are typically needed to build a robust and accurate model capable 
 of alerting of fraud with minimal false positives.
 
-https://docs.oracle.com/en/solutions/models-credit-card-fraud-detection/index.html 
+[https://docs.oracle.com/en/solutions/models-credit-card-fraud-detection/index.html](https://docs.oracle.com/en/solutions/models-credit-card-fraud-detection/index.html)
 
 ## Employ anomaly detection for managing assets and predictive maintenance
 
@@ -186,7 +184,7 @@ Anomaly Detection Service helps you detect anomalies in time series data without
 It provides prebuilt algorithms, and it addresses data issues automatically. It is a cloud-native service accessible over REST APIs and 
 can connect to many data sources. The OCI Console, CLI, and SDK make it easy for use in end-to-end solutions.
 
-https://docs.oracle.com/en/solutions/anomaly-detection/index.html
+[https://docs.oracle.com/en/solutions/anomaly-detection/index.html](https://docs.oracle.com/en/solutions/anomaly-detection/index.html)
 
 ##  Oracle Architecture Center
 
@@ -195,5 +193,5 @@ https://docs.oracle.com/en/solutions/anomaly-detection/index.html
 Leverage knowledge from Oracle experts. Use our reference architectures, solution playbooks, and customer stories to build and deploy your cloud, 
 hybrid, and on-premises workloads.
 
-https://docs.oracle.com/pls/topic/lookup?ctx=en/solutions&id=solutions-home
+[Explore Oracle Architecture Center](https://docs.oracle.com/pls/topic/lookup?ctx=en/solutions&id=solutions-home)
 
