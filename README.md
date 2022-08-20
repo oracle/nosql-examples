@@ -50,7 +50,7 @@ Oracle LiveLabs gives you access to Oracle's tools and technologies to run a wid
 
 Experience Oracle's best technology, live!
 
-https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/home
+https://developer.oracle.com/livelabs
 
 # Oracle NoSQL Workshops and Examples
 
