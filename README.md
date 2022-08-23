@@ -25,21 +25,25 @@ a wide variety of labs and workshops.
 In the development world, practice makes master. That is why you must find as many 
 ways to practice as possible. Never stop learning. Follow our LiveLabs
 
-* [Get started with tables in Oracle NoSQL Database Cloud Service](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=642)
-* [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://bit.ly/dbwlab23)
+* [Get started with tables in Oracle NoSQL Database Cloud Service](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=642) `sql-for-nosql` `nosql-java-sdk` `nosql-node-sdk` `nosql-dotnet-sdk` `nosql-go-sdk` `nosql-python-sdk`
+* [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://bit.ly/dbwlab23) `sql-for-nosql`  `nosql-node-sdk` 
 
 > Those labs were specialled designed for Application Developers, Architects, Administrators
 > and DevOps Engineers.
 
+---
 
-In the directory `demo-livelab` you can find the code used in our NoSQL LiveLabs workshops.
-* [demo-lab-nosql](./demo-livelab/demo-lab-nosql) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level
+In the directory `demo-livelab` you can find the **code used in our NoSQL LiveLabs workshops**.
+* [demo-lab-nosql](./demo-livelab/demo-lab-nosql) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level `sql-for-nosql`  `nosql-node-sdk` 
+
 
 **You can find also the code of workshops showcased in NoSQL events** around the World (*LiveLabs coming soon*)
 * [serverless-with-nosql-database](./demo-livelab/serverless-with-nosql-database) contains the code for Discover serverless apps using 
-Oracle NoSQL Database Cloud Service — intermediate level. Intermediate level LiveLab will feature functions
-* [demo-lab-baggage](./demo-livelab/demo-lab-baggage) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — expert level.
-Advanced level Livelab will feature Streaming and API gateway
+Oracle NoSQL Database Cloud Service — intermediate level. Intermediate level LiveLab will feature functions `sql-for-nosql`  `nosql-node-sdk` 
+`nosql-python-sdk` `oci-functions` `nosql-cloud-devops`
+* [demo-lab-baggage](./demo-livelab/demo-lab-baggage) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — expert level. 
+Advanced level Livelab will feature Streaming and API gateway 
+`sql-for-nosql`  `nosql-node-sdk` `nosql-python-sdk` `oci-functions` `nosql-cloud-devops` `oci-streaming` `oci-api-gateway` `oci-connector-hub`
 
 
 ## Oracle LiveLabs 
@@ -56,6 +60,8 @@ Experience Oracle's best technology, live!
 
 NoSQL Developers 👨‍💻 👩‍💻
 
+**Tags:** `enhancement` `help wanted` `question` `idea` `show-and-tell`
+
 In the development world, practice makes the master. That is why you must find as many ways to practice as possible. Never stop learning. 
 
 We’ve enabled GitHub Discussions to provide a way for you to connect with other community members. We hope that you:
@@ -67,6 +73,7 @@ We’ve enabled GitHub Discussions to provide a way for you to connect with othe
 
 ## Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure
 
+**Tags:** `deploy-nosql` 
 
 See this [script](./cluster_setup) that simplifies the installation of Oracle NoSQL Database on the Oracle Cloud Infrastructure (OCI). 
 This script lets a user set up a small cluster (1-10 machines) quickly, for use in proof-of-concepts, small on premise installations, 
@@ -76,8 +83,11 @@ Read this [whitepaper](https://www.oracle.com/a/otn/docs/database/oracle-nosql-c
 
 ## Getting started with SQL for Oracle NoSQL Database 
 
+**Tags:** `sql-for-nosql` 
+
 Welcome to [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/nsdev/getting-started-sql-oracle-nosql-database.html#GUID-9B9BAC71-20C3-4F76-99B8-8843907E4A6A
 ). 
+
 
 The SQL for Oracle NoSQL Database data model supports flat relational data, hierarchical typed (schema-full) data, and schema-less JSON data. 
 SQL for Oracle NoSQL Database is designed to handle all such data seamlessly without any impedance mismatch among the different sub-models. 
@@ -109,8 +119,8 @@ in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/datab
 The NoSQL team is delivering content in Webinars and Events around the world. 
 
 **You can find also the instructions of workshops showcased in NoSQL events**
-- [Discover Oracle NoSQL Database](./demo-events/webinar) `demo-nosql-lab-with-kvlite`
-- [Writing and optimizing NoSQL queries](./demo-events/webinar) `demo-nosql-lab-with-kvlite`
+- [Discover Oracle NoSQL Database](./demo-events/webinar) > demo-nosql-lab-with-kvlite `sql-for-nosql` `nosql-node-sdk` 
+- [Writing and optimizing NoSQL queries](./demo-events/webinar) > demo-nosql-lab-with-kvlite `sql-for-nosql` 
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 
@@ -123,9 +133,14 @@ This is a Terraform configuration that creates the NoSQL service on Oracle Cloud
 
 [https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql](https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql)
 
+**Tags:** `nosql-cloud-devops` 
+
+
 # Cloud Learning
 
 NoSQL Developers 👨‍💻 👩‍💻
+
+**Tags:** `nosql-java-sdk` `nosql-node-sdk` `nosql-dotnet-sdk` `nosql-go-sdk` `nosql-python-sdk`  `nosql-spring-sdk` `nosql-cloud-devops` `oci-functions` `oci-oke` and `more`
 
 Learn how to Develop Applications Fast and Effortlessly using our resources and videos in the **Cloud Learning** page
 
@@ -140,6 +155,8 @@ Learn how to Develop Applications Fast and Effortlessly using our resources and 
 
 **Source:** `Architecture Center`
 
+**Tags:** `nosql-python-sdk` `oci-functions` 
+
 Processing large media files can be a resource intensive operation requiring large compute shapes for timely and efficient processing. 
 In scenarios where media processing requests might be ad-hoc and on-demand, leaving instances idle while waiting for new work is not cost effective.
 
@@ -153,6 +170,9 @@ Note: You can deploy this pattern using downloadable code or automated provision
 ## Oracle Cloud Infrastructure Data Flow Samples
 
 **Source:** `GitHub`
+
+**Tags:** `nosql-python-sdk` `oci-data flow` 
+
 
 Oracle Cloud Infrastructure (OCI) Data Flow is a cloud-based serverless platform with a rich user interface. It allows Spark developers 
 and data scientists to create, edit, and run Spark jobs at any scale without the need for clusters, an operations team, or highly specialized 
