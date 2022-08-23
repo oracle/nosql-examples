@@ -33,7 +33,7 @@ ways to practice as possible. Never stop learning. Follow our LiveLabs
 
 ---
 
-In the directory `demo-livelab` you can find the **code used in our NoSQL LiveLabs workshops**.
+In the directory **demo-livelab** you can find the **code used in our NoSQL LiveLabs workshops**.
 * [demo-lab-nosql](./demo-livelab/demo-lab-nosql) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level `sql-for-nosql`  `nosql-node-sdk` 
 
 
@@ -124,6 +124,8 @@ The NoSQL team is delivering content in Webinars and Events around the world.
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 
+**Tags:** `nosql-cloud-devops` 
+
 The Oracle Cloud Infrastructure (OCI) provider allows you to use Terraform to interact with Oracle Cloud Infrastructure resources. 
 Wherever you use a Terraform distribution you can use the OCI Terraform provider, including Terraform Cloud and the OCI Resource Manager.
 
@@ -132,9 +134,6 @@ Wherever you use a Terraform distribution you can use the OCI Terraform provider
 This is a Terraform configuration that creates the NoSQL service on Oracle Cloud Infrastructure.
 
 [https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql](https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql)
-
-**Tags:** `nosql-cloud-devops` 
-
 
 # Cloud Learning
 
