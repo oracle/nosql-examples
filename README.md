@@ -15,7 +15,41 @@ delivering predictable single digit millisecond response times with data replica
 The service offers ACID transactions, serverless scaling, comprehensive security, and low pay-per-use pricing 
 for both on-demand and provisioned capacity modes, including 100% compatibility with on-premises Oracle NoSQL Database. 
 
+# Oracle Nosql Examples
+This repository stores a variety of examples demonstrating how to use the Oracle NoSQL Database. 
+
+| Repo/Folder name  | Description |
+| ------------- | ------------- |
+| [cluster_setup](./cluster_setup) | Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure `deploy-nosql` |
+| [examples-nosql-java-direct-driver](./examples-nosql-java-direct-driver) | Examples using the `nosql-java-direct-driver` |
+| [examples-nosql-java-sdk](./examples-nosql-java-sdk) | Examples using the `nosql-java-sdk` |
+| [examples-nosql-java-direct-driver](./examples-nosql-java-direct-driver) | Examples using the `examples-nosql-node-sdk` |
+| [demo-livelab](./demo-livelab) | you can find the code used in our NoSQL LiveLabs workshops in this directory and more information [here](#oracle-nosql-livelabs) |
+| [demo-events](./demo-events) | The NoSQL team is delivering content in Webinars and Events around the world. You can also find the instructions for workshops showcased in NoSQL events and have more information [here]|
+| [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-da`tabase/22.2/nsdev/getting-started-sql-oracle-nosql-database.html#GUID-9B9BAC71-20C3-4F76-99B8-8843907E4A6A) | Getting started with SQL for Oracle NoSQL Database `sql-for-nosql`|
+| [SQL for Oracle NoSQL Database tutorial](https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql)| Terraform Provider for Oracle Cloud Infrastructure `nosql-cloud-devops`|
+
+
+We also collected in this repository exciting content about How to use the Oracle NoSQL database with other OCI services - more information  [here](#other-examples-and-resources). 
+**Source:** `Architecture Center` **Source:** `GitHub`
+
+---
+
+NoSQL Developers 👨‍💻 👩‍💻
+
+**Tags:** `enhancement` `help wanted` `question` `idea` `show-and-tell`
+
+In the development world, practice makes the master. That is why you must find as many ways to practice as possible. Never stop learning. 
+
+We’ve enabled [GitHub Discussions](https://github.com/oracle/nosql-examples/discussions) to provide a way for you to connect with other community members. We hope that you:
+
+    Ask questions.
+    Share ideas.
+    Engage with other community members.
+    Welcome others and are open-minded. Remember that this is a community we build together
 # Oracle NoSQL LiveLabs
+
+
 
 ![NoSQL LiveLabs](./demo-livelab/LiveLabs.png)
 
@@ -37,7 +71,7 @@ In the directory **demo-livelab** you can find the **code used in our NoSQL Live
 * [demo-lab-nosql](./demo-livelab/demo-lab-nosql) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level `sql-for-nosql`  `nosql-node-sdk` 
 
 
-**You can find also the code of workshops showcased in NoSQL events** around the World (*LiveLabs coming soon*)
+**You can also find the code of workshops showcased in NoSQL events** around the World (*LiveLabs coming soon*)
 * [serverless-with-nosql-database](./demo-livelab/serverless-with-nosql-database) contains the code for Discover serverless apps using 
 Oracle NoSQL Database Cloud Service — intermediate level. Intermediate level LiveLab will feature functions `sql-for-nosql`  `nosql-node-sdk` 
 `nosql-python-sdk` `oci-functions` `nosql-cloud-devops`
@@ -57,19 +91,6 @@ Experience Oracle's best technology, live!
 # Oracle NoSQL Workshops and Examples
 
 ![NoSQL Ideas](./demo-livelab/Ideas.png)
-
-NoSQL Developers 👨‍💻 👩‍💻
-
-**Tags:** `enhancement` `help wanted` `question` `idea` `show-and-tell`
-
-In the development world, practice makes the master. That is why you must find as many ways to practice as possible. Never stop learning. 
-
-We’ve enabled GitHub Discussions to provide a way for you to connect with other community members. We hope that you:
-
-    Ask questions.
-    Share ideas.
-    Engage with other community members.
-    Welcome others and are open-minded. Remember that this is a community we build together
 
 ## Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure
 
@@ -143,7 +164,7 @@ NoSQL Developers 👨‍💻 👩‍💻
 
 Learn how to Develop Applications Fast and Effortlessly using our resources and videos in the **Cloud Learning** page
 
-[https://www.oracle.com/database/nosql/#rc30-cloud-learning](https://www.oracle.com/database/nosql/#rc30-cloud-learning]
+[https://www.oracle.com/database/nosql/#rc30-cloud-learning](https://www.oracle.com/database/nosql/#rc30-cloud-learning)
 
 
 # Other Examples and Resources
