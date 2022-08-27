@@ -140,8 +140,8 @@ in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/datab
 The NoSQL team is delivering content in Webinars and Events around the world. 
 
 **You can find also the instructions of workshops showcased in NoSQL events**
-- [Discover Oracle NoSQL Database](./demo-events/webinar) > demo-nosql-lab-with-kvlite `sql-for-nosql` `nosql-node-sdk` 
-- [Writing and optimizing NoSQL queries](./demo-events/webinar) > demo-nosql-lab-with-kvlite `sql-for-nosql` 
+- [Discover Oracle NoSQL Database](http://oracle.github.io/nosql-examples/demo-events/webinar/demo-nosql-lab-with-kvlite/workshops/livelabs/index.html) demo-events > demo-nosql-lab-with-kvlite `sql-for-nosql` `nosql-node-sdk` 
+- [Writing and optimizing NoSQL queries](http://oracle.github.io/nosql-examples/demo-events/webinar/tv-streaming-service-queries/workshops/livelabs/index.html) demo-events > demo-nosql-lab-with-kvlite `sql-for-nosql` 
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 
