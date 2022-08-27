@@ -1,7 +1,7 @@
 {
     "workshoptitle": "Discover Oracle NoSQL Database",
     "include": {"queries.sql":"../../files/queries.sql", "baggage_data_file.json":"../../files/baggage_data_file0.json"},
-      "help": "livelabs-help-db_us@oracle.com",
+      "help": "nosql_sdk_help_grp@oracle.com",
       "tutorials": [
         {
             "title": "Introduction",
