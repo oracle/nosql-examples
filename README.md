@@ -71,15 +71,6 @@ In the directory **demo-livelab** you can find the **code used in our NoSQL Live
 * [demo-lab-nosql](./demo-livelab/demo-lab-nosql) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level `sql-for-nosql`  `nosql-node-sdk` 
 
 
-**You can also find the code of workshops showcased in NoSQL events** around the World (*LiveLabs coming soon*)
-* [serverless-with-nosql-database](./demo-livelab/serverless-with-nosql-database) contains the code for Discover serverless apps using 
-Oracle NoSQL Database Cloud Service — intermediate level. Intermediate level LiveLab will feature functions `sql-for-nosql`  `nosql-node-sdk` 
-`nosql-python-sdk` `oci-functions` `nosql-cloud-devops`
-* [demo-lab-baggage](./demo-livelab/demo-lab-baggage) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — expert level. 
-Advanced level Livelab will feature Streaming and API gateway 
-`sql-for-nosql`  `nosql-node-sdk` `nosql-python-sdk` `oci-functions` `nosql-cloud-devops` `oci-streaming` `oci-api-gateway` `oci-connector-hub`
-
-
 ## Oracle LiveLabs 
 
 Oracle LiveLabs gives you access to Oracle's tools and technologies to run a wide variety of labs and workshops.
@@ -91,6 +82,26 @@ Experience Oracle's best technology, live!
 # Oracle NoSQL Workshops and Examples
 
 ![NoSQL Ideas](./demo-livelab/Ideas.png)
+
+##  Oracle NoSQL Workshops
+
+The NoSQL team is delivering content in Webinars and Events around the world.
+
+**You can find the code of workshops showcased in NoSQL events** around the World (*LiveLabs coming soon*)
+* [serverless-with-nosql-database](./demo-livelab/serverless-with-nosql-database) contains the code for Discover serverless apps using 
+Oracle NoSQL Database Cloud Service — intermediate level. Intermediate level LiveLab will feature functions `sql-for-nosql`  `nosql-node-sdk` 
+`nosql-python-sdk` `oci-functions` `nosql-cloud-devops`
+* [demo-lab-baggage](./demo-livelab/demo-lab-baggage) contains the code for Discover serverless apps using Oracle NoSQL Database Cloud Service — expert level. 
+Advanced level Livelab will feature Streaming and API gateway 
+`sql-for-nosql`  `nosql-node-sdk` `nosql-python-sdk` `oci-functions` `nosql-cloud-devops` `oci-streaming` `oci-api-gateway` `oci-connector-hub`
+
+
+**You can find also the instructions of workshops showcased in NoSQL events**
+
+- [Discover Serverless Apps Using Oracle NoSQL Database Cloud Service - intermediate level](http://oracle.github.io/nosql-examples/demo-events/oug/serverless-with-nosql-database-and-functions/workshops/freetier/index.html) *demo-events > oug > serverless-with-nosql-database-and-functions*
+`preview version` `sql-for-nosql` `nosql-node-sdk` `nosql-python-sdk` `oci-functions` `nosql-cloud-devops` 
+- [Discover Oracle NoSQL Database](http://oracle.github.io/nosql-examples/demo-events/webinar/demo-nosql-lab-with-kvlite/workshops/livelabs/index.html) *demo-events > webinar > demo-nosql-lab-with-kvlite* `preview version` `sql-for-nosql` `nosql-node-sdk` 
+- [Writing and optimizing NoSQL queries](http://oracle.github.io/nosql-examples/demo-events/webinar/tv-streaming-service-queries/workshops/livelabs/index.html) *demo-events > webinar > demo-nosql-lab-with-kvlite* `preview version` `sql-for-nosql` 
 
 ## Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure
 
@@ -134,14 +145,6 @@ The data is stored in the NoSQL Database and the application performs SQL querie
 The scripts allowing to run this tutorial are hosted in this Repository ( `AcctStreamSchema` and `BaggageSchema` ) but follow the instructions provided
 in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/nsdev/getting-started-sql-oracle-nosql-database.html#GUID-9B9BAC71-20C3-4F76-99B8-8843907E4A6A
 )
-
-## What If I want to learn more about SQL for Oracle NoSQL Database 
-
-The NoSQL team is delivering content in Webinars and Events around the world. 
-
-**You can find also the instructions of workshops showcased in NoSQL events**
-- [Discover Oracle NoSQL Database](http://oracle.github.io/nosql-examples/demo-events/webinar/demo-nosql-lab-with-kvlite/workshops/livelabs/index.html) demo-events > demo-nosql-lab-with-kvlite `sql-for-nosql` `nosql-node-sdk` 
-- [Writing and optimizing NoSQL queries](http://oracle.github.io/nosql-examples/demo-events/webinar/tv-streaming-service-queries/workshops/livelabs/index.html) demo-events > demo-nosql-lab-with-kvlite `sql-for-nosql` 
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 
