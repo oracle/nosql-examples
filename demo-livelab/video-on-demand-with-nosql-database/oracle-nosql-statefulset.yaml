@@ -48,7 +48,7 @@ spec:
     spec:
       containers:
       - name: nosql
-        image: iad.ocir.io/oradbclouducm/nosqldemos/oracle/nosql:ee
+        image: iad.ocir.io/oradbclouducm/nosqldemos/oracle/nosql:ce
         imagePullPolicy: Always        
         env:
         - name: KV_PROXY_PORT

@@ -23,8 +23,8 @@ see instuction https://github.com/oracle/docker-images/tree/main/NoSQL
 2. Deploy this application
 
 ````shell
-docker pull ghcr.io/dario-vega/demo-tv-streaming-app:latest
-docker tag ghcr.io/dario-vega/demo-tv-streaming-app:latest demo-tv-streaming-app:latest
+docker pull ghcr.io/dario-vega/demo-vod-streaming-app:latest
+docker tag ghcr.io/dario-vega/demo-vod-streaming-app:latest demo-vod-streaming-app:latest
 ````
 
 Start up this demo in a container 
@@ -35,7 +35,7 @@ docker run -d --env NOSQL_ENDPOINT=$HOSTNAME -p 3000:3000 demo-tv-streaming-app:
 or use user-defined bridge network name
 
 ````shell
-docker run -d --link kvlite --env NOSQL_ENDPOINT=kvlite  -p 3000:3000 demo-tv-streaming-app:latest
+docker run -d --link kvlite --env NOSQL_ENDPOINT=kvlite  -p 3000:3000 demo-vod-streaming-app:latest
 ````
 
 
@@ -55,6 +55,13 @@ ENV NOSQL_PORT 8080
 cd ~/demo-tv-streaming-app
 docker-compose up -d
 docker-compose ps
+````
+
+Note: https://docs.docker.com/compose/startup-order/
+
+````shell
+cd ~/demo-tv-streaming-app
+docker-compose start
 ````
 
 
@@ -81,9 +88,9 @@ see instuction https://github.com/oracle/docker-images/tree/main/NoSQL
 2. Clone this project and startup the application 
 
 ````shell
-cd ~/demo-tv-streaming-app
+cd ~/demo-tv-streaming-app/demo-vod
 npm install 
-export NOSQL_ENDPOINT=nosql-container-host
+export NOSQL_ENDPOINT=$HOSTNAME
 export NOSQL_PORT=8080
 npm start
 ````
@@ -93,12 +100,12 @@ npm start
 
   
 ````shell
-cd ~/demo-tv-streaming-app/demo-tv
+cd ~/demo-tv-streaming-app/demo-vod
 docker cp insert-stream-acct.sql kvlite:insert-stream-acct.sql
 docker exec kvlite  java -jar lib/sql.jar -helper-hosts localhost:5000 \
 -store kvstore load -file /insert-stream-acct.sql
 ````
-*Note*: if you are using docker compose, use `docker ps` to obtain the name of the container `demo-tv-streaming-app_demo-tv-streaming-db_1` 
+*Note*: if you are using docker compose, use `docker ps` to obtain the name of the container e.g.`demo-tv-streaming-app_demo-vod-streaming-db_1` 
 
 
 read  https://github.com/oracle/docker-images/tree/main/NoSQL#using-oracle-nosql-command-line-from-an-external-host 
@@ -143,15 +150,57 @@ curl --request POST     --header 'content-type: application/json' --url 'localho
 }
 ````
 
-The steps outlined above are using Oracle NoSQL Database community edition, if you need Oracle NoSQL Database Enterprise Edition, 
-please use the appropriate image name.
 
-
-````
+````shell
 curl --request POST \
     --header 'content-type: application/json' \
     --url 'localhost:3000' \
     --data '{"query":"query WatchTime { watchTime { showName seasonNum length } } "}'
+````
+````
+
+
+{
+  "data": {
+    "watchTime": [
+      {
+        "showName": "Apprentice",
+        "seasonNum": 1,
+        "length": 82
+      },
+      {
+        "showName": "Apprentice",
+        "seasonNum": 2,
+        "length": 96
+      },
+      {
+        "showName": "Rita",
+        "seasonNum": 1,
+        "length": 125
+      },
+      {
+        "showName": "Mr.Chef",
+        "seasonNum": 1,
+        "length": 125
+      },
+      {
+        "showName": "Mystery unfolded",
+        "seasonNum": 1,
+        "length": 125
+      },
+      {
+        "showName": "Call My Agent",
+        "seasonNum": 1,
+        "length": 158
+      },
+      {
+        "showName": "Call My Agent",
+        "seasonNum": 2,
+        "length": 192
+      }
+    ]
+  }
+}
 ````
 
 more queries below

@@ -43,8 +43,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: iad.ocir.io/oradbclouducm/nosqldemos/demo-tv-streaming-app:latest
-        imagePullPolicy: Always
+        image: ghcr.io/dario-vega/demo-vod-streaming-app:latest
         env:
         - name: NOSQL_ENDPOINT
           value: myapp-nosql
@@ -53,6 +52,4 @@ spec:
         ports:
         - containerPort: 3000
           name: myapp
-      imagePullSecrets:
-      - name: ocirsecret          
 

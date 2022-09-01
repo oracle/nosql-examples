@@ -49,8 +49,7 @@ spec:
     spec:
       containers:
       - name: nosql
-        image: iad.ocir.io/oradbclouducm/nosqldemos/oracle/nosql:ee
-        imagePullPolicy: Always
+        image: ghcr.io/oracle/nosql:latest-ce
         env:
         - name: KV_PROXY_PORT
           value: "80"
@@ -64,6 +63,4 @@ spec:
       - name: nosql-persistent-storage
         persistentVolumeClaim:
           claimName: nosql-pv-claim
-      imagePullSecrets:
-      - name: ocirsecret
 
