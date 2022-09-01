@@ -1,5 +1,5 @@
 {
-  "name": "demo-tv-streaming-app",
+  "name": "video-on-demand-with-nosql-database",
   "version": "1.0.0",
   "description": "Basic demo of GraphQL with Oracle NoSQL",
   "private": "true",

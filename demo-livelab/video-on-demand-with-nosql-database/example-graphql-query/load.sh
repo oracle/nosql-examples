@@ -22,13 +22,13 @@ do
   do 
     echo $fileUser
     cp $fileUser user.json
-    sh createStream.sh
+    sh create-stream.sh
     for fileDataShow in `ls -1 ../data/DataShow/DataShow_$serie*  | shuf -n 5`
     do 
       echo "-> " $fileDataShow
       cp $fileDataShow show.json  
-      sh updateStream.sh
+      sh update-stream.sh
     done
-    sh queryStreamById.sh
+    sh query-stream-by-id.sh
   done
 done
