@@ -1,8 +1,8 @@
-// Copyright (c) 2022 Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-//
+###  Copyright (c) 2022 Oracle and/or its affiliates.
+###  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+### 
 
-//first row
+### first row
 
 INSERT INTO stream_acct VALUES(
 1,
@@ -55,7 +55,7 @@ INSERT INTO stream_acct VALUES(
   }
 )
 ;
-//second row
+### second row
 INSERT INTO stream_acct VALUES(
 2,
 {
@@ -107,7 +107,7 @@ INSERT INTO stream_acct VALUES(
   }
 )
 ;
-//third row
+### third row
 INSERT INTO stream_acct VALUES(
 3,
 {
