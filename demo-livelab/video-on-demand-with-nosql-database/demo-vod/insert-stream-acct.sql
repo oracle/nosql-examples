@@ -1,11 +1,11 @@
-// Copyright (c) 2022 Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-//
+###  Copyright (c) 2022 Oracle and/or its affiliates.
+###  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+### 
 
-//first row
+### first row
 
 INSERT INTO stream_acct VALUES(
-DEFAULT,
+1,
 {
    "firstName" : "John",
    "lastName" : "Sanders",
@@ -55,9 +55,9 @@ DEFAULT,
   }
 )
 ;
-//second row
+### second row
 INSERT INTO stream_acct VALUES(
-DEFAULT,
+2,
 {
    "firstName" : "Tim",
    "lastName" : "Greenberg",
@@ -107,9 +107,9 @@ DEFAULT,
   }
 )
 ;
-//third row
+### third row
 INSERT INTO stream_acct VALUES(
-DEFAULT,
+3,
 {
    "firstName" : "Aniketh",
    "lastName" : "Shubham",

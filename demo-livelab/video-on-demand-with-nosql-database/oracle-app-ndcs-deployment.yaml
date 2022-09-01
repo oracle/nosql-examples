@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: ghcr.io/dario-vega/demo-tv-streaming-app:latest
+        image: ghcr.io/dario-vega/demo-vod-streaming-app:latest
         env:
         - name: NOSQL_ServiceType
           value: "useInstancePrincipal"
