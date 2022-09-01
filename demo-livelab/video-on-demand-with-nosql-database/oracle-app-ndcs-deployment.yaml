@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+  creationTimestamp: null
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-internal: "true"
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: myapp
+    tier: backend
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: myapp
+        tier: backend
+    spec:
+      containers:
+      - name: myapp
+        image: ghcr.io/dario-vega/demo-tv-streaming-app:latest
+        env:
+        - name: NOSQL_ServiceType
+          value: "useInstancePrincipal"
+        - name: NOSQL_REGION
+          value: "us-ashburn-1"
+        - name: NOSQL_COMPID
+          value: "ocid1.compartment.oc1..aaaaaaaa4mlehopmvdluv2wjcdp4tnh2ypjz3nhhpahb4ss7yvxaa3be3diq"
+        ports:
+        - containerPort: 3000
+          name: myapp

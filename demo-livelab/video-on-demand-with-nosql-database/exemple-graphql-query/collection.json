@@ -1,0 +1,476 @@
+{
+	"info": {
+		"name": "Demo TV Streaming",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Query Streams",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query ExampleQuery {\r\n  streams {\r\n    id\r\n    info {\r\n      firstName\r\n      lastName\r\n      country\r\n      shows {\r\n        showName\r\n        showId\r\n        type\r\n        numSeasons\r\n        seriesInfo {\r\n          seasonNum\r\n          numEpisodes\r\n          episodes {\r\n            episodeID\r\n            lengthMin\r\n            minWatched\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams Some Fields",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Streams {\r\n  streams {\r\n    id\r\n    info {\r\n      firstName\r\n      lastName\r\n      country\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams Error",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Streams {\r\n  streams {\r\n    error {\r\n      firstName\r\n      lastName\r\n      country\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams by Id",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Stream($streamId: Int) {\r\n  user1:stream(id: $streamId) {\r\n    id\r\n    info {\r\n      firstName\r\n      lastName\r\n      country\r\n      shows {\r\n        showName\r\n        showId\r\n        type\r\n        numSeasons\r\n        seriesInfo {\r\n          seasonNum\r\n          numEpisodes\r\n          episodes {\r\n            episodeID\r\n            lengthMin\r\n            minWatched\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n}",
+						"variables": "{\r\n  \"streamId\": NOSQL_EXAMPLE_STREAMID\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams by Id V2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Stream($streamId: Int) {\r\n  user1:stream(id: $streamId) {\r\n    id\r\n    info {\r\n      firstName\r\n      lastName\r\n      country\r\n      shows {\r\n        showName\r\n        showId\r\n        type\r\n        numSeasons\r\n        seriesInfo {\r\n          seasonNum\r\n          numEpisodes\r\n          episodes {\r\n            episodeID\r\n            lengthMin\r\n            minWatched\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n  user2: stream(id: 2) {\r\n    id \r\n    }\r\n}",
+						"variables": "{\r\n  \"streamId\": 1\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams With Condition",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Stream ($contentDirective: Boolean!){\r\n    user1: stream (id: 1) {\r\n        id\r\n        ...contentStreamed @include(if: $contentDirective)\r\n    }\r\n    user2: stream(id: 2) {\r\n        id\r\n        ...contentStreamed @include(if: $contentDirective)\r\n    }\r\n}\r\n\r\nfragment contentStreamed on Stream {\r\n    info\r\n    {\r\n      shows {  \r\n        showName\r\n        showId\r\n        type\r\n        numSeasons    \r\n      }\r\n    }\r\n}",
+						"variables": "{\r\n  \"contentDirective\": true  \r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams With Condition False",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Stream ($contentDirective: Boolean!){\r\n    user1: stream (id: 1) {\r\n        id\r\n        ...contentStreamed @include(if: $contentDirective)\r\n    }\r\n    user2: stream(id: 2) {\r\n        id\r\n        ...contentStreamed @include(if: $contentDirective)\r\n    }\r\n}\r\n\r\nfragment contentStreamed on Stream {\r\n    info\r\n    {\r\n      shows {  \r\n        showName\r\n        showId\r\n        type\r\n        numSeasons    \r\n      }\r\n    }\r\n}",
+						"variables": "{\r\n  \"contentDirective\": false  \r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Report peopleWatching",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query PeopleWatching($country: String!) {\r\n  peopleWatching(country: $country) {\r\n    showId\r\n    cnt\r\n  }\r\n}",
+						"variables": "{\r\n  \"country\":\"USA\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Report WatchTime",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query WatchTime {\r\n  watchTime {\r\n    showName\r\n    seasonNum\r\n    length\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateStream",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation CreateStream($input: StreamEntry) {\r\n  createStream(input: $input) {\r\n    id\r\n    info {\r\n      firstName\r\n      lastName\r\n      country\r\n      shows {\r\n           showName\r\n      }\r\n\t}\r\n  }\r\n}",
+						"variables": "{\r\n  \"input\": NOSQL_EXAMPLE_USER}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateStream",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation Mutation($updateStreamId: Int, $input: showsEntry) {\r\n  updateStream(id: $updateStreamId, input: $input) {\r\n    id\r\n    info {\r\n      firstName\r\n      lastName\r\n      country\r\n      shows {\r\n        showName\r\n      }\r\n    }\r\n  }\r\n}",
+						"variables": "{\r\n  \"updateStreamId\":NOSQL_EXAMPLE_STREAMID,\r\n  \"input\": NOSQL_EXAMPLE_SHOW }"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Streams Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query streamByLastName($lastName: String) {  \r\n    user1:streamByLastName(lastName:$lastName) \r\n    {    id    \r\n         info {      \r\n           firstName\r\n           lastName\r\n           country\r\n           shows {\r\n             showName\r\n           }\r\n         }\r\n    }\r\n}",
+						"variables": "{\r\n  \"lastName\":\"vega\"  \r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteStream",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation DeleteStream($deleteStreamId: Int) {\r\n  deleteStream(id: $deleteStreamId) {\r\n    id\r\n  }\r\n}",
+						"variables": "{\r\n   \"deleteStreamId\":NOSQL_EXAMPLE_STREAMID\r\n}\r\n"
+					}
+				},
+				"url": {
+					"raw": "https://lc22qxcred2zq4ciqms2tzzxv4.apigateway.us-ashburn-1.oci.customer-oci.com/",
+					"protocol": "https",
+					"host": [
+						"lc22qxcred2zq4ciqms2tzzxv4",
+						"apigateway",
+						"us-ashburn-1",
+						"oci",
+						"customer-oci",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

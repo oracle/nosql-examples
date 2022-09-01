@@ -1,0 +1,24 @@
+ {
+    "showName" : "Casa de papel",
+    "showId" : 26,
+    "type" : "tvseries",
+    "numSeasons" : 4,
+    "seriesInfo": [
+      {
+        "seasonNum" : 1,
+        "numEpisodes" : 2,
+        "episodes": [
+          { "episodeID": 20, "lengthMin": 85, "minWatched": 85},
+          { "episodeID": 30, "lengthMin": 60, "minWatched": 60}
+        ]
+      },
+      {
+        "seasonNum": 2,
+        "numEpisodes" : 4,
+        "episodes": [
+          { "episodeID": 40, "lengthMin": 50, "minWatched": 50},
+          { "episodeID": 50, "lengthMin": 45, "minWatched": 30}
+        ]
+      }
+    ]
+}

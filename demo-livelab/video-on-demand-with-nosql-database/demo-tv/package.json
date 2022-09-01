@@ -1,0 +1,18 @@
+{
+  "name": "demo-tv-streaming-app",
+  "version": "1.0.0",
+  "description": "Basic demo of GraphQL with Oracle NoSQL",
+  "private": "true",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": " ",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^3.9.0",
+    "graphql": "^16.5.0",
+    "oracle-nosqldb": "^5.3.1"
+  }
+}

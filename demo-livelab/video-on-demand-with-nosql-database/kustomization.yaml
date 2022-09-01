@@ -1,0 +1,3 @@
+resources:
+  - oracle-nosql-deployment.yaml
+  - oracle-app-deployment.yaml
