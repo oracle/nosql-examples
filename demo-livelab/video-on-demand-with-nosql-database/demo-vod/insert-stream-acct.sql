@@ -5,7 +5,7 @@
 //first row
 
 INSERT INTO stream_acct VALUES(
-DEFAULT,
+1,
 {
    "firstName" : "John",
    "lastName" : "Sanders",
@@ -57,7 +57,7 @@ DEFAULT,
 ;
 //second row
 INSERT INTO stream_acct VALUES(
-DEFAULT,
+2,
 {
    "firstName" : "Tim",
    "lastName" : "Greenberg",
@@ -109,7 +109,7 @@ DEFAULT,
 ;
 //third row
 INSERT INTO stream_acct VALUES(
-DEFAULT,
+3,
 {
    "firstName" : "Aniketh",
    "lastName" : "Shubham",
