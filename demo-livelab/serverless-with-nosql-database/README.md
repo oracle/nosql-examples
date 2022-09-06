@@ -15,7 +15,7 @@ creating the backend and developing queries.
 
 **Level**: intermediate
 
-**Detailed instructions**: go to https://github.com/oracle/nosql-examples/tree/demo-events/demo-events/oug
+**Detailed instructions**: go to https://github.com/oracle/nosql-examples/tree/demo-events/oug
 
 
 
