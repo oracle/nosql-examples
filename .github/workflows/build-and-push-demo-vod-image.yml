@@ -1,0 +1,50 @@
+name: Build and publish Demo VoD container image to GitHub Container Registry
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'demo-livelab/video-on-demand-with-nosql-database/demo-vod/*'
+      - '.github/workflows/build-and-push-demo-vod-image.yml'
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: demo-vod-example-app
+
+jobs:
+  build-and-push:
+    name: Build and push VoD Demo container image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login -u ${GITHUB_ACTOR,,} --password-stdin ghcr.io
+
+      - name: Repository owner needs to be lowercase
+        id: repo-owner
+        run: |
+          REPO_OWNER=${{ github.repository_owner }}
+          echo "::set-output name=repo-owner::${REPO_OWNER,,}"
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m')"
+ 
+      - name: Build image
+        run: |
+          cd demo-livelab/video-on-demand-with-nosql-database/demo-vod/
+          docker build --tag ghcr.io/${{ steps.repo-owner.outputs.repo-owner }}/$IMAGE_NAME:$TAG .
+          docker tag ghcr.io/${{ steps.repo-owner.outputs.repo-owner }}/$IMAGE_NAME:$TAG ghcr.io/${{ steps.repo-owner.outputs.repo-owner }}/$IMAGE_NAME:latest
+        env:
+          TAG: ${{ steps.date.outputs.date }}
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          cd demo-livelab/video-on-demand-with-nosql-database/demo-vod/
+          docker push ghcr.io/${{ steps.repo-owner.outputs.repo-owner }}/$IMAGE_NAME:$TAG
+          docker push ghcr.io/${{ steps.repo-owner.outputs.repo-owner }}/$IMAGE_NAME:latest
+        env:
+          TAG: ${{ steps.date.outputs.date }}    
