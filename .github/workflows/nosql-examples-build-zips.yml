@@ -1,0 +1,45 @@
+name: nosql-examples-build-zips
+on:
+  workflow_dispatch:     
+jobs:
+  build-zips:
+    name: Build zip files
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Build Zip files'
+        run: |
+          mkdir -p zips
+          rm -rf zips/*.zip
+          cd demo-livelab
+          FOLDERS=$(ls -1d */ )
+          for EXAMPLE_FOLDER in $FOLDERS;
+          do
+            RESOURCE=$(cut -d "/" -f 1 <<< "$EXAMPLE_FOLDER")
+            zip -r ../zips/$RESOURCE.zip $EXAMPLE_FOLDER
+          done
+          cd ..
+          FOLDERS=$(ls -1 -d examples-nosql-*/*/ )
+          for EXAMPLE_FOLDER in $FOLDERS;
+          do
+            RESOURCE=$(cut -d "/" -f 2 <<< "$EXAMPLE_FOLDER")
+            if [ -f "$EXAMPLE_FOLDER/zip" ]; then 
+              zip zips/$RESOURCE.zip $EXAMPLE_FOLDER
+            fi
+          done          
+  
+      - name: Commit and Push Changes
+        continue-on-error: true
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "dario-vega"
+            git config --global user.email "dario-vega@oracle.com"
+            git pull origin main
+            git add zips/*.zip
+            git commit -m "Automation - zip files"
+            git push
+          else
+            echo "No changes!";
+          fi          
