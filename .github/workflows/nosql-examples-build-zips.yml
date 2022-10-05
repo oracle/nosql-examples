@@ -36,7 +36,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.name "dario-vega"
             git config --global user.email "dario-vega@oracle.com"
-            git pull origin main
+            git pull origin master
             git add zips/*.zip
             git commit -m "Automation - zip files"
             git push
