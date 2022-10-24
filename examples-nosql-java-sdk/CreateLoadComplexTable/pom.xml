@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nosql.cloud.table</groupId>
+  <artifactId>complextable</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <organization>
+    <name>Oracle Corporation</name>
+    <url>http://www.oracle.com/</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>11</maven.compiler.release>
+    <timestamp>${maven.build.timestamp}</timestamp>
+    <maven.build.timestamp.format>d-MMMM-yyyy</maven.build.timestamp.format>
+    <copyright>Copyright (c) 2011, 2020 Oracle and/or its affiliates.  All rights reserved.</copyright>
+    <java.apidoc>http://docs.oracle.com/javase/8/docs/api</java.apidoc>
+
+    <!-- deploy -->
+    <maven.deploy.skip>false</maven.deploy.skip>
+
+    <!-- Version numbers for the dependencies -->
+    <oci-sdk.version>2.38.0</oci-sdk.version>
+    <nosqldriver.version>5.3.5</nosqldriver.version>
+    <bouncycastle.version>1.70</bouncycastle.version>
+    <netty.version>4.1.82.Final</netty.version>
+    <jackson.version>2.13.4</jackson.version>
+    <slf4j.version>1.7.32</slf4j.version>
+    <log4j2.version>2.17.1</log4j2.version>
+  </properties>
+
+  <dependencies>
+
+    <!-- oci-java-sdk -->
+    <dependency>
+      <groupId>com.oracle.oci.sdk</groupId>
+      <artifactId>oci-java-sdk-common</artifactId>
+      <version>${oci-sdk.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- nosqldiver -->
+    <dependency>
+      <groupId>com.oracle.nosql.sdk</groupId>
+      <artifactId>nosqldriver</artifactId>
+      <version>${nosqldriver.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Bouncycastle - request signing in cloud -->
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>${bouncycastle.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcpkix-jdk15on</artifactId>
+      <version>${bouncycastle.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Netty - networking -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-common</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-buffer</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec-http</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler-proxy</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-resolver</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-unix-common</artifactId>
+      <version>${netty.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- jackson core - JSON processing -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- logging: OCI BMC classes use slf4j and log4j2 -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- log4j-slf4j-impl (for Log4j2) -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j2.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Log4j2 API -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j2.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Log4j2 CORE -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <finalName>${project.artifactId}-${project.version}</finalName>
+
+    <defaultGoal>
+      clean dependency:copy-dependencies package
+    </defaultGoal>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>11</release>
+          <!--<verbose>true</verbose>-->
+          <fork>true</fork>
+        </configuration>
+      </plugin>
+
+      <!-- test plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M4</version>
+
+        <configuration>
+
+          <systemPropertyVariables>
+            <java.util.logging.config.file>
+              ${project.build.directory}/test-classes/logging/test-util-logging.properties
+            </java.util.logging.config.file>
+
+            <log4j.configurationFile>
+              file:${project.build.directory}/test-classes/logging/test-log4j2.properties
+            </log4j.configurationFile>
+
+            <log4j2.debug>false</log4j2.debug>
+          </systemPropertyVariables>
+
+          <environmentVariables>
+            <OCI_obo_token_path>
+              ${java.io.tmpdir}${user.name}/ComplexTableTestDir/delegation_token
+            </OCI_obo_token_path>
+          </environmentVariables>
+
+          <workingDirectory>${project.build.directory}/test-run</workingDirectory>
+
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <!-- Place the CreateLoadComplexTable jar file under
+             target/dependencies so it is co-located with
+             all its 3rd party dependencies. This is done
+             because the CreateLoadComplexTable jar file's manifest
+             uses relative paths to those dependencies. Thus,
+             the co-location, along with the relative paths,
+             allow the developer to execute/test the utility
+             from the local build environment's command line.
+          -->
+          <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              <addClasspath>true</addClasspath>
+              <!-- No classpathPrefix allows relative paths in manifest -->
+              <mainClass>nosql.cloud.table.CreateLoadComplexTable</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
+
+      <!-- copy runtime dependencies to target for packaging -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <includeScope>runtime</includeScope>
+          <reResolve>false</reResolve>
+          <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+          <executions>
+            <execution>
+              <id>copydeps</id>
+              <goals>
+                <goal>copy-dependencies</goal>
+              </goals>
+              <phase>package</phase>
+            </execution>
+          </executions>
+        </configuration>
+      </plugin>
+
+      <!-- source jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- javadoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <source>1.8</source>
+          <stylesheetfile>${basedir}/doc/style.css</stylesheetfile>
+          <show>public</show>
+          <header><![CDATA[<b>Oracle NoSQL Database</b><br><font size=\"-1\"> Version ${project.version} ${maven.build.timestamp}</font>]]></header>
+          <bottom><![CDATA[<font size=1>${copyright}</font>]]> </bottom>
+          <link>${java.apidoc}</link>
+          <additionalOptions>
+            <additionalOption>-author</additionalOption>
+            <additionalOption>-html5</additionalOption>
+          </additionalOptions>
+          <!-- put output in target/apidocs -->
+          <reportOutputDirectory>
+            ${project.build.directory}/apidocs
+          </reportOutputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>javadoc-jar</id>
+            <goals>
+              <goal>jar</goal>
+              <goal>javadoc</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- create tar.gz and .zip archives in package phase -->
+      <plugin>
+
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
+
+        <configuration>
+
+          <!-- The name of the tar.gz and zip files. -->
+          <finalName>${project.artifactId}-${project.version}</finalName>
+
+          <!-- assembly id is "release", but don't append it -->
+          <appendAssemblyId>false</appendAssemblyId>
+
+          <descriptors>
+            <descriptor>src/main/assembly/release.xml</descriptor>
+          </descriptors>
+
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>make-release</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
