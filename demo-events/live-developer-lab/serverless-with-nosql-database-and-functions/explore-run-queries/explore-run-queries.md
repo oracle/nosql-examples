@@ -35,6 +35,24 @@ Estimated Time: 25 minutes
     source ~/serverless-with-nosql-database/env.sh
     </copy>
     ```
+3. For this LiveLab, we are not deploying the functions using the terraform script. For people wanting to skip this Lab and running the next Labs
+
+  ```
+  <copy>
+  cd ~/serverless-with-nosql-database/functions-fn
+  cd load/demo-keyval-load
+  fn -v deploy --app $APP_NAME
+  cd ~/serverless-with-nosql-database/functions-fn
+  cd load/demo-load
+  fn -v deploy --app $APP_NAME
+  cd ~/serverless-with-nosql-database/functions-fn
+  cd api/demo-api
+  fn -v deploy --app $APP_NAME
+  cd ~/serverless-with-nosql-database/functions-fn
+  cd streaming/load-target
+  fn -v deploy --app $APP_NAME
+  </copy>
+  ```  
 
 ## Task 2: Load Data and Examine It
 
@@ -298,30 +316,6 @@ In this task, we are going to load a record using a python function.  This uses 
    6. Type in **exit** to exit from the Python application.
 
    7. Minimize the Cloud Shell by pressing the **minimize** key.
-
-## Task 6: Clean Up
-
-This task deletes the tables that got created.
-
-1. On the top left, go to menu, then Databases, then under Oracle NoSQL Database, hit 'Tables'
-Set your compartment to 'demonosql'
-Click on the freeTest table, which will bring up the table details screen.  Hit Delete.
-
-  ![](./images/delete-freetable.png)
-
-  Deleting tables is an async operation, so you will not immediately see the results on the OCI console.  Eventually the status of the tables will get changed to deleted.  
-
-2.  Clean up from the deployment.   In the top left corner, hit the OCI drop down menu, then go to 'Developer Services' and then Stacks under Resource manager.
-
-    ![](./images/stacks-select.png)
-
-3.  In the Stacks screen, click on the stack with the name main.zip-xxxxxx.
-
-    ![](./images/main-zip.png)
-
-4.  This will bring you to the stacks detail page.  On that screen hit the 'Destroy' button.  This will then pop up another window where you will have to hit 'Destroy' again.    This process takes 4-5 minutes to run and clean everything up.  
-
-    ![](./images/destroy-stack.png)
 
 
 ## Learn More

@@ -38,7 +38,19 @@
             "type": "livelabs",
             "filename": "../../explore-run-queries/explore-run-queries.md"
         },
-		{
+        {
+            "title": "Lab 5: Deploy API Gateway",
+            "description": "Deploy API Gateway",
+            "type": "livelabs",
+            "filename": "../../deploy-api-gateway/deploy-api-gateway.md"
+        },
+        {
+            "title": "Lab 6: Deploy Connector Hub",
+            "description": "Deploy Streaming and Connector HUB",
+            "type": "livelabs",
+            "filename": "../../deploy-connector-hub/deploy-connector-hub.md"
+        },
+		    {
           "title": "Need Help?",
           "description": "Solutions to Common Problems and Directions for Receiving Live Help",
           "filename":"https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/need-help/need-help-freetier.md"

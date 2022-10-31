@@ -22,7 +22,7 @@
         },
         {
             "title": "Lab 2: Prepare Your Environment",
-            "description": "Perform the iniital setup operations",
+            "description": "Perform the initial setup operations",
             "type": "livelabs",
             "filename": "../../setup-environment/setup-environment.md"
         },
@@ -34,9 +34,21 @@
         },
         {
             "title": "Lab 4: Explore Data, Run Queries",
-            "description": "This is the complete template for LiveLabs content developers",
+            "description": "Deploy functions",
             "type": "livelabs",
             "filename": "../../explore-run-queries/explore-run-queries.md"
+        },
+        {
+            "title": "Lab 5: Deploy API Gateway",
+            "description": "Deploy API Gateway",
+            "type": "livelabs",
+            "filename": "../../deploy-api-gateway/deploy-api-gateway.md"
+        },
+        {
+            "title": "Lab 6: Deploy Connector Hub",
+            "description": "Deploy Streaming and Connector HUB",
+            "type": "livelabs",
+            "filename": "../../deploy-connector-hub/deploy-connector-hub.md"
         },
         {
           "title": "Need Help?",
