@@ -84,6 +84,14 @@ Click on the freeTest table, which will bring up the table details screen.  Hit 
 
   Wait until the status changed from Deleting to Deleted
 
+4. On the top left, go to menu,  then Identity & Security and then Policies
+
+  In the policies screen, choose the 2 policies with the name ConnectorPolicy_functions* and delete them.
+
+  ![Policies](./images/delete-policies.png)
+
+
+
 ## Task 3: Delete resources created using Resource Manager - terraform
 
 
