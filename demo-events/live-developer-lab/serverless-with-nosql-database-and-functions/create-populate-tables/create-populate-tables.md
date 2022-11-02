@@ -199,11 +199,11 @@ You have seen two different ways to insert data into a table.
 
 Starting with the demo table, we can go and look at the data we inserted for each of the tables.
 
-1. On the left Click on Table Rows
+1. On the left Click on Explore Data
 
     ![](./images/table-row-select.png)
 
-2. In the textbox Query, keep the text SELECT * FROM demo.  This will select all the rows from our table.  Click on Run query
+2. In the textbox Query, keep the text `SELECT * FROM demo`.  This will select all the rows from our table.  Click on Run query
 
     ![](./images/run-query.png)
 

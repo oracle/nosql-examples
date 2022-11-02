@@ -114,7 +114,7 @@ and/or timed out.   In that case, restart it.
     </copy>
     ```
 
-## Task 3: Read Data Using a Node.js Application via the API Gatewau
+## Task 3: Read Data Using a Node.js Application via the API Gateway
 
 When the configuration is finished, you can test the endpoints to retrieve Data
 using your favorite API Browser, your standard WEB Browser or simulate traffic
@@ -147,7 +147,31 @@ using API calls from a linux system:
   Each of these produced slightly different results.   The first one display the document with a specific ticket number,
   the second displayed all the records and the third gave a count of the records.
 
-3. Now, lets test another one of the endpoints in the function. Execute in Cloud Shell.
+2. Now, lets test another one of the endpoints in the function. Execute in Cloud Shell.
+
+    ```
+    <copy>
+    URL="https://$HOSTAPI/BaggageDemo/getByConfirmationCode"
+    echo $URL
+    </copy>
+    ```
+
+    ```
+    <copy>
+    curl $URL?confNo=WU4U7K | jq
+    </copy>
+    ```  
+
+    ```
+    <copy>
+    curl $URL | jq
+    </copy>
+    ```  
+
+  Each of these produced slightly different results.   The first one display the document with a specific Confirmation code,
+  and the second displayed an error because for this endpoint the parameter confNo is mandatory.
+
+3. Finally, lets test another one of the endpoints in the function. Execute in Cloud Shell.
 
     ```
     <copy>
@@ -164,6 +188,33 @@ using API calls from a linux system:
   As you can see the field "message" the getPassengersAffectedByFlight endpoint is still under construction.  
   In other words the code for that endpoint has not been completed yet.
 
+## Task 4: Read Data Using APIARY
+
+As discussed above Apiary was used in our project as a very powerful tool for Collaboration and Interactions.
+You can use it to Explore data and execute queries. We will use another API Gateway deployment where the endpoints have been completed.
+
+In the lab 1, we talked about the Baggage Tracking Demo and we used the Mobile Application.
+This application is calling those endpoints.
+
+
+1. Go to the following link [https://ndcsbaggagetrackingdemo.docs.apiary.io/#](https://ndcsbaggagetrackingdemo.docs.apiary.io/#)
+
+2. Choose one of the endpoints - e.g. /BaggageDemo/getRandomConfCodes. Click in (1) then in (2), this opens up a new window.
+
+  ![Apiary](images/apiary-1.png)
+
+3. Click in **Switch to Console**
+
+  ![Apiary](images/apiary-2.png)
+
+4. Choose **Production** and click on **Call Resource**
+
+  ![Apiary](images/apiary-3.png)
+
+5. Scroll down and review the data
+
+6. Explore the other endpoints and execute new queries.
+
 ## Learn More
 
 
@@ -176,4 +227,3 @@ using API calls from a linux system:
 
 ## Acknowledgements
 * **Author** - Dario Vega, Product Manager, NoSQL Product Management and Michael Brey, Director, NoSQL Product Development
-* **Last Updated By/Date** - Michael Brey, Director, NoSQL Product Development, September 2021

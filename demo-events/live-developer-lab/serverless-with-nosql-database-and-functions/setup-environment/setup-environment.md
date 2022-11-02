@@ -208,7 +208,7 @@ Ensure your region is set to Phoenix.
 
   **Note:**
 
-    -In step 4 replace [OCIR-REPO] by demonosql (the name of the compartment)
+    -In step 4 replace [OCIR-REPO] by demonosql (It is the name of OCIR repository name provided in Task 3 - Step 4. The default is demonosql)
 
     -In step 5 you do not need to generate another authorization token.  Use the token generated in step 2 and copied down.
 
@@ -216,15 +216,10 @@ Ensure your region is set to Phoenix.
 
 ## Task 6: Get Data and Code Bundle
 
-In this task we will copy over a data bundle stored on object storage and
+In this task we will copy over a data bundle stored on GitHub and
 place that in the Cloud Shell.
 
-1. Open the **Cloud Shell** in the top right menu. It can take about 2 minutes
-to get the Cloud Shell started.
-
-    ![cloud-shell](images/cloud-shell.png)
-
-2. Execute the following in your Cloud Shell.
+1. Execute the following in your Cloud Shell.
 
     ````
     <copy>
@@ -253,4 +248,4 @@ You may now **proceed to the next lab.**
 
 ## Acknowledgements
 * **Author** - Dario Vega, Product Manager, NoSQL Product Management and Michael Brey, Director, NoSQL Product Development
-* **Last Updated By/Date** - Michael Brey, Director, NoSQL Product Development, September 2021
+* **Last Updated By/Date** - Dario Vega, NoSQL Product Management, NoSQL Product Development, September 2022

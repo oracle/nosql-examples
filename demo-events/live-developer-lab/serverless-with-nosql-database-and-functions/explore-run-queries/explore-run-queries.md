@@ -37,22 +37,22 @@ Estimated Time: 25 minutes
     ```
 3. For this LiveLab, we are not deploying the functions using the terraform script. For people wanting to skip this Lab and running the next Labs
 
-  ```
-  <copy>
-  cd ~/serverless-with-nosql-database/functions-fn
-  cd load/demo-keyval-load
-  fn -v deploy --app $APP_NAME
-  cd ~/serverless-with-nosql-database/functions-fn
-  cd load/demo-load
-  fn -v deploy --app $APP_NAME
-  cd ~/serverless-with-nosql-database/functions-fn
-  cd api/demo-api
-  fn -v deploy --app $APP_NAME
-  cd ~/serverless-with-nosql-database/functions-fn
-  cd streaming/load-target
-  fn -v deploy --app $APP_NAME
-  </copy>
-  ```  
+    ```
+    <copy>
+    cd ~/serverless-with-nosql-database/functions-fn
+    cd load/demo-keyval-load
+    fn -v deploy --app $APP_NAME
+    cd ~/serverless-with-nosql-database/functions-fn
+    cd load/demo-load
+    fn -v deploy --app $APP_NAME
+    cd ~/serverless-with-nosql-database/functions-fn
+    cd api/demo-api
+    fn -v deploy --app $APP_NAME
+    cd ~/serverless-with-nosql-database/functions-fn
+    cd streaming/load-target
+    fn -v deploy --app $APP_NAME
+    </copy>
+    ```  
 
 ## Task 2: Load Data and Examine It
 
@@ -66,7 +66,6 @@ The goal of this task is to understand the difference between the 2 data models 
     <copy>
     cd ~/serverless-with-nosql-database/functions-fn
     cd load/demo-keyval-load
-    fn -v deploy --app $APP_NAME
     cat ~/BaggageData/baggage_data_file99.json | fn invoke $APP_NAME demo-keyval-load
     cat ~/BaggageData/baggage_data_file9.json  | fn invoke $APP_NAME demo-keyval-load
     cat ~/BaggageData/baggage_data_file103.json  | fn invoke  $APP_NAME demo-keyval-load
@@ -85,7 +84,6 @@ The goal of this task is to understand the difference between the 2 data models 
     <copy>
     cd ~/serverless-with-nosql-database/functions-fn
     cd load/demo-load
-    fn -v deploy --app $APP_NAME
     cat ~/BaggageData/baggage_data_file99.json | fn invoke  $APP_NAME demo-load
     cat ~/BaggageData/baggage_data_file9.json | fn invoke  $APP_NAME demo-load
     cat ~/BaggageData/baggage_data_file103.json  | fn invoke  $APP_NAME demo-load
@@ -109,7 +107,6 @@ In this Task, we will review the code and trigger the function manually using th
     <copy>
     cd ~/serverless-with-nosql-database/functions-fn
     cd api/demo-api
-    fn -v deploy --app $APP_NAME
     vi func.js
     </copy>
     ```
@@ -193,15 +190,7 @@ In this task, we are going to load a record using a python function.  This uses 
     </copy>
     ```
 
-2. Deploy this function which take about 2 min and 30 sec.  Execute in Cloud Shell.
-
-    ```
-    <copy>
-    fn -v deploy --app $APP_NAME
-    </copy>
-    ```
-
-3. Run this function.  The first time running this function takes about 1 min because it has to populate the cache. Execute in Cloud Shell.
+2. Run this function.  The first time running this function takes about 1 min because it has to populate the cache. Execute in Cloud Shell.
 
     ```
     <copy>
@@ -215,13 +204,6 @@ In this task, we are going to load a record using a python function.  This uses 
     ```
     <copy>
     fn invoke $APP_NAME load-target < stream_baggage_data_file99.json
-    </copy>
-    ```
-4. Remove the function now that we are done with it.  Execute in Cloud Shell.
-
-    ```
-    <copy>
-    fn delete function $APP_NAME load-target
     </copy>
     ```
 
@@ -332,4 +314,4 @@ In this task, we are going to load a record using a python function.  This uses 
 
 ## Acknowledgements
 * **Author** - Dario Vega, Product Manager, NoSQL Product Management and Michael Brey, Director, NoSQL Product Development
-* **Last Updated By/Date** - Michael Brey, Director, NoSQL Product Development, September 2021
+* **Last Updated By/Date** - Dario Vega, NoSQL Product Management, NoSQL Product Development, September 2022

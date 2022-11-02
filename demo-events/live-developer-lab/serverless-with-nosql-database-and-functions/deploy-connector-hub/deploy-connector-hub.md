@@ -104,6 +104,23 @@ and/or timed out.   In that case, restart it.
     </copy>
     ```
 
+3. Invoke the function behind to validate.  The first time running this function takes about 1 min because it has to populate the cache. Execute in Cloud Shell.
+
+    ```
+    <copy>
+    cd ~/serverless-with-nosql-database/functions-fn
+    cd streaming/load-target
+    var1=`base64 -w 0 ~/BaggageData/baggage_data_file99.json`
+    cp test_templ.json stream_baggage_data_file99.json
+    sed -i "s/<here>/$var1/g"  stream_baggage_data_file99.json
+    </copy>
+    ```
+    ```
+    <copy>
+    fn invoke $APP_NAME load-target < stream_baggage_data_file99.json
+    </copy>
+    ```
+
 ## Task 4: Load Data Using Streaming Input
 
 When the configuration finishes, you need to publishing messages to the Stream instance
@@ -171,4 +188,3 @@ OCI cli commands in order to simulate real-time traffic.
 
 ## Acknowledgements
 * **Author** - Dario Vega, Product Manager, NoSQL Product Management and Michael Brey, Director, NoSQL Product Development
-* **Last Updated By/Date** - Michael Brey, Director, NoSQL Product Development, September 2021
