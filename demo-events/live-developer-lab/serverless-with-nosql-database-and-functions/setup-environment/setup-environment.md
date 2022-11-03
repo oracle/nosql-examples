@@ -232,6 +232,9 @@ place that in the Cloud Shell.
     cd $HOME
     </copy>
     ````
+    **Note**: if you have decided to deploy in a compartment other than root or root/demonosql,
+    you need to modify ~/serverless-with-nosql-database/env.sh. Follow the instructions in the env.sh file
+
 
 3. Exit from Cloud Shell
 
