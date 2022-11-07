@@ -132,7 +132,7 @@ After building and unit testing the example, the release can be installed and th
   - An OCI Compute Instance
   - Your local development environment
 
-The release is packaged in both a ZIP file and a compressed TAR file; each located under the './target' directory. The names of these files take the form complextable-<version>.zip and complextable-<version>.tar.gz respectively. To install the example, copy either the ZIP or the TAR release artifact to a directory in the desired execution environment, and type:
+The release is packaged in both a ZIP file and a compressed TAR file; each located under the './target' directory. The names of these files take the form `complextable-<version>.zip` and `complextable-<version>.tar.gz` respectively. To install the example, copy either the ZIP or the TAR release artifact to a directory in the desired execution environment, and type:
 
 ````
 unzip complextable-<version>.zip
