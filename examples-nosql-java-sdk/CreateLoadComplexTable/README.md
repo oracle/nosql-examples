@@ -22,7 +22,21 @@ To build and/or execute the program, the following requirements must be satisfie
 ## Java Version
 
   - Java 11 or higher.
+  - Configure your environment to access the version of Java you wish to use; that is, either
 
+     1. Set your PATH environment variable to include the `bin` directory of your Java installation, or
+	 2. Set the JAVA_HOME environment variable to reference the parent directory of the Java `bin` directory
+
+  For example, if you installed Java installation under /usr/local/share/java, then you would do either
+
+````
+export PATH=$PATH:/usr/local/share/java/bin
+````
+or
+````
+export JAVA_HOME=/usr/local/share/java
+````
+  
 ## OCI Cloud Environment
 
   - An account in the Oracle Cloud Infrastructure; either a free trial or a paid subscription.
@@ -69,8 +83,7 @@ cd <base>/nosql-examples/examples-nosql-java-sdk/CreateLoadComplexTable
 mvn
 ````
 
-By default, the command above executes the following goals: `mvn clean dependency:copy-dependencies package`
-
+By default, the command above executes the following goals: `clean dependency:copy-dependencies package`
 
 Specifically, executing the command above is equivalent to executing the command,
 
@@ -103,7 +116,7 @@ java -Djava.util.logging.config.file=./src/main/resources/logging/java-util-logg
      -jar ./target/dependencies/complextable-<version>.jar -config ~/.oci/<your-local-environment-config.json>
 ````
 
-For details on the configuration file that must be input to the program, see the section below titled, 'Configurating the Example'.
+For details on the configuration file that must be input to the program, see the section below titled, 'Configuring the Example'.
 
 # Unit Testing the Release
 

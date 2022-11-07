@@ -56,8 +56,7 @@ public class ComplexTableTestBase {
     protected static final String CLOSE_BRACE = "}";
 
     protected static final String TEST_DIR =
-        System.getProperty("java.io.tmpdir") +
-        System.getProperty("user.name") + F_SEP + "ComplexTableTestDir";
+        System.getProperty("user.dir") + F_SEP + "ComplexTableTestDir";
 
     protected static final String CREDENTIALS_FILE = "config.complex-table-file";
     protected static final String COMPARTMENT_OCID =

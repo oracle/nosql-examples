@@ -49,53 +49,6 @@ public final class CreateLoadComplexTable {
 
     private static final SecureRandom generator = new SecureRandom();
 
-    private static final Map<String, Region> REGIONS_MAP = new HashMap<>();
-    static {
-        /* Africa */
-        REGIONS_MAP.put("af-johannesburg-1", Region.AF_JOHANNESBURG_1);
-        /* Asia Pacific */
-        REGIONS_MAP.put("ap-chuncheon-1", Region.AP_CHUNCHEON_1);
-        REGIONS_MAP.put("ap-hyderabad-1", Region.AP_HYDERABAD_1);
-        REGIONS_MAP.put("ap-melbourne-1", Region.AP_MELBOURNE_1);
-        REGIONS_MAP.put("ap-mumbai-1", Region.AP_MUMBAI_1);
-        REGIONS_MAP.put("ap-osaka-1", Region.AP_OSAKA_1);
-        REGIONS_MAP.put("ap-singapore-1", Region.AP_SINGAPORE_1);
-        REGIONS_MAP.put("ap-seoul-1", Region.AP_SEOUL_1);
-        REGIONS_MAP.put("ap-sydney-1", Region.AP_SYDNEY_1);
-        REGIONS_MAP.put("ap-tokyo-1", Region.AP_TOKYO_1);
-        /* United Kingdom */
-        REGIONS_MAP.put("uk-cardiff-1", Region.UK_CARDIFF_1);
-        REGIONS_MAP.put("uk-london-1", Region.UK_LONDON_1);
-        /* European Union */
-        REGIONS_MAP.put("eu-amsterdam-1", Region.EU_AMSTERDAM_1);
-        REGIONS_MAP.put("eu-frankfurt-1", Region.EU_FRANKFURT_1);
-        REGIONS_MAP.put("eu-madrid-1", Region.EU_MADRID_1);
-        REGIONS_MAP.put("eu-marseille-1", Region.EU_MARSEILLE_1);
-        REGIONS_MAP.put("eu-milan-1", Region.EU_MILAN_1);
-        REGIONS_MAP.put("eu-paris-1", Region.EU_PARIS_1);
-        REGIONS_MAP.put("eu-stockholm-1", Region.EU_STOCKHOLM_1);
-        REGIONS_MAP.put("eu-zurich-1", Region.EU_ZURICH_1);
-        /* Middle East */
-        REGIONS_MAP.put("me-abudhabi-1", Region.ME_ABUDHABI_1);
-        REGIONS_MAP.put("me-dubai-1", Region.ME_DUBAI_1);
-        REGIONS_MAP.put("me-jeddah-1", Region.ME_JEDDAH_1);
-        /* Mexico */
-        REGIONS_MAP.put("mx-queretaro-1", Region.MX_QUERETARO_1);
-        /* Israel */
-        REGIONS_MAP.put("il-jerusalem-1", Region.IL_JERUSALEM_1);
-        /* US */
-        REGIONS_MAP.put("us-ashburn-1", Region.US_ASHBURN_1);
-        REGIONS_MAP.put("us-phoenix-1", Region.US_PHOENIX_1);
-        REGIONS_MAP.put("us-sanjose-1", Region.US_SANJOSE_1);
-        /* Canada */
-        REGIONS_MAP.put("ca-montreal-1", Region.CA_MONTREAL_1);
-        REGIONS_MAP.put("ca-toronto-1", Region.CA_TORONTO_1);
-        /* South America */
-        REGIONS_MAP.put("sa-saopaulo-1", Region.SA_SAOPAULO_1);
-        REGIONS_MAP.put("sa-santiago-1", Region.SA_SANTIAGO_1);
-        REGIONS_MAP.put("sa-vinhedo-1", Region.SA_VINHEDO_1);
-    }
-
     private final Configuration config;
     private final NoSQLHandle ociNoSqlHndl;
 
@@ -195,7 +148,7 @@ public final class CreateLoadComplexTable {
             authProvider = SignatureProvider.createWithInstancePrincipal();
         }
         final NoSQLHandleConfig config =
-            new NoSQLHandleConfig(REGIONS_MAP.get(regionName), authProvider);
+            new NoSQLHandleConfig(Region.fromRegionId(regionName), authProvider);
         ociNoSqlHndl = NoSQLHandleFactory.createNoSQLHandle(config);
         createTable();
     }
