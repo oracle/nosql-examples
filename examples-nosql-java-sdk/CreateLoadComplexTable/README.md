@@ -376,7 +376,7 @@ java -Dtable=my_table_2 -DreadUnits=10 -DwriteUnits=15 -DstorageGb=3 \
   [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project complextable: Compilation failure
   ````
   
-  **Action**: Use Java 11 or higher
+  **Action**: Use Java 11 or higher.
   **Note**: You can use the command `java -version` to validate the version used.
   
   2. If you encounter an error such as the following, then you should check that your environment is correctly configured to access the desired version of Java.
