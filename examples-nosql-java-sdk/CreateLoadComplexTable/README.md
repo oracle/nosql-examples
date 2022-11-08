@@ -162,7 +162,7 @@ Once installed, if you have satisfied the requirements described above for inter
 cd complextable-1.0.0/complextable
 java -Djava.util.logging.config.file=./src/main/resources/logging/java-util-logging.properties \
      -Dlog4j.configurationFile=file:./src/main/resources/logging/log4j2-complextable.properties \
-     -jar ./lib/complextable-1.0.0.jar -config~/.oci/<your-complextable-config.json>
+     -jar ./lib/complextable-1.0.0.jar -config ~/.oci/<your-complextable-config.json>
 ````
 
 Note that the same command is used whether you are executing from the OCI Command Shell, an OCI Compute Instance, or your local development environment. For details on the configuration file that must be input to the program, see the next section titled, 'Configurating the Example'.
