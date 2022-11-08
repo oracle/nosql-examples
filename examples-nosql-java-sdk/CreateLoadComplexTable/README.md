@@ -24,19 +24,20 @@ To build and/or execute the program, the following requirements must be satisfie
   - Java 11 or higher.
   - Configure your environment to access the version of Java you wish to use; that is, either
 
-     1. Set your PATH environment variable to include the `bin` directory of your Java installation, or
-	 2. Set the JAVA_HOME environment variable to reference the parent directory of the Java `bin` directory
+     1. Set the JAVA_HOME environment variable to reference the parent directory of the Java `bin` directory, and/or
+	 2. Set your PATH environment variable to include the `bin` directory of your Java installation, 
 
-  For example, if you installed Java installation under /usr/local/share/java, then you would do either
+  For example, if you installed Java under /usr/local/share/java, then you can do one (or both) of the following:
 
 ````
 export PATH=$PATH:/usr/local/share/java/bin
 ````
-or
 ````
 export JAVA_HOME=/usr/local/share/java
 ````
-  
+
+Note: if you install and run the example program from the OCI Cloud Shell VM, that environment provides many useful tools and utilities; including pre-installed versions of Java and Maven. See [Managing Language Runtimes] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/devcloudshellgettingstarted.htm#cloudshellgettingstarted_topic_managing_language_runtimes) to change Java version.
+
 ## OCI Cloud Environment
 
   - An account in the Oracle Cloud Infrastructure; either a free trial or a paid subscription.
@@ -134,8 +135,9 @@ Note that when the token `fqcn` is used below, that token represents the fully-q
 
 # Other Useful Build Tasks
 
-1. To generate only the javadoc:  `mvn javadoc:javadoc`,   where the generated doc files will be placed in the directory,  `./target/apidocs`
-2. To remove all dependencies from the local Maven repository (ex. `~/.m2/repository`):  `mvn dependency:purge-local-repository`
+1. To skip running the unit tests when building the example: `mvn -DskipTests`
+2. To generate only the javadoc:  `mvn javadoc:javadoc`, where the generated doc files will be placed in the directory,  `./target/apidocs`
+3. To remove all dependencies from the local Maven repository (ex. `~/.m2/repository`):  `mvn dependency:purge-local-repository`
 
 # Executing the Example
 
@@ -357,4 +359,33 @@ java -Dtable=my_table_2 -DreadUnits=10 -DwriteUnits=15 -DstorageGb=3 \
   The CreateLoadComplexTable example program executes software from different third-party libraries, where each library defines its own set of loggers with different namespaces. For convenience, this example provides two logging configuration files as part of the release; one to configure logging mechanisms based on java.util.logging, and one for loggers based on Log4j2.
 
   By default, the logger configuration files provided with the utility are designed to produce minimal output as the program executes. If you wish to see more verbose output from the various components employed during execution, then you should increase the logging levels of the specific loggers referenced in the appropriate logging configuration file.
+
+## Troubleshooting
+
+  If you encounter problems building or running this example, then a common cause may be that you have not satisfied one or more of the `Requirements` described above. For example,
+  
+  1. If you encounter an error such as the following, then you should check the version of Java you are using.
+  
+  ````
+  [ERROR] COMPILATION ERROR : 
+  [INFO] -------------------------------------------------------------
+  [ERROR] javac: invalid flag: --release
+  Usage: javac <options> <source files>
+  use -help for a list of possible options
+  ...
+  [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project complextable: Compilation failure
+  ````
+  
+  **Action**: Use Java 11 or higher
+  **Note**: You can use the command `java -version` to validate the version used.
+  
+  2. If you encounter an error such as the following, then you should check that your environment is correctly configured to access the desired version of Java.
+	
+  ````
+ [ERROR] Failed to execute goal org.apache.maven.plugins:maven-javadoc-plugin:3.2.0:jar (javadoc-jar) on 
+ project complextable: MavenReportException: Error while generating Javadoc: Unable to find javadoc 
+ command: The environment variable JAVA_HOME is not correctly set. -> [Help 1]`
+  ````
+	
+  **Action**: Set the JAVA_HOME and/or PATH environment variable; so that the build mechanism can find the correct version of each Java utility (ex. `java`, `javac`, `javadoc`, etc.)
 
