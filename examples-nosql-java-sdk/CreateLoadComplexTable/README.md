@@ -36,7 +36,7 @@ export PATH=$PATH:/usr/local/share/java/bin
 export JAVA_HOME=/usr/local/share/java
 ````
 
-Note: if you install and run the example program from the OCI Cloud Shell VM, that environment provides many useful tools and utilities; including pre-installed versions of Java and Maven. See [Managing Language Runtimes] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/devcloudshellgettingstarted.htm#cloudshellgettingstarted_topic_managing_language_runtimes) to change Java version.
+Note: if you install and run the example program from the OCI Cloud Shell VM, that environment provides many useful tools and utilities; including pre-installed versions of Java and Maven. See [Managing Language Runtimes](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/devcloudshellgettingstarted.htm#cloudshellgettingstarted_topic_managing_language_runtimes) to change Java version.
 
 ## OCI Cloud Environment
 
@@ -377,7 +377,9 @@ java -Dtable=my_table_2 -DreadUnits=10 -DwriteUnits=15 -DstorageGb=3 \
   ````
   
   **Action**: Use Java 11 or higher.
+  
   **Note**: You can use the command `java -version` to validate the version used.
+  
   
   2. If you encounter an error such as the following, then you should check that your environment is correctly configured to access the desired version of Java.
 	
