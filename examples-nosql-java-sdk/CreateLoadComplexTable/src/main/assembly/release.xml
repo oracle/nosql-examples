@@ -1,0 +1,198 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+
+  <!-- When the package goal assembles release artifacts  --> 
+  <!-- (the tar and zip files), this file specifies which -->
+  <!-- files to place in those artifacts; ex. executable  -->
+  <!-- jar file, third party libs, license files, etc.    -->
+ 
+  <id>release</id>
+
+  <baseDirectory>${artifactId}-${project.version}/complextable</baseDirectory>
+  <includeBaseDirectory>true</includeBaseDirectory>
+
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+
+  <!-- Specify all files to include the zip and tar files -->
+  <fileSets>
+
+    <!-- Include the executable complextable jar -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>complextable-${project.version}.jar</include>
+      </includes>
+      <excludes>
+        <exclude>complextable-*-sources.jar</exclude>
+        <exclude>complextable-*-javadoc.jar</exclude>
+      </excludes>
+    </fileSet>
+
+    <!-- oci-java-sdk lib -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>oci-java-sdk-common-${oci-sdk.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <!-- nosqldriver lib -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>nosqldriver-${nosqldriver.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <!-- bouncycastle libs -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>bcpkix-jdk15on-${bouncycastle.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>bcprov-jdk15on-${bouncycastle.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <!-- netty libs -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-common-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-buffer-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-codec-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-codec-http-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-handler-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-handler-proxy-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-resolver-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-transport-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>netty-transport-native-unix-common-${netty.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <!-- jackson libs -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>jackson-core-${jackson.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <!-- slf4j and log4j2 libs -->
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>slf4j-api-${slf4j.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>log4j-slf4j-impl-${log4j2.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>log4j-api-${log4j2.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>./target/dependencies</directory>
+      <outputDirectory>./lib</outputDirectory>
+      <includes>
+        <include>log4j-core-${log4j2.version}.jar</include>
+      </includes>
+    </fileSet>
+
+    <!-- Include logging configuration files -->
+    <fileSet>
+      <directory>./src/main/resources/logging/</directory>
+      <outputDirectory>./src/main/resources/logging</outputDirectory>
+      <includes>
+        <include>log4j2-complextable.properties</include>
+        <include>java-util-logging.properties</include>
+      </includes>
+    </fileSet>
+
+  </fileSets>
+
+</assembly>
