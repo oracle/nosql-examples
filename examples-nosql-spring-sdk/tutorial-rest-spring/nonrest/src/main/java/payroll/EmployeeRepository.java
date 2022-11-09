@@ -1,7 +1,8 @@
 package payroll;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.oracle.nosql.spring.data.repository.NosqlRepository;
 
-interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+interface EmployeeRepository extends NosqlRepository<Employee, Long> {
 
 }

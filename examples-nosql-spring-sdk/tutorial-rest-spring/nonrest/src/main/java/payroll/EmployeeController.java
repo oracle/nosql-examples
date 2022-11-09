@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 class EmployeeController {
 
+  @Autowired
   private final EmployeeRepository repository;
 
   EmployeeController(EmployeeRepository repository) {
@@ -23,7 +25,7 @@ class EmployeeController {
   // Aggregate root
   // tag::get-aggregate-root[]
   @GetMapping("/employees")
-  List<Employee> all() {
+  Iterable<Employee> all() {
     return repository.findAll();
   }
   // end::get-aggregate-root[]

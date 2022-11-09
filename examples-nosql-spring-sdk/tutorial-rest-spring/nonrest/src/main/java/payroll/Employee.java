@@ -2,14 +2,14 @@ package payroll;
 
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.oracle.nosql.spring.data.core.mapping.NosqlId;
+import com.oracle.nosql.spring.data.core.mapping.NosqlTable;
 
-@Entity
+@NosqlTable(storageGB = 1, writeUnits = 10, readUnits = 10)
 class Employee {
 
-  private @Id @GeneratedValue Long id;
+  @NosqlId(generated = true)
+  private Long id;
   private String name;
   private String role;
 
