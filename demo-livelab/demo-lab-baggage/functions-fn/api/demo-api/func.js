@@ -19,6 +19,7 @@ process.on('exit', function(code) {
 fdk.handle(async function(input, ctx){
 
   let ticketNo;
+  let confNo;
   let endPoint;
   let sql;
 
@@ -27,6 +28,8 @@ fdk.handle(async function(input, ctx){
     endPoint = input.endPoint;
   if (input && input.ticketNo)
     ticketNo = input.ticketNo;
+  if (input && input.confNo)
+    confNo = input.confNo;
   if (input && input.sql)
     sql = input.sql;
 
@@ -37,6 +40,7 @@ fdk.handle(async function(input, ctx){
         var q = url.parse(adr, true);
         endPoint = q.pathname.split('/')[2]
         ticketNo = q.query.ticketNo
+        confNo = q.query.confNo
   }
 
 
@@ -52,6 +56,14 @@ fdk.handle(async function(input, ctx){
      const statementQry1 = `SELECT d.ticketNo as ticketNo, d.fullName as fullName, d.contactPhone as contactInfo, size(d.bagInfo) as numBags FROM demo d WHERE d.bagInfo.flightLegs.flightNo =ANY 'BM715'`
      rows = {'message': endPoint + " under construction." , "sql" : statementQry1, "index" : "bagInfo.flightLegs.flightNo", "endPoint":"executeSQL"}
   }
+  else if ((endPoint == "getByConfirmationCode") && (confNo)) {
+	 const statementQryConfCode = `SELECT * FROM demo WHERE confNo =  "${confNo}"`;
+     rows = executeQuery(statementQryConfCode);
+  }
+  else if ((endPoint == "getByConfirmationCode") && !(confNo)) {
+     rows = {'message': endPoint + " missing parameter confNo"}
+     hctx.statusCode=500;
+  }  
   else if ((endPoint == "executeSQL") && (sql)) {
      rows = executeQuery(sql);
   }

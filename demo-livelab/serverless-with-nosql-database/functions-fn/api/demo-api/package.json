@@ -9,6 +9,6 @@
         "dependencies": {
                 "@fnproject/fdk": ">=0.0.15",
                 "url": "^0.11.0",
-                "oracle-nosqldb": "^5.2.0"
+                "oracle-nosqldb": ">=5.2.0"
         }
 }
