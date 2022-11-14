@@ -4,22 +4,19 @@
 #
 import os
 import io
-import oci
 import json
-import requests
 import logging
 import base64
-import pandas as pd
 from fdk import response
 
-import borneo
-import sys
 from borneo import (
     AuthorizationProvider, DeleteRequest, GetRequest,
     IllegalArgumentException, NoSQLHandle, NoSQLHandleConfig, PutRequest,
     QueryRequest, Regions, TableLimits, TableRequest)
 from borneo.iam import SignatureProvider
 from borneo.kv import StoreAccessTokenProvider
+
+import traceback
 
 def handler(ctx, data: io.BytesIO=None):
     logger = logging.getLogger()
@@ -34,11 +31,8 @@ def handler(ctx, data: io.BytesIO=None):
         for item in logs:
             if 'value' in item:
                 item['value'] = base64_decode(item['value'])
-
             if 'key' in item:
                 item['key'] = base64_decode(item['key'])
-
-
         #
         # For demo purpose, we are inserting the data as received, no processing
         # Put rows in NoSQL
@@ -56,19 +50,16 @@ def handler(ctx, data: io.BytesIO=None):
                request.set_value_from_json(item['value'])
                store_handle.put(request)
         #
-        # return data in CSV mode
+        # return data 
         #
-        df = pd.json_normalize(logs)
-        csv_result = df.to_csv(index=False)
-        return response.Response(ctx, status_code=200, response_data=csv_result, headers={"Content-Type": "text/csv"})
-
+        return response.Response(ctx, status_code=200, response_data=logs, headers={"Content-Type": "text/plain"})
     except (Exception, ValueError) as e:
         # For demo purpose, I am ignoring all errors
         # During tests, I sent some no JSON messages to my Stream that were broken all
         # If there is an error, in the next iteration I will receive all pending message from the Stream
         # so continue to have the same error
-        logger.info('Logging and ignore the error')
-        logger.error(str(e))
+        logger.error('Logging and ignore the error ' + str(e))
+        return response.Response(ctx, status_code=200, response_data=traceback.format_exc(), headers={"Content-Type": "text/plain"})
 
 def base64_decode(encoded):
     if not encoded: return
@@ -77,8 +68,7 @@ def base64_decode(encoded):
     return message_bytes.decode('utf-8')
 
 def get_handle():
-     provider = borneo.iam.SignatureProvider.create_with_resource_principal()
-     compartment_id = provider.get_resource_principal_claim(borneo.ResourcePrincipalClaimKeys.COMPARTMENT_ID_CLAIM_KEY)
-
-     config = borneo.NoSQLHandleConfig(os.getenv('NOSQL_REGION'), provider).set_logger(None).set_default_compartment(compartment_id)
-     return borneo.NoSQLHandle(config)
+     provider = SignatureProvider.create_with_resource_principal()
+     config = NoSQLHandleConfig(os.getenv('NOSQL_REGION'), provider).set_logger(None).set_default_compartment(os.getenv('NOSQL_COMPARTMENT_ID'))
+     return NoSQLHandle(config)
+     
