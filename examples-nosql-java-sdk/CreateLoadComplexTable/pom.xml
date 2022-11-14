@@ -326,7 +326,7 @@
 
           <environmentVariables>
             <OCI_obo_token_path>
-              ${java.io.tmpdir}${user.name}/ComplexTableTestDir/delegation_token
+              ${user.dir}/target/test-run/ComplexTableTestDir/delegation_token
             </OCI_obo_token_path>
           </environmentVariables>
 
