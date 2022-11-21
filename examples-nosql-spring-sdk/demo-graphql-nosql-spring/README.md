@@ -1,5 +1,11 @@
 # demo-graphql-nosql-spring
 
+This tutorial will focus on how you can use Oracle NoSQL Spring Data for a flexible and elastic database
+that scales with your application. We start with the spring boot's tutorial using my-sql,
+and then move over to Oracle NoSQL Cloud Services
+
+You can see the modifications to the original tutorial [here](https://github.com/oracle/nosql-examples/pull/81/commits/403a1b98829690d18c86cd777b84520574fe8f2f)
+
 ## Develop Applications Fast and Effortlessly with Oracle NoSQL Database Cloud Service
 
 ## Connect and go
