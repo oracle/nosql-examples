@@ -12,6 +12,8 @@ This tutorial will focus on how you can use Oracle NoSQL Spring Data for a flexi
 We start with the spring boot's standard tutorial - the in memory H2 database, and them move over to Oracle NoSQL Cloud Services. 
 The application will be built using maven and can be deployed locally using docker-compose or to the Oracle Kubernetes Engine (OKE) cluster for elastic scalability.
 
+You can see the modifications to the original tutorial [here](https://github.com/oracle/nosql-examples/commit/1a37300a8e9893037bf0a48aff37019ce4cd5e75)
+
 ## Test
 Spring Initializr uses maven wrapper so type this:
 ```` shell
