@@ -1,0 +1,29 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Author {
+	name: String!
+}
+
+input WorkaroundAuthor {
+	name: String!
+}
+
+type Tutorial {
+	id: ID!
+	title: String!
+	description: String
+        keywords: [String]
+	author: Author
+}
+type Query {
+	findAllTutorials: [Tutorial]!
+        findByDescriptionRegex(regexp: String): [Tutorial]!
+        findByAuthorNameRegex(regexp: String): [Tutorial]!
+        findByKeywords (keyword: String): [Tutorial]!
+}
+type Mutation {
+	createTutorial(title: String!, description: String, keywords: [String], author: WorkaroundAuthor): Tutorial!
+}
