@@ -2,8 +2,6 @@
 
 ## Develop Applications Fast and Effortlessly with Oracle NoSQL Database Cloud Service
 
-Work in Progress 👷
-
 ## Connect and go
 
 1. **Connect to Oracle NoSQL Database Cloud Service** - Your application connects to Oracle NoSQL Database Cloud Service by specifying credentials and a target region for the connection
@@ -14,7 +12,6 @@ In this case, we will deploy a spring application using [Oracle NoSQL Database S
 
 
 ## Connect instructions
-Work in Progress 👷
 
 In this version, this application connects to Oracle NoSQL Database Cloud Service by using Instance Principals
 
@@ -29,7 +26,6 @@ export OCI_NOSQL_COMPID="ocid1.compartment.oc1..xxxx"
 ````
 
 ## Deployment and Execution instructions
-Work in Progress 👷
 
 Spring Initializr uses maven wrapper so type this:
 
@@ -50,7 +46,6 @@ mvn exec:java -Dexec.mainClass="graphql.GraphqlApplication" -Dlogging.level.com.
 ````
 
 ## Build instructions
-Work in Progress 👷
 
 ````
 mvn clean package spring-boot:repackage

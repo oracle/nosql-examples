@@ -1,23 +1,27 @@
 package graphql;
 
-import javax.persistence.*;
-@Entity
-public class Tutorial {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+import java.util.Objects;
+import java.util.List;
+
+import com.oracle.nosql.spring.data.core.mapping.NosqlId;
+import com.oracle.nosql.spring.data.core.mapping.NosqlTable;
+
+@NosqlTable(storageGB = 1, writeUnits = 10, readUnits = 10)
+class Tutorial  {
+
+  @NosqlId(generated = true)
   private Long id;
-  @Column(name = "title", nullable = false)
   private String title;
-  @Column(name = "description")
   private String description;
-  @ManyToOne
-  @JoinColumn(name = "author_id", nullable = false, updatable = false)
-  private Author author;
+  private List<String> keywords;
+  private Author author ;
+
   public Tutorial() {
   }
-  public Tutorial(String title, String description, Author author) {
+  public Tutorial(String title, String description, List<String> keywords, Author author) {
     this.title = title;
     this.description = description;
+    this.keywords = keywords;
     this.author = author;
   }
   public Long getId() {
@@ -35,6 +39,12 @@ public class Tutorial {
   public void setDescription(String description) {
     this.description = description;
   }
+  public List<String> getKeywords() {
+    return keywords;
+  }
+  public void setKeywords(List<String> keywords) {
+    this.keywords = keywords;
+  }
   public Author getAuthor() {
     return author;
   }
@@ -43,6 +53,7 @@ public class Tutorial {
   }
   @Override
   public String toString() {
-    return "Tutorial [id=" + id + ", title=" + title + ", description=" + description + ", author=" + author + "]";
+    return "Tutorial [id=" + id + ", title=" + title + ", description=" + description + "keywords=" + keywords + ", author=" + author + "]";
   }
+
 }
