@@ -4,6 +4,7 @@
   "description": "Basic demo of GraphQL with Oracle NoSQL",
   "private": "true",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js"
   },
@@ -11,8 +12,8 @@
   "author": " ",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^3.9.0",
-    "graphql": "^16.5.0",
-    "oracle-nosqldb": "^5.3.1"
+    "@apollo/server": "^4.1.1",
+    "graphql": "^16.6.0",
+    "oracle-nosqldb": "^5.3.3"
   }
 }

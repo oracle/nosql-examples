@@ -9,7 +9,7 @@ sed -i "s/\"/\\\\\"/g"  show-copy.json
 cp collection.json collection-copy.json
 sed -i "s/NOSQL_EXAMPLE_STREAMID/$NOSQL_EXAMPLE_STREAMID/g"  collection-copy.json
 sed -e "s/NOSQL_EXAMPLE_SHOW/$(<show-copy.json sed -e 's/[\&/]/\\&/g')/g" -i collection-copy.json
-cat collection-copy.json | jq '.item[]| select(.name=="UpdateStream") | .request.body.graphql' >  query.json
+cat collection-copy.json | jq '.item[]| select(.name=="UpdateStream") | .request.body.graphql' | jq '{query: .query, variables: .variables|fromjson}' >  query.json
 cat query.json | jq
 
 curl --location --request POST 'http://localhost:3000/' \
