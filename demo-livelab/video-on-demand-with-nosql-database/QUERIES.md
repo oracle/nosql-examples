@@ -22,7 +22,7 @@ query ExampleQuery {
       shows {
         showName
         showId
-        showType
+        type
         numSeasons
         seriesInfo {
           seasonNum
@@ -49,7 +49,7 @@ query Stream($streamId: Int) {
       shows {
         showName
         showId
-        showType
+        type
         numSeasons
         seriesInfo {
           seasonNum
@@ -76,7 +76,7 @@ query Stream($streamId: Int) {
       shows {
         showName
         showId
-        showType
+        type
         numSeasons
         seriesInfo {
           seasonNum
@@ -113,7 +113,7 @@ fragment contentStreamed on Stream {
       shows {  
         showName
         showId
-        showType
+        type
         numSeasons    
       }
     }
@@ -204,7 +204,7 @@ mutation Mutation($updateStreamId: Int, $input: showsEntry) {
   "input": {
          "showName": "Call My Agent",
          "showId": 12,
-         "showType": "tvseries",
+         "type": "tvseries",
          "numSeasons" : 2,
          "seriesInfo": [
             {

@@ -10,7 +10,7 @@ sed -z 's/\n/\\r\\n/g' -i user-copy.json
 sed -i "s/\"/\\\\\"/g"  user-copy.json
 cp collection.json collection-copy.json
 sed -e "s/NOSQL_EXAMPLE_USER/$(<user-copy.json sed -e 's/[\&/]/\\&/g')/g" -i collection-copy.json
-cat collection-copy.json | jq '.item[]| select(.name=="CreateStream") | .request.body.graphql' >  query.json
+cat collection-copy.json | jq '.item[]| select(.name=="CreateStream") | .request.body.graphql' | jq '{query: .query, variables: .variables|fromjson}' >  query.json
 
 cat query.json | jq
 

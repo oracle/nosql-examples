@@ -48,7 +48,7 @@ spec:
         - name: NOSQL_ServiceType
           value: "useInstancePrincipal"
         - name: NOSQL_REGION
-          value: "us-ashburn-1"
+          value: "eu-paris-1"
         - name: NOSQL_COMPID
           value: "ocid1.compartment.oc1..aaaaaaaa4mlehopmvdluv2wjcdp4tnh2ypjz3nhhpahb4ss7yvxaa3be3diq"
         ports:

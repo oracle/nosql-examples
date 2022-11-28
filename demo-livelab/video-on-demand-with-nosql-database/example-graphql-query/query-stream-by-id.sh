@@ -5,7 +5,7 @@
 NOSQL_EXAMPLE_STREAMID=$(cat _createStreamId.txt)
 cp collection.json collection-copy.json
 sed -i "s/NOSQL_EXAMPLE_STREAMID/$NOSQL_EXAMPLE_STREAMID/g"  collection-copy.json
-cat collection-copy.json | jq '.item[]| select(.name=="Query Streams by Id") | .request.body.graphql' >  query.json
+cat collection-copy.json | jq '.item[]| select(.name=="Query Streams by Id") | .request.body.graphql' | jq '{query: .query, variables: .variables|fromjson}' >  query.json
 cat query.json | jq
 
 curl --location --request POST 'http://localhost:3000/' \
