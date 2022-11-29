@@ -71,4 +71,3 @@ def get_handle():
      provider = SignatureProvider.create_with_resource_principal()
      config = NoSQLHandleConfig(os.getenv('NOSQL_REGION'), provider).set_logger(None).set_default_compartment(os.getenv('NOSQL_COMPARTMENT_ID'))
      return NoSQLHandle(config)
-     
