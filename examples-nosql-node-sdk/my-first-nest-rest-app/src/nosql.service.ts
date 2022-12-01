@@ -38,7 +38,6 @@ export class NoSQLService {
          let offset = +params.page*+params.limit;
          statement = statement + " OFFSET " + offset;
       }
-      console.log(statement);
 
       for await(const res of this.getInstance().getConnection().queryIterable(statement)) {
         rows.push.apply(rows, res.rows);
