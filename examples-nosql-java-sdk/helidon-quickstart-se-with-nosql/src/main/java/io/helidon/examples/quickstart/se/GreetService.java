@@ -18,6 +18,8 @@ import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
 
+import java.util.List;
+
 /**
  * A simple service to greet you. Examples:
  *
@@ -39,13 +41,15 @@ public class GreetService implements Service {
      * The config value for the key {@code greeting}.
      */
     private final AtomicReference<String> greeting = new AtomicReference<>();
+    private final GreetRepo greetRepo ;
 
     private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
 
     private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
 
-    GreetService(Config config) {
+    GreetService(Config config, GreetRepo greetRepo) {
         greeting.set(config.get("app.greeting").asString().orElse("Ciao"));
+        this.greetRepo = greetRepo;
     }
 
     /**
@@ -66,7 +70,10 @@ public class GreetService implements Service {
      * @param response the server response
      */
     private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
-        sendResponse(response, "World");
+
+        List<Greet> result = this.greetRepo.findAll();
+        response.status(200).send(result);
+        //sendResponse(response, "World");
     }
 
     /**
@@ -76,7 +83,9 @@ public class GreetService implements Service {
      */
     private void getMessageHandler(ServerRequest request, ServerResponse response) {
         String name = request.path().param("name");
-        sendResponse(response, name);
+        Greet result = this.greetRepo.findById( Integer.parseInt(name) );
+        response.status(200).send(result);
+        //sendResponse(response, name);
     }
 
     private void sendResponse(ServerResponse response, String name) {
@@ -109,6 +118,7 @@ public class GreetService implements Service {
         return null;
     }
 
+        /*
     private void updateGreetingFromJson(JsonObject jo, ServerResponse response) {
         if (!jo.containsKey("greeting")) {
             JsonObject jsonErrorObject = JSON.createObjectBuilder()
@@ -120,6 +130,9 @@ public class GreetService implements Service {
         }
 
         greeting.set(jo.getString("greeting"));
+        */
+    private void updateGreetingFromJson(Greet jo, ServerResponse response) {
+        this.greetRepo.save(jo);
         response.status(Http.Status.NO_CONTENT_204).send();
     }
 
@@ -130,7 +143,8 @@ public class GreetService implements Service {
      */
     private void updateGreetingHandler(ServerRequest request,
                                        ServerResponse response) {
-        request.content().as(JsonObject.class)
+        //request.content().as(JsonObject.class)
+        request.content().as(Greet.class)
             .thenAccept(jo -> updateGreetingFromJson(jo, response))
             .exceptionally(ex -> processErrors(ex, request, response));
     }

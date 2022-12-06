@@ -6,23 +6,62 @@ Sample Helidon SE project that includes multiple REST operations.
 
 With JDK11+
 ```bash
+
+# modify src/main/resources/application.yaml
+
+cat src/main/resources/application.yaml
+
+app:
+  greeting: "Hello"
+
+server:
+  port: 8080
+  host: 0.0.0.0
+
+nosql:
+  OCI_CLI_AUTH: instance_principal
+  region: us-ashburn-1
+  compartment-id: ocid1.compartment.oc1..aaaaaaaa4mlehopmvdluv2wjcdp4tnh2ypjz3nhhpahb4ss7yvxaa3be3diq
+
+ 
 mvn package
 java -jar target/helidon-quickstart-se.jar
 ```
 
 ## Exercise the application
 
+
 ```
+curl -X PUT -H "Content-Type: application/json" -d '{"id":1, "message" : "Hola"}' http://localhost:8080/greet/greeting
+curl -X PUT -H "Content-Type: application/json" -d '{"id":2, "message" : "Bonjour"}' http://localhost:8080/greet/greeting
+curl -X PUT -H "Content-Type: application/json" -d '{"id":3, "message" : "Hello"}' http://localhost:8080/greet/greeting
+
 curl -X GET http://localhost:8080/greet
-{"message":"Hello World!"}
+[
+  {
+    "id": 3,
+    "message": "Helll"
+  },
+  {
+    "id": 2,
+    "message": "Bonjour"
+  },
+  {
+    "id": 1,
+    "message": "Hola"
+  }
+]
 
-curl -X GET http://localhost:8080/greet/Joe
-{"message":"Hello Joe!"}
 
-curl -X PUT -H "Content-Type: application/json" -d '{"greeting" : "Hola"}' http://localhost:8080/greet/greeting
+curl -X GET http://localhost:8080/greet/1
+{"id":1,"message":"Hola"}
 
-curl -X GET http://localhost:8080/greet/Jose
-{"message":"Hola Jose!"}
+curl -X GET http://localhost:8080/greet/2
+{"id":2,"message":"Bonjour"}
+
+curl -X GET http://localhost:8080/greet/3
+{"id":3,"message":"Hello"}
+
 ```
 
 ## Try health and metrics
