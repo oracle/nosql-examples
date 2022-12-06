@@ -17,6 +17,7 @@ import oracle.nosql.driver.NoSQLHandleConfig;
 import oracle.nosql.driver.NoSQLHandleFactory;
 import oracle.nosql.driver.Region;
 import oracle.nosql.driver.iam.SignatureProvider;
+import java.io.IOException;
 
 /**
  * The application main class.
@@ -96,15 +97,32 @@ public final class Main {
                 .build();
     }
 
-    private static NoSQLHandle getNoSQLConnection(Config config) {
+        String OCI_CLI_AUTH = config.get("nosql").get("OCI_CLI_AUTH").asString().get();
+        SignatureProvider authProvider = null;
+        try {
+          System.out.println(config.get("nosql").get("OCI_CLI_AUTH").asString());
+          switch(OCI_CLI_AUTH){
+            case "api_key" :
+              authProvider = new SignatureProvider(); // Use User Principal authorization using a config file in $HOME/.oci/config
+              //authProvider = new SignatureProvider(configFile, profileName);
+              break;
+            case "instance_principal" :
+              authProvider = SignatureProvider.createWithInstancePrincipal();
+              break;
+            case "instance_obo_user" :
+              authProvider = SignatureProvider.createWithInstancePrincipalForDelegation(System.getenv("OCI_obo_token"));
+              break;
+          }
+        } catch (IOException ioe) {
+          System.err.println("Unable to configure authentication: " + ioe);
+          System.exit(1);
+        }
 
-        System.out.println(config.get("nosql").get("OCI_CLI_AUTH").asString());
-        System.out.println(config.get("nosql").get(".region").asString());
-        System.out.println(config.get("nosql").get("compartment-id").asString());
-
-        SignatureProvider authProvider = SignatureProvider.createWithInstancePrincipal();
         NoSQLHandleConfig NoSQLconfig = new NoSQLHandleConfig(config.get("nosql").get(".region").asString().get(), authProvider);
         NoSQLconfig.setDefaultCompartment(config.get("nosql").get("compartment-id").asString().get());
+
+        System.out.println(config.get("nosql").get(".region").asString());
+        System.out.println(config.get("nosql").get("compartment-id").asString());
         return( NoSQLHandleFactory.createNoSQLHandle(NoSQLconfig) );
     }
 
