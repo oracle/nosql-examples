@@ -5,3 +5,8 @@ app:
 server:
   port: 8080
   host: 0.0.0.0
+
+nosql:
+  OCI_CLI_AUTH: instance_principal
+  region: us-ashburn-1
+  compartment-id: ocid1.compartment.oc1..aaaaaaaa4mlehopmvdluv2wjcdp4tnh2ypjz3nhhpahb4ss7yvxaa3be3diq

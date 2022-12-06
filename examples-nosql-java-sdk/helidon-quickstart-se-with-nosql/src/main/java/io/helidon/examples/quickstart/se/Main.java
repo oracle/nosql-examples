@@ -6,10 +6,18 @@ import io.helidon.common.reactive.Single;
 import io.helidon.config.Config;
 import io.helidon.health.HealthSupport;
 import io.helidon.health.checks.HealthChecks;
-import io.helidon.media.jsonp.JsonpSupport;
+//import io.helidon.media.jsonp.JsonpSupport;
+import io.helidon.media.jsonb.JsonbSupport;
 import io.helidon.metrics.MetricsSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.WebServer;
+
+import oracle.nosql.driver.NoSQLHandle;
+import oracle.nosql.driver.NoSQLHandleConfig;
+import oracle.nosql.driver.NoSQLHandleFactory;
+import oracle.nosql.driver.Region;
+import oracle.nosql.driver.iam.SignatureProvider;
+import java.io.IOException;
 
 /**
  * The application main class.
@@ -44,7 +52,8 @@ public final class Main {
 
         WebServer server = WebServer.builder(createRouting(config))
                 .config(config.get("server"))
-                .addMediaSupport(JsonpSupport.create())
+                //.addMediaSupport(JsonpSupport.create())
+                .addMediaSupport(JsonbSupport.create())
                 .build();
 
         Single<WebServer> webserver = server.start();
@@ -72,15 +81,49 @@ public final class Main {
     private static Routing createRouting(Config config) {
 
         MetricsSupport metrics = MetricsSupport.create();
-        GreetService greetService = new GreetService(config);
+        
+        NoSQLHandle client = getNoSQLConnection(config); // 1) Use of NoSQLHandle
+        // 2) No Metrics support
+        // 3) No Health support
+        GreetService greetService = new GreetService(config, new GreetRepoImpl(client)); // 4) Initialize GreetRepoImpl with NoSQLHandle
         HealthSupport health = HealthSupport.builder()
                 .addLiveness(HealthChecks.healthChecks())   // Adds a convenient set of checks
                 .build();
 
-        return Routing.builder()
+        return Routing.builder() // 5) Register the services in Routing
                 .register(health)                   // Health at "/health"
                 .register(metrics)                  // Metrics at "/metrics"
                 .register("/greet", greetService)
                 .build();
     }
+    private static NoSQLHandle getNoSQLConnection(Config config) {
+        String OCI_CLI_AUTH = config.get("nosql").get("OCI_CLI_AUTH").asString().get();
+        SignatureProvider authProvider = null;
+        try {
+          System.out.println(config.get("nosql").get("OCI_CLI_AUTH").asString());
+          switch(OCI_CLI_AUTH){
+            case "api_key" :
+              authProvider = new SignatureProvider(); // Use User Principal authorization using a config file in $HOME/.oci/config
+              //authProvider = new SignatureProvider(configFile, profileName);
+              break;
+            case "instance_principal" :
+              authProvider = SignatureProvider.createWithInstancePrincipal();
+              break;
+            case "instance_obo_user" :
+              authProvider = SignatureProvider.createWithInstancePrincipalForDelegation(System.getenv("OCI_obo_token"));
+              break;
+          }
+        } catch (IOException ioe) {
+          System.err.println("Unable to configure authentication: " + ioe);
+          System.exit(1);
+        }
+
+        NoSQLHandleConfig NoSQLconfig = new NoSQLHandleConfig(config.get("nosql").get(".region").asString().get(), authProvider);
+        NoSQLconfig.setDefaultCompartment(config.get("nosql").get("compartment-id").asString().get());
+
+        System.out.println(config.get("nosql").get(".region").asString());
+        System.out.println(config.get("nosql").get("compartment-id").asString());
+        return( NoSQLHandleFactory.createNoSQLHandle(NoSQLconfig) );
+    }
+
 }
