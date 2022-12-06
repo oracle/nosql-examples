@@ -96,7 +96,7 @@ public final class Main {
                 .register("/greet", greetService)
                 .build();
     }
-
+    private static NoSQLHandle getNoSQLConnection(Config config) {
         String OCI_CLI_AUTH = config.get("nosql").get("OCI_CLI_AUTH").asString().get();
         SignatureProvider authProvider = null;
         try {
