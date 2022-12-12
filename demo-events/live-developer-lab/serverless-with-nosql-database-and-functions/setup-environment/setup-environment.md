@@ -83,7 +83,7 @@ This lab assumes you have:
 
 1. To deploy the application, we will use a terraform scripts provided for this Lab. Click on the 'Deploy to Oracle Cloud ' button.  This will create a new window in your browser.
 
-  [![Deploy to Oracle Cloud - home](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?region=us-phoenix-1&zipUrl=https://github.com/oracle/nosql-examples/raw/master/zips/serverless-with-nosql-database.zip)
+  [![Deploy to Oracle Cloud - home](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle/nosql-examples/raw/master/zips/serverless-with-nosql-database.zip)
 
   Oracle NoSQL Always Free tables are available only in the Phoenix region.  This application will be deployed in the Phoenix Region and if you are not subscribed to that region you will get the following error.  If you are subscribed, then proceed to step 2.
 
