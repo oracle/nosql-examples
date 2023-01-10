@@ -23,19 +23,20 @@ see instuction https://github.com/oracle/docker-images/tree/main/NoSQL
 2. Deploy this application
 
 ````shell
-docker pull ghcr.io/dario-vega/demo-vod-streaming-app:latest
-docker tag ghcr.io/dario-vega/demo-vod-streaming-app:latest demo-vod-streaming-app:latest
+docker pull ghcr.io/oracle/demo-vod-example-app:latest
+docker tag ghcr.io/oracle/demo-vod-example-app:latest demo-vod-example-app:latest
 ````
 
 Start up this demo in a container 
 
 ````shell
-docker run -d --env NOSQL_ENDPOINT=$HOSTNAME -p 3000:3000 demo-tv-streaming-app:latest 
+docker run -d --env NOSQL_ENDPOINT=$HOSTNAME -p 3000:3000 demo-vod-example-app:latest
 ````
+
 or use user-defined bridge network name
 
 ````shell
-docker run -d --link kvlite --env NOSQL_ENDPOINT=kvlite  -p 3000:3000 demo-vod-streaming-app:latest
+docker run -d --link kvlite --env NOSQL_ENDPOINT=kvlite  -p 3000:3000 demo-vod-example-app:latest
 ````
 
 
@@ -49,10 +50,21 @@ ENV NOSQL_PORT 8080
 
 ## Deployment using docker-compose
 
-1. Clone this project and run the up docker-compose command
+1.  Get Code Bundle
 
 ````shell
-cd ~/demo-tv-streaming-app
+cd $HOME
+rm -rf video-on-demand-with-nosql-database
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
+unzip video-on-demand-with-nosql-database.zip
+cd $HOME
+````shell
+
+2.  Run the docker-compose up command
+
+
+````shell
+cd ~/video-on-demand-with-nosql-database
 docker-compose up -d
 docker-compose ps
 ````
@@ -85,10 +97,20 @@ docker run -d --name=kvlite --hostname=kvlite --env KV_PROXY_PORT=8080 -p 8080:8
 
 see instuction https://github.com/oracle/docker-images/tree/main/NoSQL
 
-2. Clone this project and startup the application 
+2. Get Code Bundle - ignore if already done
 
 ````shell
-cd ~/demo-tv-streaming-app/demo-vod
+cd $HOME
+rm -rf video-on-demand-with-nosql-database
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
+unzip video-on-demand-with-nosql-database.zip
+cd $HOME
+````shell
+
+3. Startup the application
+
+````shell
+cd ~/video-on-demand-with-nosql-database/demo-vod
 npm install 
 export NOSQL_ENDPOINT=$HOSTNAME
 export NOSQL_PORT=8080
@@ -98,9 +120,21 @@ npm start
 
 ## Load some test data to KVLite runnning in a container
 
-  
+1.  Get Code Bundle - ignore if already done
+
 ````shell
-cd ~/demo-tv-streaming-app/demo-vod
+cd $HOME
+rm -rf video-on-demand-with-nosql-database
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
+unzip video-on-demand-with-nosql-database.zip
+cd $HOME
+````shell
+
+2.  Load some data
+
+
+````shell
+cd ~/video-on-demand-with-nosql-database/demo-vod
 docker cp insert-stream-acct.sql kvlite:insert-stream-acct.sql
 docker exec kvlite  java -jar lib/sql.jar -helper-hosts localhost:5000 \
 -store kvstore load -file /insert-stream-acct.sql
