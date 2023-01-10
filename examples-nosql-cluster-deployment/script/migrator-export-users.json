@@ -1,0 +1,18 @@
+{
+  "source" : {
+    "type" : "nosqldb",
+    "storeName" : "OUGCO",
+    "helperHosts" : ["node2-nosql:5000"],
+    "table" : "users",
+    "requestTimeoutMs" : 5000
+  },
+  "sink" : {
+    "type" : "file",
+    "format" : "json",
+    "schemaPath" : "/home/opc/kvstore_export/users.ddl",
+    "pretty" : false,
+    "dataPath" : "/home/opc/kvstore_export/users.json"
+  },
+  "abortOnError" : false,
+  "migratorVersion" : "1.0.0"
+}

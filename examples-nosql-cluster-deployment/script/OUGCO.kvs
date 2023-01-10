@@ -1,0 +1,9 @@
+#
+# Copyright (c) 2023 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+connect store -name OUGCO -host localhost -port 5000
+execute 'SET LOCAL REGION CO'
+execute 'CREATE REGION FR'
+execute 'show regions'
+show mrtable-agent-statistics -agent 0 -json

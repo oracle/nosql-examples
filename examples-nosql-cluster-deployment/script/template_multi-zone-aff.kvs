@@ -1,0 +1,26 @@
+#
+# Copyright (c) 2023 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+configure -name <KVSTORE>;
+plan deploy-zone -name "DataCenter1" -master-affinity -rf 1 -wait;
+plan deploy-zone -name "DataCenter2" -master-affinity -rf 1 -wait;
+plan deploy-zone -name "DataCenter3" -rf 1 -wait;
+
+
+plan deploy-sn -zn zn1 -host <KVNODE_1> -port 5000 -wait;
+plan deploy-admin -sn sn1 -wait;
+plan deploy-sn -zn zn2 -host <KVNODE_2> -port 5000 -wait;
+plan deploy-admin -sn sn2 -wait;
+plan deploy-sn -zn zn3 -host <KVNODE_3> -port 5000 -wait;
+plan deploy-admin -sn sn3 -wait;
+
+
+pool create -name CloudPool;
+pool join -name CloudPool -sn sn1;
+pool join -name CloudPool -sn sn2;
+pool join -name CloudPool -sn sn3;
+
+topology create -name MultiZone -pool CloudPool -partitions 300;
+topology preview -name MultiZone;
+plan deploy-topology -name MultiZone -wait

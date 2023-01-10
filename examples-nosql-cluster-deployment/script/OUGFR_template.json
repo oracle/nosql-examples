@@ -1,0 +1,13 @@
+{
+ "path" : "/home/opc/nosql/xrshome",
+  "agentGroupSize" : 1,
+  "agentId" : 0,
+  "region" : "FR",
+  "store" : "OUGFR",
+  "helpers" : [ "node1-nosql:5000" ],
+  "regions" : [ {
+    "name" : "CO",
+    "store" : "OUGCO",
+    "helpers" : [ "node2-nosql:5000" ]
+} ]
+}
