@@ -26,9 +26,10 @@ jobs:
           do
             RESOURCE=$(cut -d "/" -f 2 <<< "$EXAMPLE_FOLDER")
             if [ -f "$EXAMPLE_FOLDER/zip" ]; then 
-              zip zips/$RESOURCE.zip $EXAMPLE_FOLDER
+              zip -r zips/$RESOURCE.zip $EXAMPLE_FOLDER
             fi
-          done          
+          done
+          zip -r zips/examples-nosql-cluster-deployment.zip examples-nosql-cluster-deployment          
   
       - name: Commit and Push Changes
         continue-on-error: true
