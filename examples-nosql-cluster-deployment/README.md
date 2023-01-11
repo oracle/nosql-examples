@@ -4,8 +4,8 @@
 
 **Oracle NoSQL Database** is designed for today’s most demanding applications that
 require low latency responses, flexible data models, and elastic scaling for dynamic workloads.
-It supports JSON, Table and Key-Value datatypes running on-premise, or as a cloud
-service with on-demand throughput and storage based provisioning.
+It supports JSON, Table and Key-Value datatypes running on-premises, or as a cloud
+service with on-demand throughput and storage-based provisioning.
 
 This repository provides you guidelines and examples allowing you to learn how to deploy a NoSQL cluster/NoSQL store (also referred to as the topology). 
 We will learn how to deploy the most popular topologies:
@@ -38,14 +38,14 @@ For those of you that prefer a fully serverless managed service - learn more **O
 ## Quick prototyping with Oracle NoSQL Database
 
 If you are looking for quick prototyping, we recommend downloading the following [script in GitHub](https://github.com/oracle/nosql-examples/tree/master/cluster_setup).
-This script lets a user set up a small cluster (1-10 machines) quickly, for use in proof-of-concepts, small on premise installations, and cluster installations
+This script lets a user set up a small cluster (1-10 machines) quickly, for use in proof-of-concepts, small on-premises installations, and cluster installations
 on Public Clouds (OCI, AWS, Azure). It's easy to BYOL to the cloud environment of your choosing.
 
 The `cluster_setup.sh` script is:
 1. fast and simple. It sets up a topology with only one zone and if needed, arbiters
 2. great for prototyping/proof-of-concepts
 3. a canned script, so you do not get a sense for all the steps involved 
-4. requires coding knowlege to customize
+4. requires coding knowledge to customize
 
 Read this [whitepaper](https://www.oracle.com/docs/tech/database/oracle-nosql-cluster-setup-oci.pdf) which explains how to install Oracle NoSQL Database on the Oracle Cloud Infrastructure (OCI) using this script.
 
@@ -56,7 +56,7 @@ On another side, by using the scripts in this `repository`, you will learn step 
 Depending on the topology chosen you will need to set up a certain sized cluster. A NoSQL cluster can consist of physical machines or virtual machines (VMs).
 In Oracle NoSQL terminology, we call these physical/virtual machines storage nodes. **Storage nodes** will have hostnames, physical memory, accessibility to disk drives, and CPUs.
 
-By default in our scripts, we are using the following generic **hostnames** and storage **directories paths.**  Different topologies use different numbers of storage nodes and diretories.  In the scripts you will need to replace these generic names with actual names for your environment.  
+By default in our scripts, we are using the following generic **hostnames** and storage **directories paths.**  Different topologies use different numbers of storage nodes and directories.  In the scripts you will need to replace these generic names with actual names for your environment.  
 
 - `KVNODES=(node1-nosql node2-nosql node3-nosql node4-nosql arbiter)`
 - `KVDATA=(${KVDATA}/disk1 ${KVDATA}/disk2 ${KVDATA}/disk3)`
@@ -109,7 +109,7 @@ If you testing different configurations, we provide the following script [clean.
 bash clean.sh
 ```
 
-Just before starting an Oracle NoSQL installation, We recommend reading those links
+Just before starting an Oracle NoSQL installation, we recommend reading those links:
 - https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/release-notes/overview.html
 - https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/installation-prerequisites.html
 
@@ -119,7 +119,7 @@ The Oracle NoSQL Database server and client requires Java SE 8 (64-bit) at a min
 
 ### Open JDK
 
-We have tested with multiple Open JDK versions and it is working with all versions up to OpenJDK 17.0.2.  You can install OpenJDK using one of the examples below.
+We have tested with multiple Open JDK versions, and it is working with all versions up to OpenJDK 17.0.2.  You can install OpenJDK using one of the examples below.
 ```bash
 sudo yum -y install java-8-openjdk-devel
 sudo yum -y install java-11-openjdk-devel
@@ -128,7 +128,7 @@ sudo yum -y install java-latest-openjdk-devel
 #donwload openjdk-11.0.2_linux-x64_bin.tar.gz
 ```
 If you have an issue with the Open JDK version you are running, you can file an issue on GitHub and supply us with additional information and
-we can take a look at it. We validate the Open JDK Java version during deployment when running the command `makebootconfig`.  If you see this error: 
+we can look at it. We validate the Open JDK Java version during deployment when running the command `makebootconfig`.  If you see this error: 
 
 ````
 N/A JDK is not supported. Please use a Java version equal to or newer than the following recommended versions: 
@@ -141,7 +141,7 @@ java -XshowSettings:properties 2>&1 | grep vendor
 ````
 ### Oracle JDK
 
-We have tested with multiple Oracle JDK versions and it is working with all versions up to Oracle Java SE 17.0.3. You can install Oracle JDK/JRE using one of the examples below.
+We have tested with multiple Oracle JDK versions, and it is working with all versions up to Oracle Java SE 17.0.3. You can install Oracle JDK/JRE using one of the examples below.
 
 ```bash
 sudo yum install java
@@ -152,7 +152,7 @@ sudo yum localinstall jdk-13.0.2_linux-x64_bin.rpm
 sudo rpm -Uvh jdk-14.0.2_linux-x64_bin.rpm
 ```
 
-If you have installed multiple versions on your machine, you select which version using the folowing command.
+If you have installed multiple versions on your machine, you select which version using the following command:
 ```bash
 sudo alternatives --config java
 ```
@@ -162,28 +162,28 @@ sudo alternatives --config java
 
 ### Configuring the Network Firewalls
 
-Often times phyical machines and/or VMs (storage nodes) have built-in firewalls. Additionally you may have separate firewalls inbetween machines. In a NoSQL topology,
-the storage nodes need to communicate with one another, so communication has to pass through the firewalls.  Open the firewall ports used by the communcation channels
-in the NoSQL CLuster. To make sure your network firewall works with your topology, you should set the ports specified by the `-port`, `-harange`, `-servicerange`, and `-admin-web-port` parameters of the `makebootconfig` command (see section: Configure and start a set of storage Nodes). This parameter is used to constraint a store to
+Often physical machines and/or VMs (storage nodes) have built-in firewalls. Additionally, you may have separate firewalls in-between machines. In a NoSQL topology,
+the storage nodes need to communicate with one another, so communication must pass through the firewalls.  Open the firewall ports used by the communication channels
+in the NoSQL Cluster. To make sure your network firewall works with your topology, you should set the ports specified by the `-port`, `-harange`, `-servicerange`, and `-admin-web-port` parameters of the `makebootconfig` command (see section: Configure and start a set of storage Nodes). This parameter is used to constraint a store to
 a limited set of ports, usually for security or data center policy reasons. By **default** the services use anonymous ports. Refer to your network administrator.
 The documentation has additional information.
 
 - https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/configuring-firewall.html
 
 
-e.g VMs in Oracle OCI are configured with a linux firewall. For demo purposes, we will stop the firewall in all the VMs.
-This will allow easy communition among the storage nodes.
+e.g VMs in Oracle OCI are configured with a Linux firewall. For demo purposes, we will stop the firewall in all the VMs.
+This will allow easy communication among the storage nodes.
 
 ````bash
-# Use the appropiate command, in my case We are using 5.4.17-2102.200.13.el7uek.x86_64 
+# Use the appropriate command, in my case We are using 5.4.17-2102.200.13.el7uek.x86_64 
 sudo systemctl stop firewalld
 sudo systemctl disable firewalld
 ````
-The Networking service in OCI offers two virtual firewall features that both use security rules to control traffic at the packet level. The two features are:
+The Networking Service in OCI offers two virtual firewall features that both use security rules to control traffic at the packet level. The two features are:
 - Security lists: The original virtual firewall feature from the Networking service.
 - Network security groups (NSGs): A subsequent feature designed for application components that have different security postures. NSGs are supported only for specific services.
 
-For demo purposes, we configure the OCI Networking with the following rules using the security lists feature :
+For demo purposes, we configure the OCI Networking with the following rules using the security lists feature:
 
 ![Oracle NoSQL](./oci-firewall.jpg)
 
@@ -191,44 +191,45 @@ For demo purposes, we configure the OCI Networking with the following rules usin
 ## Install and configuration Overview
 
 At a high level, configuring your cluster/store requires these steps:
-1. Install the sofware in a set of storage nodes
+1. Install the software in a set of storage nodes
 2. Configure and start a set of storage Nodes
 3. Deploy YOUR topology
 4. Create users if deploying a secure cluster
 5. Configure and start Oracle NoSQL Database Proxy
 
-The next chapters we provide you with the details on the steps above.  Please familarize yourself with the steps ahead of time, and depending on 
+The next chapters we provide you with the details on the steps above.  Please familiarize yourself with the steps ahead of time, and depending on 
 whether you want a secure or non-secure configuration the step details may change.   
 Finally, in the chapter **Install and Configuration Scenarios**, you can pick your configuration, and we will walk you through the details on 
 setting that specific one up. 
 
-Steps 1,2,4,5 are very similar for all the popular scenarios.  Step 3 is specific to the particular scenario selected.
+Steps 1,2,4,5 are very similar for all the popular scenarios.  Step 3 is specific to the scenario selected.
 
-## Install the sofware in a set of storage nodes
+## Install the software in a set of storage nodes
 
-Download and unzip the binaries and exemples.  You should download CE or EE; and the migrator if you want to perform backups.
+Download and unzip the binaries and examples.  You should download CE or EE; and the migrator if you want to perform backups.
 
-Donwload the [Oracle NoSQL Database bundle](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html)
-- Community Edition : Oracle NoSQL Database Community Edition (CE) software is licensed pursuant to the Apache 2.0 License (Apache 2.0). 
+Download the [Oracle NoSQL Database bundle](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html)
+- Community Edition: Oracle NoSQL Database Community Edition (CE) software is licensed pursuant to the Apache 2.0 License (Apache 2.0). 
 - Enterprise Edition: Oracle NoSQL Database Enterprise Edition (EE) software is licensed pursuant to the Oracle commercial license
 - Oracle NoSQL Database Migrator: software is licensed pursuant to the Oracle UPL license
 
 In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 22.2](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/release-notes/index.html)
 
-For more information about difference between versions(CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
+For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
 unzip kv-ee-22.2.13.zip -d nosql
 unzip nosql-migrator-1.4.0.zip
 ````
 
-Modify the file `env.sh` and `env-proxy.sh` with the appropiate kvhome path location. e.g.
+Modify the file `env.sh` and `env-proxy.sh` with the appropriate kvhome path location. e.g.
 
 ```bash
 export KVHOME=$HOME/nosql/kv-22.2.13
 ```
 
-Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs are availalbe which you can use, however, we are providing Java examples. 
+Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs 
+are available which you can use, however, we are providing Java examples. 
 
 ````bash
 cd $HOME
@@ -244,7 +245,7 @@ cd $HOME
 ## Configure and start a set of storage Nodes
 
 Before you configure Oracle NoSQL Database, you should determine the parameters for each Storage Node in the store (cluster).
-We recommend to use the same configuration for all Storage Nodes (SN).
+We recommend usig the same configuration for all Storage Nodes (SN).
 
 In this repository, we are providing multiple boot scripts (`examples`) using specific values for the parameter `capacity`
 - [boot.sh](./script/boot.sh) non-secure cluster with capacity = 1
@@ -267,7 +268,7 @@ Consider the following configuration settings for Storage Nodes:
 Directory sizes to enforce disk space limits. Without configuring how much disk space is available, the store opportunistically uses all available space, 
 less 5 GB free disk space. The system maintains 5 GB of free space to allow manual recovery if the Storage Node exceeds its configured disk limit. 
 You can limit how much disk space the store consumes on a `storagedir` basis, by explicitly specifying a storage directory size (`-storagedirsize`)
-- We recommend to use at least 10 GB of disk space
+- We recommend using at least 10 GB of disk space
 - For testing the scripts in this repository, we are simulating multiple `storagedir` by providing distinct directory paths (`${KVDATA}/disk1`, `${KVDATA}/disk2`, `${KVDATA}/disk3`) on a single disk `KVDATA`.   For a production cluster, these should be different disks. 
 
 *Note*: for Arbiter Nodes, we set the capacity to 0 because no Replication Nodes are running. 
@@ -307,7 +308,7 @@ First node | Other nodes|
 
 Topologies can be modified to change the characteristics of the Storage Nodes. In one of the scenarios, we will show how to change the capacity.  We will setup all the Storage nodes of our cluster with `capacity = 1`, then we will change all Storage nodes to `capacity = 3`.
 
-To learn more about it, We recommend to read this link
+To learn more about it, we recommend to read this link:
 - https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/installation-configuration-parameters.html
 
 ## Deploy YOUR topology
@@ -320,7 +321,7 @@ description: [Architecture](https://docs.oracle.com/en/database/other-databases/
 Topologies can be changed to achieve different performance characteristics, or to change characteristics of the Storage Nodes.
 Changing and deploying a topology is an iterative process.
 
-The topology scripts below will aide you in setting up common topologies.  We have a wide range of possibilities and if one of them doesnt exactly meet your needs they can be customized.  In the table below, we give you the script name, a basic description of the topology and the number of Storage Nodes needed for each.   We go into details in the section - **Install and configuration scenarios** on each of the topologies.  The topologies can be deployed in a secure or a non-secure manner, however the same scripts are used in both cases.
+The topology scripts below will aide you in setting up common topologies.  We have a wide range of possibilities and if one of them doesn't exactly meet your needs they can be customized.  In the table below, we give you the script name, a basic description of the topology and the number of Storage Nodes needed for each.   We go into details in the section - **Install and configuration scenarios** on each of the topologies.  The topologies can be deployed in a secure or a non-secure manner, however the same scripts are used in both cases.
 
 file|topology|nodes needed|
 ---|---|---|  
@@ -452,7 +453,7 @@ To learn more, we recommend reading:
 
 ### Test using the Oracle NoSQL SDK for Java examples
 
-We have developed some tests using the Java SDK, however these can be modified for any of the other language SDKs.
+We have developed some tests using the Java SDK; however these can be modified for any of the other language SDKs.
 
 Instructions for non-secure cluster
 
@@ -515,7 +516,7 @@ $ bash stop.sh
 Failed to stop SNA: Bootstrap config file /home/opc/nosql/kvroot/config.xml does not exist
 ````
 
-Do not forget to execute the linux command `pkill` to stop the proxy from a previous execution
+Do not forget to execute the Linux command `pkill` to stop the proxy from a previous execution
 ```bash
 pkill -f httpproxy.jar
 ```
