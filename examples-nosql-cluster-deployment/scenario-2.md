@@ -63,7 +63,6 @@ In the previous section, we explained that configuring your store requires these
 
 `node1-nosql` |
 ---|
-`kv_proxy &`|
 `cd $HOME/examples-nosql-cluster-deployment/script`|
 `source env-proxy.sh`|
 `bash clean-proxy.sh`|

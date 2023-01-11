@@ -4,7 +4,7 @@
 
 configure -name OUG;
 plan deploy-zone -name "DataCenter1" -master-affinity -rf 1 -wait;
-plan deploy-zone -name "DataCenter2" -master-affinity -rf 1 -wait;
+plan deploy-zone -name "DataCenter2" -rf 1 -wait;
 plan deploy-zone -name "DataCenter3" -rf 1 -wait;
 
 

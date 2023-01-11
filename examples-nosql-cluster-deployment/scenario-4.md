@@ -63,10 +63,10 @@ In this section, we will use those scripts to highlight how easy is deploy a NoS
 `bash start.sh` | -- |
 `cd ; zip -r $HOME/security.zip $KVROOT/security; cd - ` | -- |
 copy $HOME/security.zip from `node1-nosql` to other nodes| -- |
--- |`cd; unzip security.zip; cd -;`| -- | 
--- |`bash boot-default-sec.sh configure`| -- |
+-- |`cd; unzip -o security.zip -d /; cd -;`| -- | 
+-- |`bash boot-default-sec.sh enable`| -- |
 -- |`bash start.sh`| -- |
-`kv_admin load -file multi-node.kvs` | -- |
+`kv_admin  -security $KVROOT/security/client.security load -file multi-node.kvs` | -- |
 `bash create-users.sh` | -- |
 
 
@@ -76,8 +76,8 @@ copy $HOME/security.zip from `node1-nosql` to other nodes| -- |
 `source env-proxy.sh` |
 `bash clean-proxy.sh` |
 `cp $KVROOT/security/proxy.zip $PROXYHOME` | 
-`bash generate-self-signed-cert-http-proxy.sh |
+`bash generate-self-signed-cert-http-proxy.sh` |
 `unzip $PROXYHOME/proxy.zip -d $PROXYHOME` | 
-`http-proxy-sec &` |
+`kv_proxy_sec &` |
 
 

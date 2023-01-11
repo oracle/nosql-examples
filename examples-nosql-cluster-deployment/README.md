@@ -84,17 +84,19 @@ To customize the **hostnames** or the **directories paths**, we provide a script
 1) Change the generic variables KVNODES and KVDATA in [generate-config-file.sh](./generate-config-file.sh) 
 2) execute the following commands to produce the `*.kvs` scripts for all the topologies
     ```bash
+	cd $HOME/examples-nosql-cluster-deployment/script
     source env.sh
     bash generate-config-file.sh single-node-rf1
     bash generate-config-file.sh change-rf-1-to-3.kvs
     bash generate-config-file.sh expand-add-capacity.kvs
     bash generate-config-file.sh multi-node
+    bash generate-config-file.sh multi-node-4sn
     bash generate-config-file.sh multi-zone-aff
     bash generate-config-file.sh multi-zone
     bash generate-config-file.sh multi-zone-with-arb
     bash generate-config-file.sh multi-zone-with-arb-v2
     bash generate-config-file.sh primary-secondary
-
+    cd -
     ```
     
 In our topologies, we will use the Oracle NoSQL Database proxy.  The proxy can be run on one or multiple dedicated hosts.  We are running a single proxy on one of the storage nodes. Source the following [env-proxy.sh](./script/env-proxy.sh) file to set env variables and useful aliases for Oracle NoSQL Database Proxy.
@@ -236,6 +238,7 @@ curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.3.7/oracle
 unzip oracle-nosql-java-sdk-5.3.7.zip
 cd oracle-nosql-java-sdk/examples/
 javac -cp ../lib/nosqldriver.jar *.java
+cd $HOME
 ````
 
 ## Configure and start a set of storage Nodes
@@ -438,6 +441,12 @@ Instructions for secure cluster
 kv_proxy_sec &
 ```
 
+You can use the linux command `pkill` to stop the proxy
+```bash
+pkill -f httpproxy.jar
+```
+
+
 To learn more, we recommend reading:
 - https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/proxy-and-driver.html
 
@@ -450,6 +459,7 @@ Instructions for non-secure cluster
 ````bash
 cd $HOME/oracle-nosql-java-sdk/examples/
 java -cp .:../lib/nosqldriver.jar  BasicTableExample http://$HOSTNAME:$PROXYPORT -useKVProxy
+cd -
 ````
 
 Instructions for secure cluster
@@ -459,6 +469,7 @@ cd $HOME/oracle-nosql-java-sdk/examples/
 java -Djavax.net.ssl.trustStorePassword=`cat /home/opc/proxy/pwd`  -Djavax.net.ssl.trustStore=$PROXYHOME/driver.trust \
 -cp .:../lib/nosqldriver.jar     BasicTableExample https://$HOSTNAME:$PROXYPORTSEC -useKVProxy \
 -user application_user -password  'DriverPass@@123'
+cd -
 ````
 
 
