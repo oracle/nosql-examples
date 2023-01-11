@@ -40,7 +40,7 @@ In the previous section, we explained that configuring your store requires these
 
 `node1-nosql` |
 ---|
-`cd $HOME/demo-simple-nosql-cluster/script`|
+`cd $HOME/examples-nosql-cluster-deployment/script`|
 `source env.sh`|
 `bash stop.sh`|
 `bash clean.sh`|
@@ -66,7 +66,7 @@ In the previous section, we explained that configuring your store requires these
 
 `node1-nosql` | NEW SN ( `node2-nosql` `node3-nosql`) |
 ---|---|
-`cd $HOME/demo-simple-nosql-cluster/script` | `cd $HOME/demo-simple-nosql-cluster/script` |
+`cd $HOME/examples-nosql-cluster-deployment/script` | `cd $HOME/examples-nosql-cluster-deployment/script` |
 `source env.sh` | `source env.sh` |
 -- | `bash stop.sh` | 
 -- | `bash clean.sh` | 
@@ -95,6 +95,6 @@ In the section, we will use existing nodes, so, configuring your store requires 
 
 `node1-nosql` | OTHER SN ( `node2-nosql` `node3-nosql`) |
 ---|---|
-`cd $HOME/demo-simple-nosql-cluster/script` | -- |
+`cd $HOME/examples-nosql-cluster-deployment/script` | -- |
 `source env.sh` |  -- |
 `kv_admin load -file expand-add-capacity.kvs` | -- |

@@ -29,7 +29,7 @@ Before executing, please modify the env.sh and provide **KVSTORE** names for you
 
 1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
 ---|---|
-`cd $HOME/demo-simple-nosql-cluster/script`|`cd $HOME/demo-simple-nosql-cluster/script`|
+`cd $HOME/examples-nosql-cluster-deployment/script`|`cd $HOME/examples-nosql-cluster-deployment/script`|
 `edit env.sh` change the following line `export KVSTORE=OUGFR` | `edit env.sh` change the following line export `KVSTORE=OUGCO` |
 `source env.sh`|`source env.sh`|
 `bash stop.sh`|`bash stop.sh`|

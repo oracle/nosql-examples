@@ -61,11 +61,17 @@ By default in our scripts, we are using the following generic **hostnames** and 
 - `KVNODES=(node1-nosql node2-nosql node3-nosql node4-nosql arbiter)`
 - `KVDATA=(${KVDATA}/disk1 ${KVDATA}/disk2 ${KVDATA}/disk3)`
 
-You can download the scripts by cloning this repository.
+You can download the scripts by using the following commands.
 
 ```
-sudo yum install git
-git clone https://github.com/dario-vega/demo-simple-nosql-cluster.git
+
+cd $HOME
+rm -rf examples-nosql-cluster-deployment
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/examples-nosql-cluster-deployment.zip -o examples-nosql-cluster-deployment.zip
+unzip examples-nosql-cluster-deployment.zip
+rm examples-nosql-cluster-deployment.zip
+cd $HOME
+
 ```
 
 The following [env.sh](./script/env.sh) script sets env variables and useful aliases.  

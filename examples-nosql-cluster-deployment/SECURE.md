@@ -48,7 +48,7 @@ Execute the following commands only in the first node e.g. `node1-nosql`
 
 ```bash
 
-cd $HOME/demo-simple-nosql-cluster/script
+cd $HOME/examples-nosql-cluster-deployment/script
 source env.sh
 
 mkdir $HOME/genCA
@@ -73,7 +73,7 @@ openssl req -noout -text -in mynosqlcluster.csr
 Execute the following commands only in the first node e.g. `node1-nosql`
 
 ```bash
-cd $HOME/demo-simple-nosql-cluster/script
+cd $HOME/examples-nosql-cluster-deployment/script
 cp $HOME/genCA/kspwd $KVROOT/kspwd 
 bash boot-external-sec.sh configure
 ````
@@ -158,7 +158,7 @@ copy $HOME/security.zip from `node1-nosql` to other nodes except proxy node
 Execute the following commands in all other nodes e.g `node2-nosql` `node3-nosql` 
 
 ```bash
-cd $HOME/demo-simple-nosql-cluster/script
+cd $HOME/examples-nosql-cluster-deployment/script
 bash boot-external-sec.sh enable
 ```
 
@@ -167,7 +167,7 @@ bash boot-external-sec.sh enable
 Execute the following commands in all Storage nodes
 
 ```bash
-cd $HOME/demo-simple-nosql-cluster/script
+cd $HOME/examples-nosql-cluster-deployment/script
 bash start.sh
 ```
 

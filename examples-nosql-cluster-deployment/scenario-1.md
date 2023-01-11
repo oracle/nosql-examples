@@ -45,7 +45,7 @@ In this section, we will use those scripts to highlight how easy is deploy a NoS
 
 `node1-nosql` |
 ---|
-`cd $HOME/demo-simple-nosql-cluster/script`|
+`cd $HOME/examples-nosql-cluster-deployment/script`|
 `source env.sh`|
 `bash stop.sh`|
 `bash clean.sh`|
@@ -61,7 +61,7 @@ In this section, we will use those scripts to highlight how easy is deploy a NoS
 
 `node1-nosql` |
 ---|
-`cd $HOME/demo-simple-nosql-cluster/script`|
+`cd $HOME/examples-nosql-cluster-deployment/script`|
 `source env.sh`|
 `bash stop.sh`|
 `bash clean.sh`|

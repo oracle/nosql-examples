@@ -52,7 +52,7 @@ In the previous section, we explained that configuring your store requires these
 
 `node1-nosql` |
 ---|
-`cd $HOME/demo-simple-nosql-cluster/script`|
+`cd $HOME/examples-nosql-cluster-deployment/script`|
 `source env.sh`|
 `bash stop.sh`|
 `bash clean.sh`|
@@ -64,7 +64,7 @@ In the previous section, we explained that configuring your store requires these
 `node1-nosql` |
 ---|
 `kv_proxy &`|
-`cd $HOME/demo-simple-nosql-cluster/script`|
+`cd $HOME/examples-nosql-cluster-deployment/script`|
 `source env-proxy.sh`|
 `bash clean-proxy.sh`|
 `cp $KVROOT/security/proxy.zip $PROXYHOME`|

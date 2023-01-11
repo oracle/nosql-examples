@@ -61,7 +61,7 @@ In this section, we will use those scripts to highlight how easy is deploy a NoS
 
 `node1-nosql` | Other SN ( `node2-nosql` `node3-nosql` `node4-nosql`) | Arbiter SN ( `arbiter-nosql`) |
 ---|---|---|
-`cd $HOME/demo-simple-nosql-cluster/script` | `cd $HOME/demo-simple-nosql-cluster/script` |  `cd $HOME/demo-simple-nosql-cluster/script` |
+`cd $HOME/examples-nosql-cluster-deployment/script` | `cd $HOME/examples-nosql-cluster-deployment/script` |  `cd $HOME/examples-nosql-cluster-deployment/script` |
 `source env.sh` | `source env.sh` | `source env.sh` |
 `bash stop.sh` | `bash stop.sh` | `bash stop.sh` | 
 `bash clean.sh` | `bash clean.sh` | `bash clean.sh` |  

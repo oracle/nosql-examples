@@ -15,7 +15,7 @@ You can use the import/export utility, available through kvtool.jar, to:
 
 1. Export the entire contents of Oracle NoSQL Database data store
 ````
-cd ~/demo-simple-nosql-cluster/script
+cd ~/examples-nosql-cluster-deployment/script
 mkdir -p ~/kvstore_export
 cat export_config
 # modify the path if necessary
@@ -26,7 +26,7 @@ java -jar $KVHOME/lib/kvtool.jar export -export-all -store OUG -helper-hosts nod
 For demo purpose, we will use the same data store - we need drop the tables before execute it
 
 ````
-cd ~/demo-simple-nosql-cluster/script
+cd ~/examples-nosql-cluster-deployment/script
 cat import_config
 # modify the path if necessary
 java -jar $KVHOME/lib/kvtool.jar import -import-all -store OUG -helper-hosts node1-nosql:5000  -config import_config -status /home/opc/checkpoint_dir -format JSON	
