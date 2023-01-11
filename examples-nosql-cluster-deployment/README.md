@@ -503,16 +503,57 @@ We recommend using the secure setup, albeit additional steps are needed during s
 **Note:** In this repository, the Oracle NoSQL Database Proxy is running in the first SN. The proxy can be run on a dedicated host outside of the cluster, and you can run with multiple proxies either in your cluster or outside it.  
 In the case you are using a node outside the cluster, copy `$KVROOT/security/proxy.zip` from `node1-nosql` to those outside node(s).
 
-## Other topics to explore 
+## Troubleshooting 
 
-🚧 🚧 🚧 for each topic, we will provide the instructions in a specific .md file
+If you test different configurations, we provide scripts that will tear down the previous configuration and clean up.
+
+The following error can be safely ignored when running the command `bash stop.sh`
+
+````bash
+$ bash stop.sh
+22.2.13 2022-08-04 15:35:08 UTC  Build id: 9c957e3a6ff6 Edition: Client
+Failed to stop SNA: Bootstrap config file /home/opc/nosql/kvroot/config.xml does not exist
+````
+
+Do not forget to execute the linux command `pkill` to stop the proxy from a previous execution
+```bash
+pkill -f httpproxy.jar
+```
+
+The following error happen when trying to start the proxy and it is already running
+
+````bash
+$ kv_proxy
+Starting Proxy
+Failed to start proxy: java.lang.RuntimeException: Unable to start proxy: Address already in use. Configuration used:
+async=false
+helperHosts=node1-nosql:5000
+httpPort=8080
+httpsPort=0
+idleReadTimeout=0
+kvConsistency=NONE_REQUIRED
+kvDurability=COMMIT_NO_SYNC
+kvRequestTimeout=-1
+monitorStatsEnabled=false
+numAcceptThreads=3
+numRequestThreads=32
+proxyType=KVPROXY
+sslProtocols=TLSv1.2,TLSv1.1,TLSv1
+storeName=OUG
+verbose=true
+
+        at oracle.nosql.proxy.Proxy.start(Proxy.java:345)
+        at oracle.nosql.proxy.Proxy.initialize(Proxy.java:252)
+        at oracle.nosql.proxy.ProxyMain.startProxy(ProxyMain.java:193)
+        at oracle.nosql.proxy.ProxyMain.main(ProxyMain.java:51)
+Caused by: java.net.BindException: Address already in use
+        at sun.nio.ch.Net.bind0(Native Method)
+        at sun.nio.ch.Net.bind(Net.java:438)
+        at sun.nio.ch.Net.bind(Net.java:430)
+        at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:225)
+````
 
 
-1) [Monitoring](./MONITORING.md)
-2) [use External Certificates to secure an Oracle NoSQL cluster](./SECURE.md)
-3) [use External Certificates to secure an Oracle NoSQL Database Proxy](./SECURE-PROXY.md)
-4) [Backup & Recovery](./BACKUP.md)
-5) [Export Import](./EXPORT.md)
-6) [HDD Failure simulation](./FailedDisk.md)
-7) [REST API to Administrate Oracle NoSQL Database](./APIAdmin.md)
-8) [Upgrade](./working-in-progress.md)
+If you have other errors, please restart by executing all the commands provided in each scenario. Then please, file an issue on GitHub if your issue is not solved.
+
+
