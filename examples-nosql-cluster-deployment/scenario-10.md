@@ -87,7 +87,7 @@ Underneath the covers, the data is stored in logical collections called partitio
 topology scripts, you can set the number partitions, or use what we have already defined. Once a record is placed in a partition, it will stay there over the life of the 
 record. Partitions can move to different replication nodes, which can be seen when rebalancing the store.
 
-If you execute the following command while running `kv_admin load -file expand-add-capacity.kvs`, you will see the process of rebalance
+If you execute the following command while running `kv_admin load -file expand-add-capacity.kvs`, you will see the rebalancing taking place:
 
 ```bash
 kv_admin verify topology
