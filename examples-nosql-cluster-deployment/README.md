@@ -28,12 +28,12 @@ The primary difference is in the way access is performed to NoSQL store. We reco
 It is possible to configure and use external certificates to secure an Oracle NoSQL cluster. We will provide details on it in the section **Other topics to explore**.
 In the examples in this repository, we will use the default configuration, which uses a self-signed certificate.
 
-The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the World.
+The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the world.
 
 To learn more about the **Oracle NoSQL Concepts**, we recommend reading this documentation:
 - https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/index.html
 
-For those of you that prefer a fully serverless managed service - learn more **Oracle NoSQL Database Cloud Service** [here](https://www.oracle.com/database/nosql/)
+For those of you that prefer a fully serverless managed service - learn more **Oracle NoSQL Database Cloud Service** [here.](https://www.oracle.com/database/nosql/)
 
 ## Quick prototyping with Oracle NoSQL Database
 
@@ -49,7 +49,7 @@ The `cluster_setup.sh` script is:
 
 Read this [whitepaper](https://www.oracle.com/docs/tech/database/oracle-nosql-cluster-setup-oci.pdf) which explains how to install Oracle NoSQL Database on the Oracle Cloud Infrastructure (OCI) using this script.
 
-On another side, by using the scripts in this `repository`, you will learn step by step, and learn how to deploy other popular topologies.
+Instead of the cluster_setup script, you can use the scripts in this `repository` and learn step by step how to deploy popular topologies.
 
 ## Prerequisites for deploying using scripts in this repository
 
@@ -61,7 +61,7 @@ By default in our scripts, we are using the following generic **hostnames** and 
 - `KVNODES=(node1-nosql node2-nosql node3-nosql node4-nosql arbiter)`
 - `KVDATA=(${KVDATA}/disk1 ${KVDATA}/disk2 ${KVDATA}/disk3)`
 
-You can download the scripts by using the following commands.
+You can download the scripts by using the following commands:
 
 ```
 
@@ -166,9 +166,7 @@ Often physical machines and/or VMs (storage nodes) have built-in firewalls. Addi
 the storage nodes need to communicate with one another, so communication must pass through the firewalls.  Open the firewall ports used by the communication channels
 in the NoSQL Cluster. To make sure your network firewall works with your topology, you should set the ports specified by the `-port`, `-harange`, `-servicerange`, and `-admin-web-port` parameters of the `makebootconfig` command (see section: Configure and start a set of storage Nodes). This parameter is used to constraint a store to
 a limited set of ports, usually for security or data center policy reasons. By **default** the services use anonymous ports. Refer to your network administrator.
-The documentation has additional information.
-
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/configuring-firewall.html
+The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/configuring-firewall.html)
 
 
 e.g VMs in Oracle OCI are configured with a Linux firewall. For demo purposes, we will stop the firewall in all the VMs.
