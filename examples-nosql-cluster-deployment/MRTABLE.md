@@ -1,15 +1,15 @@
 # Creating a geographically distributed Oracle NoSQL database 
 
 This is an advanced topic, and we recommend understanding basic deployments before running through this workshop.  Please read the following blog if you 
-want to have more detailed information about [Multi-Region Table](https://blogs.oracle.com/nosql/oracle-nosql-database-multi-region-table-part1-v2)
+want to have more detailed information about [Multi-Region Table.](https://blogs.oracle.com/nosql/oracle-nosql-database-multi-region-table-part1-v2)
 
 In this workshop, 
 * we will create 2 NoSQL stores with different names (OUGFR, OUGCO) 
 * we will create a minimal store with 1 server, read through [scenario 1](./scenario-1.md) to gain a better understanding of a single node deployment
-* we will create 2 regions FR and CO (harcoded values)
+* we will create 2 regions FR and CO (hardcoded values)
 * templates provided in this section also have hardcoded values
 
-It is common to deploy the NoSQL store in each region with a different store name but it is not mandatory, you can use the same name.
+It is common to deploy the NoSQL store in each region with a different store name, but it is not mandatory, you can use the same name.
 
 Review our first [workshop](./README.md) for detailed information on deploying different types of NoSQL clusters.
 
@@ -51,7 +51,7 @@ Before executing, please modify the env.sh and provide **KVSTORE** names for you
 
 After building the 2 clusters
 
-1- Configure and start XRegion Service in each region
+1. Configure and start XRegion Service in each region
 
 1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
 ---|---|
@@ -59,7 +59,7 @@ After building the 2 clusters
 `nohup java -Xms256m -Xmx2048m -jar $KVHOME/lib/kvstore.jar xrstart -config $KVXRS/json.config  > $KVXRS/nohup.out &` | `nohup java -Xms256m -Xmx2048m -jar $KVHOME/lib/kvstore.jar xrstart -config $KVXRS/json.config  > $KVXRS/nohup.out &` |
 `sleep 5`|`sleep 5`
 
-2- Set local Region Name and Create Remote Regions by executing the following command in each cluster
+2. Set local Region Name and Create Remote Regions by executing the following command in each cluster
 
 1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
 ---|---|
@@ -67,9 +67,9 @@ After building the 2 clusters
 
 
 
-## Create Multi-Region Tables - 
+## Create Multi-Region Tables
 
-You must create an MR Table on each KVStore in the connected graph, and specify the list of regions that the table should span. For this first example, you must create the users table as an **MR Table at both the regions**, in any order. 
+You must create an MR Table on each KVStore in the connected graph and specify the list of regions that the table should span. For this first example, you must create the users table as an **MR Table at both the regions**, in any order. 
 
 ````
 CREATE TABLE Users(uid INTEGER, person JSON,PRIMARY KEY(uid))  IN REGIONS CO , FR;
@@ -88,20 +88,20 @@ select * from users;
 ````
 
 [In this blog](https://blogs.oracle.com/nosql/nosql-crdt), we discussed how vital conflict detection and resolution is in an active-active replication.
--    Oracle NoSQL Multi-Region solution enabling predictable low latency and response time from anywhere in the world
+-    Oracle NoSQL Multi-Region solution enabling predictable low latency and response time from anywhere in the world.
 -    Oracle continues to improve the developer experience by introducing CRDTs that perform automatic merging and bookkeeping of value update across regions, alleviating the pain of multi-region reconciliation from your app development experience.
 
 A Multi-Region table is a global logical table that eliminates the problematic and error-prone work of replicating data between regions, enabling developers to focus on application business logic.
 
-Now it is time to test this New Concept: **conflict-free replicated data type**. Scripts are available [here](https://github.com/dario-vega/crdt-blog-nosql)
+Now it is time to test this New Concept: **conflict-free replicated data type**. Scripts are available [here.](https://github.com/dario-vega/crdt-blog-nosql)
 
 
 # Backup/Restore using Migrator Tool
 The instructions below specify a manual procedure for creating a backup of a multi-region table and a procedure for restoring that table in the event of table level data loss or corruption. 
 
-**NOTE** This exemple is provided for educational purposes only.
+**NOTE** This example is provided for educational purposes only.
 
-The [migrator-export-users.json](./script/migrator-export-users.json) and [migrator-import-users.json](./script/migrator-import-users.json) show an exemple of scripts used to export/import data in a MR table configuration. In this case, we are exporting in a region, and we decided to do the import in the other region.
+The [migrator-export-users.json](./script/migrator-export-users.json) and [migrator-import-users.json](./script/migrator-import-users.json) show an example of scripts used to export/import data in a MR table configuration. In this case, we are exporting in a region, and we decided to do the import in the other region.
 
 ````
 ~/nosql-migrator-1.3.0/runMigrator --config migrator-export-users.json
@@ -117,7 +117,7 @@ sh mrtable-agent-stat.sh
 ````
 To restore a multi-region table from an export, it is recommended that you stop all write activity to the multi-region table being restored.
 
-**NB** The best is recreate the table in all regions before do the import.
+**NOTE** The best is recreating the table in all regions before do the import.
 
 And DO NOT FORGET to backup on remote storage (storage that is not local to a NoSQL storage node in the NoSQL topology).
 
