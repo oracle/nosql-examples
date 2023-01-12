@@ -30,8 +30,7 @@ In the examples in this repository, we will use the default configuration, which
 
 The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the world.
 
-To learn more about the **Oracle NoSQL Concepts**, we recommend reading this documentation:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/index.html
+To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/index.html)
 
 For those of you that prefer a fully serverless managed service - learn more **Oracle NoSQL Database Cloud Service** [here.](https://www.oracle.com/database/nosql/)
 
@@ -262,11 +261,12 @@ See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databa
 
 Consider the following configuration settings for Storage Nodes:
 - We recommend configuring each Storage Node with a capacity equal to the number of available disks on the machine. This permits a disk for each Replication Node, ensuring that Replication Nodes on the Storage Node are not competing for I/O resources. The `–storagedir` parameter lets you specify the directory location for each Replication Node disk. 
-- It is very important to configure each storage directory with a specific amount of available disk space. The Oracle NoSQL Database uses the configured Storage 
-Directory sizes to enforce disk space limits. Without configuring how much disk space is available, the store opportunistically uses all available space, 
-less 5 GB free disk space. The system maintains 5 GB of free space to allow manual recovery if the Storage Node exceeds its configured disk limit. 
-You can limit how much disk space the store consumes on a `storagedir` basis, by explicitly specifying a storage directory size (`-storagedirsize`)
-- We recommend using at least 10 GB of disk space
+- It is very important to configure each storage directory with a specific amount of available disk space. The Oracle NoSQL Database uses the 
+configured Storage Directory sizes to enforce disk space limits. Without configuring how much disk space is available, the store opportunistically uses 
+all available space, less 5 GB free disk space. The system maintains 5 GB of free space to allow manual recovery if the Storage Node exceeds its 
+configured disk limit. You can limit how much disk space the store consumes on a `storagedir` basis, by explicitly specifying a storage 
+directory size (`-storagedirsize`).
+- We recommend using at least 10 GB of disk space.
 - For testing the scripts in this repository, we are simulating multiple `storagedir` by providing distinct directory paths (`${KVDATA}/disk1`, `${KVDATA}/disk2`, `${KVDATA}/disk3`) on a single disk `KVDATA`.   For a production cluster, these should be different disks. 
 
 *Note*: for Arbiter Nodes, we set the capacity to 0 because no Replication Nodes are running. 
@@ -306,15 +306,14 @@ First node | Other nodes|
 
 Topologies can be modified to change the characteristics of the Storage Nodes. In one of the scenarios, we will show how to change the capacity.  We will setup all the Storage nodes of our cluster with `capacity = 1`, then we will change all Storage nodes to `capacity = 3`.
 
-To learn more about it, we recommend to read this link:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/installation-configuration-parameters.html
+To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/installation-configuration-parameters.html)
 
 ## Deploy YOUR topology
 
 
 A topology is the collection of zones, storage nodes, shards, replication nodes, and administrative services that make up your NoSQL Database store. 
-A deployed store has one topology that describes its state at a given time.  Read this section in the documentation for a detailed 
-description: [Architecture](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/architecture.html)
+A deployed store has one topology that describes its state at a given time.  Read this architecture section in the documentation for a detailed 
+[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/architecture.html)
 
 Topologies can be changed to achieve different performance characteristics, or to change characteristics of the Storage Nodes.
 Changing and deploying a topology is an iterative process.
@@ -446,8 +445,7 @@ pkill -f httpproxy.jar
 ```
 
 
-To learn more, we recommend reading:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/proxy-and-driver.html
+To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/proxy-and-driver.html)
 
 ### Test using the Oracle NoSQL SDK for Java examples
 
