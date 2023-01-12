@@ -10,16 +10,16 @@ Your store is organized into **shards**, and **shards** contain replication node
 types of replication nodes, namely, **masters** and **replicas.** 
 Each shard must contain one **master** node. The master node performs all database write activities. Each shard can also contain one or more read-only **replicas**.
 The master node copies all new write activity data to the replicas. The replicas are then used to service read-only operations.  The total number of 
-masters and replicas in a shard is equal to the replication factor (RF).  You can also think of RF as the number of copies of you data. For example, 
+masters and replicas in a shard are equal to the replication factor (RF).  You can also think of RF as the number of copies of your data. For example, 
 if you have RF=3, then you will have 1 master replication node and 2 replica replication nodes; with each replication node hold a copy of the data. 
 The **shard** is often referred to has a replication group, or rg for short. In our diagrams, you will see notation rg1, rg2, etc. and 
 this means replication group 1, replication group 2; or equivalently shard 1, shard 2, etc. 
 
 Underneath the covers, the data is stored in logical collections called **partitions**.  Every replication node contains at least one, and typically many,
-partitions.  In our toplogy scripts, you can set the number partitions, or use what we have already defiend.  Once a record is placed in a 
+partitions.  In our topology scripts, you can set the number partitions, or use what we have already defined.  Once a record is placed in a 
 partition, it will stay there over the life of the record.  Partitions can move to different replication nodes, which can be seen when rebalancing the store.
 As a best practice you want the number of partitions to be evenly divisible by the number of shards and we recommend at least 20 partitions per shard.  In our 
-topology scripts we are using 100 partitions per shard, as this offers good flexibilty when expanding the store. 
+topology scripts we are using 100 partitions per shard, as this offers good flexibility when expanding the store. 
 
 While there can be only one master replication node per shard at any given time, any of the other replication nodes can become a master node. If the 
 machine hosting the master node fails in any way, the master automatically fails over to one of the other replication nodes in the shard which is then 
@@ -28,15 +28,15 @@ promoted to master.
 If you have multiple physical facilities, you can consider deploying your store across multiple **zones**. Multiple zones provide fault isolation 
 (a fault containment zone)
 and availability for your data if a single zone fails. Each zone has a copy of your complete store, including a copy of all the shards. With a 
-multi-zone configuration, reads are generally always possible, because at least one replica is located in every zone. Writes can also occur in the event 
-of a zone loss, as long as the database maintains quorum.
+multi-zone configuration, reads are generally always possible, because at least one replica is in every zone. Writes can also occur in the event 
+of a zone loss, if the database maintains quorum.
 
-A **zone** is a physical location that supports high capacity network connectivity between the Storage Nodes deployed within it. Each zone has some level 
+A **zone** is a physical location that supports high-capacity network connectivity between the Storage Nodes deployed within it. Each zone has some level 
 of physical separation from other zones. Typically, each zone includes redundant or backup power supplies, redundant data communications connections,
 environmental controls (for example: air conditioning, fire suppression), and security devices. A zone can represent a physical data center building, the 
-floor of a building, a room, pod, or rack, depending on the particular deployment.  You can think of **zone** as an independent data center.
+floor of a building, a room, pod, or rack, depending on the deployment.  You can think of **zone** as an independent data center.
 
-Oracle recommends installing and configuring your store across multiple zones when disaster recovery (DR) is a high concern.  Multiple zones help mitigate systemic failures that affect an entire physical location, such as a large scale power or network outage. 
+Oracle recommends installing and configuring your store across multiple zones when disaster recovery (DR) is a high concern.  Multiple zones help mitigate systemic failures that affect an entire physical location, such as a large-scale power or network outage. 
 
 There are two types of zones — **primary** and **secondary**. **Primary zones** are the default. They contain replication nodes that can serve as masters or replicas. Secondary zones 
 contain replication nodes that can serve only as replicas. You can use secondary zones to make a copy of the data available at a distant location, or to maintain an extra copy of the 
@@ -61,7 +61,7 @@ If you have multiple physical facilities, you can consider deploying your store 
 is automatically reestablished as long as quorum is maintained.
 
 If a zone goes down, manual procedures such as failovers can be used to recover from that situation. A failover is performed when the primary 
-zone fails or has become unreachable and a secondary zone is transitioned to take over the primary role.  You are promoting the secondary zone to be the primary 
+zone fails or has become unreachable, and a secondary zone is transitioned to take over the primary role.  You are promoting the secondary zone to be the primary 
 zone. Failover may or may not result in data loss. Switchovers can be used after performing a failover (to restore the original configuration) or for planned
 maintenance. A switchover is typically a role reversal between a primary zone and one of the secondary zones of the store. A switchover can also be performed 
 to convert one or more zones to another type for maintenance purposes. Switchover guarantees no data loss. 
@@ -70,11 +70,11 @@ Oracle recommends installing and configuring your store across multiple zones wi
 is adequate for most applications and is a good starting point, because 3 replicas allow write availability if a single primary zone fails. See the scenario
 "multi node in multiple primary zones without affinity" for more information on primary replication factor.
 
-Shown below, is the simpliest scenario to showcase and learn how to deploy a topology with primary/secondary zones. It is for test only purposes and not 
+Shown below, is the simplest scenario to showcase and learn how to deploy a topology with primary/secondary zones. It is for test only purposes and not 
 for a production environment that requires HA and business continuity. 
 
 In the previous section, we explained that configuring your store requires these steps:
-- Install the sofware in a set of storage nodes
+- Install the software in a set of storage nodes
 - Configure and start a set of storage Nodes
 - Deploy YOUR topology
 - Configure and Start Oracle NoSQL Database Proxy
