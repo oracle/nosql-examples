@@ -12,7 +12,7 @@ Your store is organized into **shards**, and **shards** contain replication node
 types of replication nodes, namely, **masters** and **replicas.** 
 Each shard must contain one **master** node. The master node performs all database write activities. Each shard can also contain one or more read-only **replicas**.
 The master node copies all new write activity data to the replicas. The replicas are then used to service read-only operations.  The total number of 
-masters and replicas in a shard is equal to the replication factor (RF).  You can also think of RF as the number of copies of you data. For example, 
+masters and replicas in a shard are equal to the replication factor (RF).  You can also think of RF as the number of copies of your data. For example, 
 if you have RF=3, then you will have 1 master replication node and 2 replica replication nodes; with each replication node hold a copy of the data. 
 The **shard** is often referred to has a replication group, or rg for short. In our diagrams, you will see notation rg1, rg2, etc. and 
 this means replication group 1, replication group 2; or equivalently shard 1, shard 2, etc. 
@@ -23,13 +23,15 @@ promoted to master.
 
 The goal of this example is to walk you through the steps of creating a very small store and growing that over time.  This demonstrates NoSQL's expansion
 capability in a simple to understand manner.  In the first step, we will deploy a topology using 1 Storage Node, capacity=1 and replication factor = 1. 
-In this case, we have only masters.  In the second step, we take this very simple topoogy and expand it to include 3 storage nodes.  This allows us to increase 
-the replication factor to 3.  The final step increases the size of the storage node so it has a capacity of 3.  This will permit us to have 3 shards instead of 
+In this case, we have only masters.  In the second step, we take this very simple topology and expand it to include 3 storage nodes.  This allows us 
+to increase 
+the replication factor to 3.  The final step increases the size of the storage node, so it has a capacity of 3.  This will permit us to have 3 
+shards instead of 
 the single one we have been using.   
 
 
 In the previous section, we explained that configuring your store requires these steps:
-- Install the sofware in a set of storage nodes
+- Install the software in a set of storage nodes
 - Configure and start a set of storage Nodes
 - Deploy YOUR topology
 - Configure and Start Oracle NoSQL Database Proxy
@@ -53,13 +55,13 @@ In the previous section, we explained that configuring your store requires these
 
 ## Increase availability - modify the replication factor
 
-In this step, we will add replicas but we will continue to mantain the same name of shards. 
+In this step, we will add replicas but we will continue to maintain the same number of shards. 
 - Deployed on 3 Storage Nodes – capacity=1 - RF=3, with small capacity machines the system will create 1 shard
 
 ![Oracle NoSQL](./multi-node-cap1.jpg)
 
 In the previous section, we explained that configuring your store requires these steps:
-- Install the sofware in a set of NEW storage nodes
+- Install the software in a set of NEW storage nodes
 - Configure and start a set of NEW storage Nodes
 - Deploy YOUR topology. In this case - deploy YOUR NEW topology - Increase availability - modify the replication factor
 
@@ -82,10 +84,10 @@ In this step, we will add more capacity and expand our cluster. Depending on the
 ![Oracle NoSQL](./multi-node-cap3.jpg)
 
 Underneath the covers, the data is stored in logical collections called partitions. Every replication node contains at least one, and typically many, partitions. In our 
-toplogy scripts, you can set the number partitions, or use what we have already defiend. Once a record is placed in a partition, it will stay there over the life of the 
+topology scripts, you can set the number partitions, or use what we have already defined. Once a record is placed in a partition, it will stay there over the life of the 
 record. Partitions can move to different replication nodes, which can be seen when rebalancing the store.
 
-If you execute the following command at the same time that `kv_admin load -file expand-add-capacity.kvs`, you will see the process of rebalance
+If you execute the following command while running `kv_admin load -file expand-add-capacity.kvs`, you will see the process of rebalance
 
 ```bash
 kv_admin verify topology
