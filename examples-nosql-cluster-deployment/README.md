@@ -25,7 +25,7 @@ And how to modify an existing configuration
 There are 2 ways to configure a NoSQL cluster, one using a **secure** configuration and another one using a **non-secure** configuration. 
 The primary difference is in the way access is performed to NoSQL store. We recommend using the secure setup, albeit additional steps are needed during set up. 
 
-It is possible to configure and use External Certificates to secure an Oracle NoSQL cluster. We will provide details on it in the section **Other topics to explore**.
+It is possible to configure and use external certificates to secure an Oracle NoSQL cluster. We will provide details on it in the section **Other topics to explore**.
 In the examples in this repository, we will use the default configuration, which uses a self-signed certificate.
 
 The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the World.
