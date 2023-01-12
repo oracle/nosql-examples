@@ -10,22 +10,22 @@ Your store is organized into **shards**, and **shards** contain replication node
 types of replication nodes, namely, **masters** and **replicas.** 
 Each shard must contain one **master** node. The master node performs all database write activities. Each shard can also contain one or more read-only **replicas**.
 The master node copies all new write activity data to the replicas. The replicas are then used to service read-only operations.  The total number of 
-masters and replicas in a shard is equal to the replication factor (RF).  You can also think of RF as the number of copies of you data. For example, 
+masters and replicas in a shard are equal to the replication factor (RF).  You can also think of RF as the number of copies of your data. For example, 
 if you have RF=3, then you will have 1 master replication node and 2 replica replication nodes; with each replication node hold a copy of the data. 
 The **shard** is often referred to has a replication group, or rg for short. In our diagrams, you will see notation rg1, rg2, etc. and 
 this means replication group 1, replication group 2; or equivalently shard 1, shard 2, etc. 
 
 Underneath the covers, the data is stored in logical collections called **partitions**.  Every replication node contains at least one, and typically many,
-partitions.  In our toplogy scripts, you can set the number partitions, or use what we have already defiend.  Once a record is placed in a 
+partitions.  In our topology scripts, you can set the number partitions, or use what we have already defined.  Once a record is placed in a 
 partition, it will stay there over the life of the record.  Partitions can move to different replication nodes, which can be seen when rebalancing the store.
 As a best practice you want the number of partitions to be evenly divisible by the number of shards and we recommend at least 20 partitions per shard.  In our 
-topology scripts we are using 100 partitions per shard, as this offers good flexibilty when expanding the store. 
+topology scripts we are using 100 partitions per shard, as this offers good flexibility when expanding the store. 
 
 While there can be only one master replication node per shard at any given time, any of the other replication nodes can become a master node. If the 
 machine hosting the master node fails in any way, the master automatically fails over to one of the other replication nodes in the shard which is then 
 promoted to master.
 
-We have a special node type called an arbiter node.  An arbiter node is a lightweight process that is capable of supporting write availability in 
+We have a special node type called an arbiter node.  An arbiter node is a lightweight process that can support write availability in 
 two situations. First, when the replication factor is two and a single replication node becomes unavailable. Second, when two replication nodes are 
 unable to communicate to determine which one of them is the master. The role of an arbiter node 
 is to participate in elections and respond to acknowledge requests in the situations noted above.
@@ -42,7 +42,7 @@ In this scenario, we are showcasing a complex setup where we have 2 primary zone
 gives us a total of 4 storage nodes.  We also want to demonstrate the use of arbiters so we will use a replication factor of 2.  Each shard will need an associated arbiter node.
 
 In the previous section, we explained that configuring your store requires these steps:
-- Install the sofware in a set of storage nodes
+- Install the software in a set of storage nodes
 - Configure and start a set of storage Nodes
 - Deploy YOUR topology
 - Configure and Start Oracle NoSQL Database Proxy
