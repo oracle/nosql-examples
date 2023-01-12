@@ -1,4 +1,4 @@
-# Oracle NoSQL Database
+# Example Oracle NoSQL Cluster Deployments
 
 ![Oracle NoSQL](./NoSQL-Database.png)
 
