@@ -86,8 +86,8 @@ To customize the **hostnames** or the **directories paths**, we provide a script
 	cd $HOME/examples-nosql-cluster-deployment/script
     source env.sh
     bash generate-config-file.sh single-node-rf1
-    bash generate-config-file.sh change-rf-1-to-3.kvs
-    bash generate-config-file.sh expand-add-capacity.kvs
+    bash generate-config-file.sh change-rf-1-to-3
+    bash generate-config-file.sh expand-add-capacity
     bash generate-config-file.sh multi-node
     bash generate-config-file.sh multi-node-4sn
     bash generate-config-file.sh multi-zone-aff
