@@ -30,7 +30,7 @@ In the examples in this repository, we will use the default configuration, which
 
 The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the world.
 
-To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/index.html)
+To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/concepts/index.html)
 
 For those of you that prefer a fully serverless managed service - learn more **Oracle NoSQL Database Cloud Service** [here.](https://www.oracle.com/database/nosql/)
 
@@ -109,8 +109,8 @@ bash clean.sh
 ```
 
 Just before starting an Oracle NoSQL installation, we recommend reading those links:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/release-notes/overview.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/installation-prerequisites.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/release-notes/overview.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/installation-prerequisites.html
 
 ## Java Version
 
@@ -165,7 +165,7 @@ Often physical machines and/or VMs (storage nodes) have built-in firewalls. Addi
 the storage nodes need to communicate with one another, so communication must pass through the firewalls.  Open the firewall ports used by the communication channels
 in the NoSQL Cluster. To make sure your network firewall works with your topology, you should set the ports specified by the `-port`, `-harange`, `-servicerange`, and `-admin-web-port` parameters of the `makebootconfig` command (see section: Configure and start a set of storage Nodes). This parameter is used to constraint a store to
 a limited set of ports, usually for security or data center policy reasons. By **default** the services use anonymous ports. Refer to your network administrator.
-The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/configuring-firewall.html)
+The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/configuring-firewall.html)
 
 
 e.g VMs in Oracle OCI are configured with a Linux firewall. For demo purposes, we will stop the firewall in all the VMs.
@@ -210,19 +210,19 @@ Download the [Oracle NoSQL Database bundle](https://www.oracle.com/database/tech
 - Enterprise Edition: Oracle NoSQL Database Enterprise Edition (EE) software is licensed pursuant to the Oracle commercial license
 - Oracle NoSQL Database Migrator: software is licensed pursuant to the Oracle UPL license
 
-In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 22.2](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/release-notes/index.html)
+In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 22.3](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/release-notes/index.html)
 
 For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
-unzip kv-ee-22.2.13.zip -d nosql
+unzip kv-ee-22.3.16.zip -d nosql
 unzip nosql-migrator-1.4.0.zip
 ````
 
 Modify the file `env.sh` and `env-proxy.sh` with the appropriate kvhome path location. e.g.
 
 ```bash
-export KVHOME=$HOME/nosql/kv-22.2.13
+export KVHOME=$HOME/nosql/kv-22.3.16
 ```
 
 Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs 
@@ -230,10 +230,10 @@ are available which you can use, however, we are providing Java examples.
 
 ````bash
 cd $HOME
-rm -rf oracle-nosql-java-sdk-5.3.7.zip oracle-nosql-java-sdk
-curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.3.7/oracle-nosql-java-sdk-5.3.7.zip \
--o oracle-nosql-java-sdk-5.3.7.zip
-unzip oracle-nosql-java-sdk-5.3.7.zip
+rm -rf oracle-nosql-java-sdk-5.4.8.zip oracle-nosql-java-sdk
+curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.8/oracle-nosql-java-sdk-5.4.8.zip \
+-o oracle-nosql-java-sdk-5.4.8.zip
+unzip oracle-nosql-java-sdk-5.4.8.zip
 cd oracle-nosql-java-sdk/examples/
 javac -cp ../lib/nosqldriver.jar *.java
 cd $HOME
@@ -257,7 +257,7 @@ Note: you can use those scripts as templates to create your own.
 
 If the Storage Node you are configuring has the resources to support more than a one Replication Node, set the capacity value to the appropriate number.
 As a general heuristic, Replication Nodes require sufficient disk, cpu, memory, and network bandwidth to satisfy peak runtime demands.
-See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/initial-capacity-planning.html) for more details.
+See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/initial-capacity-planning.html) for more details.
 
 Consider the following configuration settings for Storage Nodes:
 - We recommend configuring each Storage Node with a capacity equal to the number of available disks on the machine. This permits a disk for each Replication Node, ensuring that Replication Nodes on the Storage Node are not competing for I/O resources. The `–storagedir` parameter lets you specify the directory location for each Replication Node disk. 
@@ -306,14 +306,14 @@ First node | Other nodes|
 
 Topologies can be modified to change the characteristics of the Storage Nodes. In one of the scenarios, we will show how to change the capacity.  We will setup all the Storage nodes of our cluster with `capacity = 1`, then we will change all Storage nodes to `capacity = 3`.
 
-To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/installation-configuration-parameters.html)
+To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/installation-configuration-parameters.html)
 
 ## Deploy YOUR topology
 
 
 A topology is the collection of zones, storage nodes, shards, replication nodes, and administrative services that make up your NoSQL Database store. 
 A deployed store has one topology that describes its state at a given time.  Read this architecture section in the documentation for a detailed 
-[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/concepts/architecture.html)
+[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/concepts/architecture.html)
 
 Topologies can be changed to achieve different performance characteristics, or to change characteristics of the Storage Nodes.
 Changing and deploying a topology is an iterative process.
@@ -335,9 +335,9 @@ file|topology|nodes needed|
 
 For information on how to use the command line interface to create, transform, view, validate and preview 
 a topology, see the following chapters in the Administrator's Guide.
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/name-your-kvstore.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/steps-changing-stores-topology.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/plans.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/name-your-kvstore.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/steps-changing-stores-topology.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/plans.html
 
 
 ## Create users
@@ -364,8 +364,8 @@ bash create-users.sh
 ```
 
 To learn more, we recommend reading:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/security/configuring-authentication.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/security/configuring-authorization.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/security/configuring-authentication.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/security/configuring-authorization.html
 
 ## Validate your deployment
 
@@ -445,7 +445,7 @@ pkill -f httpproxy.jar
 ```
 
 
-To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.2/admin/proxy-and-driver.html)
+To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/admin/proxy-and-driver.html)
 
 ### Test using the Oracle NoSQL SDK for Java examples
 
@@ -508,7 +508,7 @@ The following error can be safely ignored when running the command `bash stop.sh
 
 ````bash
 $ bash stop.sh
-22.2.13 2022-08-04 15:35:08 UTC  Build id: 9c957e3a6ff6 Edition: Client
+22.3.13 2022-08-04 15:35:08 UTC  Build id: 9c957e3a6ff6 Edition: Client
 Failed to stop SNA: Bootstrap config file /home/opc/nosql/kvroot/config.xml does not exist
 ````
 

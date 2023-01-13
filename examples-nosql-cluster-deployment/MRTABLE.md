@@ -104,10 +104,10 @@ The instructions below specify a manual procedure for creating a backup of a mul
 The [migrator-export-users.json](./script/migrator-export-users.json) and [migrator-import-users.json](./script/migrator-import-users.json) show an example of scripts used to export/import data in a MR table configuration. In this case, we are exporting in a region, and we decided to do the import in the other region.
 
 ````
-~/nosql-migrator-1.3.0/runMigrator --config migrator-export-users.json
+~/nosql-migrator-1.4.0/runMigrator --config migrator-export-users.json
 ````
 ````
-~/nosql-migrator-1.3.0/runMigrator --config migrator-import-users.json
+~/nosql-migrator-1.4.0/runMigrator --config migrator-import-users.json
 ````
 Use the multi-region statistics to find the most up to date region for the table that you wish to back up. Use the command `show mrtable-agent-statistics -agent 0 -json` to find the region that shows the smallest laggingMS value for the “max” attribute.  This region will contain the most up-to-date version of your table.
 
