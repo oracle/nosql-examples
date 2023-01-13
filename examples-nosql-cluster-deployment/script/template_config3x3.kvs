@@ -1,0 +1,17 @@
+#
+# Copyright (c) 2023 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+plan change-storagedir -sn sn1 -storagedir <KVDATA_2> -storagedirsize 5500-MB -add -wait
+plan change-storagedir -sn sn1 -storagedir <KVDATA_3> -storagedirsize 5500-MB -add -wait
+plan change-storagedir -sn sn2 -storagedir <KVDATA_2> -storagedirsize 5500-MB -add -wait
+plan change-storagedir -sn sn2 -storagedir <KVDATA_3> -storagedirsize 5500-MB -add -wait
+plan change-storagedir -sn sn3 -storagedir <KVDATA_2> -storagedirsize 5500-MB -add -wait
+plan change-storagedir -sn sn3 -storagedir <KVDATA_3> -storagedirsize 5500-MB -add -wait
+plan change-parameters -service sn1 -wait -params capacity=3
+plan change-parameters -service sn2 -wait -params capacity=3
+plan change-parameters -service sn3 -wait -params capacity=3
+topology clone -current -name 3x3
+topology redistribute -name 3x3 -pool AllStorageNodes
+topology preview -name 3x3
+plan deploy-topology -name 3x3 -wait

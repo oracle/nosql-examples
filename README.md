@@ -21,9 +21,11 @@ This repository stores a variety of examples demonstrating how to use the Oracle
 | Repo/Folder name  | Description |
 | ------------- | ------------- |
 | [cluster_setup](./cluster_setup) | Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure `deploy-nosql` |
+| [examples-nosql-cluster-deployment](./examples-nosql-cluster-deployment) | Examples allowing you to learn how to deploy a NoSQL cluster/NoSQL store - the most popular topologies |
 | [examples-nosql-java-direct-driver](./examples-nosql-java-direct-driver) | Examples using the `nosql-java-direct-driver` |
 | [examples-nosql-java-sdk](./examples-nosql-java-sdk) | Examples using the `nosql-java-sdk` |
-| [examples-nosql-node-sdk](./examples-nosql-node-sdk) | Examples using the `examples-nosql-node-sdk` |
+| [examples-nosql-node-sdk](./examples-nosql-node-sdk) | Examples using the `nosql-node-sdk` |
+| [examples-nosql-spring-sdk](./examples-nosql-spring-sdk) | Examples using the `nosql-spring-sdk` |
 | [demo-livelab](./demo-livelab) | you can find the code used in our NoSQL LiveLabs workshops in this directory and more information [here](#oracle-nosql-livelabs) |
 | [demo-events](./demo-events) | The NoSQL team is delivering content in Webinars and Events around the world. You can also find the instructions for workshops showcased in NoSQL events and have more information [here](#oracle-nosql-livelabs)|
 | [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/nsdev/getting-started-sql-oracle-nosql-database1.html) | Getting started with SQL for Oracle NoSQL Database `sql-for-nosql`|
@@ -187,6 +189,21 @@ we can quickly create a management system for processing media content using eph
 [https://docs.oracle.com/en/solutions/process-media-using-oci-services/index.html](https://docs.oracle.com/en/solutions/process-media-using-oci-services/index.html)
 
 Note: You can deploy this pattern using downloadable code or automated provisioning, as described in the Download or Deploy section in the link above.
+
+## oci wearable health app
+
+**Source:** `GitHub`
+
+**Tags:** `nosql` `oci` 
+
+
+The sample application is an IoT use-case, in which an application capturing health parameters running on a wearable device is sending health statistics to a device gateway (backend) 
+hosted on OCI on regular intervals. The complete use-case can be split into 3 different parts:
+- On-boarding and Administration
+- Health data capturing & Real time Analytics
+- Batch Analytics
+
+[https://github.com/oracle-devrel/oci-wearable-health-app](https://github.com/oracle-devrel/oci-wearable-health-app)
 
 ## Oracle Cloud Infrastructure Data Flow Samples
 

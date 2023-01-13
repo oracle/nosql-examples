@@ -1,0 +1,19 @@
+{
+  "source" : {
+    "type" : "file",
+    "format" : "json",
+    "dataPath" : "/home/opc/kvstore_export/users.json"
+  },
+  "sink" : {
+    "type" : "nosqldb",
+    "storeName" : "OUGFR",
+    "helperHosts" : ["localhost:5000"],
+    "table" : "users",
+    "schemaInfo" : {
+      "schemaPath" : "/home/opc/kvstore_export/users.ddl"
+    },
+    "requestTimeoutMs" : 5000
+  },
+  "abortOnError" : false,
+  "migratorVersion" : "1.0.0"
+}
