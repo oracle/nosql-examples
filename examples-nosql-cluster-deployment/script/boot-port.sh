@@ -24,4 +24,4 @@ java -jar $KVHOME/lib/kvstore.jar makebootconfig \
 
 nohup java -jar $KVHOME/lib/kvstore.jar start -root $KVROOT/${1-50}  >/dev/null 2>&1 </dev/null &
 sleep 5
-sudo netstat -ntpl | grep ${1-50}
+netstat -ntpl | grep ${1-50}

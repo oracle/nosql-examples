@@ -68,7 +68,8 @@ copy $HOME/security.zip from `node1-nosql` to other nodes| -- |
 -- |`bash start.sh`| -- |
 `kv_admin  -security $KVROOT/security/client.security load -file multi-node.kvs` | -- |
 `bash create-users.sh` | -- |
-
+copy $KVROOT/security/root.zip from `node1-nosql` to other nodes| -- |
+-- |`unzip -o $KVROOT/security/root.zip -d $KVROOT/security`|
 
 `node1-nosql` | 
 ---|
@@ -77,7 +78,8 @@ copy $HOME/security.zip from `node1-nosql` to other nodes| -- |
 `bash clean-proxy.sh` |
 `cp $KVROOT/security/proxy.zip $PROXYHOME` | 
 `bash generate-self-signed-cert-http-proxy.sh` |
-`unzip $PROXYHOME/proxy.zip -d $PROXYHOME` | 
+`unzip -o $PROXYHOME/proxy.zip -d $PROXYHOME` | 
+`pkill -f httpproxy.jar` |
 `kv_proxy_sec &` |
 
 
