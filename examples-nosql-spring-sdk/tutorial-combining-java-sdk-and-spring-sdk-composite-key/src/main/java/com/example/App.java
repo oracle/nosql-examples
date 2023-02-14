@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @SpringBootApplication
-// If Spring Data Framework doesn't automatically find the repository beam class
+// If Spring Data Framework doesn't automatically find the repository bean class
 // uncomment the following line:
 // @EnableNosqlRepositories(basePackageClasses = {CustomerRepository.class})
 public class App implements CommandLineRunner
