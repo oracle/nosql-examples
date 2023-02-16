@@ -8,7 +8,7 @@ It delivers predictable single digit millisecond response times with data
 replication for high availability. With this flexibility and reliability, 
 effortlessly developing modern applications is straightforward. 
 
-In this [workshop](https://bit.ly/dbwlab23) 
+In this [workshop](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=879) 
 you can experience a baggage tracking application 
 running on your personal device. Additionally, you will get hands on experience 
 creating the backend and developing queries.

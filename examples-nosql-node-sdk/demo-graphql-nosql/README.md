@@ -39,7 +39,7 @@ docker run  --env NOSQL_ENDPOINT=US_ASHBURN_1 --env NOSQL_COMPID=ocid1.compartme
 
 ## TEST
 
-1. USE INTERFACE GraphIQL http://host:3000/graphql
+1. USE INTERFACE GraphIQL `http://host:3000/graphql`
 2. USE POSTMAN
 
 
