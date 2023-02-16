@@ -62,7 +62,7 @@ In the development world, practice makes master. That is why you must find as ma
 ways to practice as possible. Never stop learning. Follow our LiveLabs
 
 * [Get started with tables in Oracle NoSQL Database Cloud Service](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=642) `sql-for-nosql` `nosql-java-sdk` `nosql-node-sdk` `nosql-dotnet-sdk` `nosql-go-sdk` `nosql-python-sdk`
-* [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://bit.ly/dbwlab23) `sql-for-nosql`  `nosql-node-sdk` 
+* [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=879) `sql-for-nosql`  `nosql-node-sdk` 
 
 > Those labs were specialled designed for Application Developers, Architects, Administrators
 > and DevOps Engineers.

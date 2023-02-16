@@ -165,7 +165,7 @@ allow dynamic-group nosql-demos_davega to manage all-resources in compartment da
 ```
 ![Working](Policies.png)
 
-You can find more information about NoSQL Privileges in the documentation- [Policy Reference](https://docs.oracle.com/en/cloud/paas/nosql-cloud/csnsd/policy-reference.html#GUID-C194529F-2B38-4BDE-9777-2D3C0CF248D3).
+You can find more information about NoSQL Privileges in the documentation- [Policy Reference](https://docs.oracle.com/en/cloud/paas/nosql-cloud/odsql/index.html#articletitle).
 
 
 After doing the setup, you just use **Resource Principals to do the connection to NoSQL Cloud Service** as shown below.

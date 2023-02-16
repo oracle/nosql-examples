@@ -80,7 +80,7 @@ source env.sh
 
 To customize the **hostnames** or the **directories paths**, we provide a script that will generate the `*.kvs` scripts for **your configuration**.  Follow the steps below to create your custom environment.
 
-1) Change the generic variables KVNODES and KVDATA in [generate-config-file.sh](./generate-config-file.sh) 
+1) Change the generic variables KVNODES and KVDATA in [generate-config-file.sh](./script/generate-config-file.sh) 
 2) execute the following commands to produce the `*.kvs` scripts for all the topologies
     ```bash
 	cd $HOME/examples-nosql-cluster-deployment/script
@@ -342,7 +342,7 @@ a topology, see the following chapters in the Administrator's Guide.
 
 ## Create users
 
-In this step, we will create the initial users with [password complexity policy enabled.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.1/security/password-complexity-policies.html)  The following users need to be created: root, proxy and application.
+In this step, we will create the initial users with [password complexity policy enabled.](https://docs.oracle.com/en/database/other-databases/nosql-database/22.3/security/password-complexity-policies.html)  The following users need to be created: root, proxy and application.
 - Create the `root` user and the file `root.login` that contain property settings for the login as admin
 - Create the `proxy_user` user and the file proxy.login that contain property settings for the login as `proxy_user` user
 - Password for `root` and `proxy_user` are generated randomly using `openssl` tool and stored in a wallet
