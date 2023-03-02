@@ -8,11 +8,11 @@ KVLocal provides a single-node store that is not replicated.
 It runs as a separate child process in the application JVM and requires minimal administration. KVLocal is a robust database and handles failures efficiently.
 You can start and stop KVLocal using APIs.
 
-KVLocal provides the ability to run a single instance of Oracle NoSQL Database by including `kvstore.jar` in the application's classpath, starting a JVM,
-and calling an API to initialize the database. KVLocal is accessed using the Java Direct Driver API.
+KVLocal runs in a single instance of Oracle NoSQL Database by including `kvstore.jar` in the application's classpath, with APIs to start a JVM
+and initialize the database. KVLocal is accessed using the Java Direct Driver API.
 
-KVLocal to use either TCP/IP sockets or Unix domain sockets for communication between the client APIs and KVLocal.
-If you configure KVLocal to use TCP/IP sockets, it runs by default in secure mode, and you can configure it explicitly to run non-securely.
+KVLocal uses either TCP/IP sockets or Unix domain sockets for communication between the client APIs and KVLocal.
+If you configure KVLocal to use TCP/IP sockets, it runs by default in secure mode, however you can configure it explicitly to run non-securely.
 If you configure KVLocal to use Unix domain sockets, it is inherently secure because it is not accessible over the network.
 The security depends on file protections on the socket files used for communication.
 
