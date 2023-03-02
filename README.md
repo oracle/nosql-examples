@@ -22,6 +22,7 @@ This repository stores a variety of examples demonstrating how to use the Oracle
 | ------------- | ------------- |
 | [cluster_setup](./cluster_setup) | Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure `deploy-nosql` |
 | [examples-nosql-cluster-deployment](./examples-nosql-cluster-deployment) | Examples allowing you to learn how to deploy a NoSQL cluster/NoSQL store - the most popular topologies |
+| [examples-nosql-kvlocal](./examples-nosql-kvlocal) | example of Java Application embedding KVLocal  |
 | [examples-nosql-java-direct-driver](./examples-nosql-java-direct-driver) | Examples using the `nosql-java-direct-driver` |
 | [examples-nosql-java-sdk](./examples-nosql-java-sdk) | Examples using the `nosql-java-sdk` |
 | [examples-nosql-node-sdk](./examples-nosql-node-sdk) | Examples using the `nosql-node-sdk` |
