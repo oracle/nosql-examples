@@ -55,7 +55,8 @@ ENV NOSQL_PORT 8080
 ````shell
 cd $HOME
 rm -rf video-on-demand-with-nosql-database
-curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip \
+-o video-on-demand-with-nosql-database.zip
 unzip video-on-demand-with-nosql-database.zip
 cd $HOME
 ````
