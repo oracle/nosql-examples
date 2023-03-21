@@ -102,7 +102,8 @@ see instuction in this [link](https://github.com/oracle/docker-images/tree/main/
 ````shell
 cd $HOME
 rm -rf video-on-demand-with-nosql-database
-curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip \
+-o video-on-demand-with-nosql-database.zip
 unzip video-on-demand-with-nosql-database.zip
 cd $HOME
 ````
@@ -125,7 +126,8 @@ npm start
 ````shell
 cd $HOME
 rm -rf video-on-demand-with-nosql-database
-curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
+curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip \
+-o video-on-demand-with-nosql-database.zip
 unzip video-on-demand-with-nosql-database.zip
 cd $HOME
 ````
