@@ -1,4 +1,4 @@
-# demo-tv-streaming-app
+# video-on-demand-with-nosql-database
 Demo Video On Demand streaming application using GraphQL and NoSQL
 
 ## Deployment using Docker
@@ -18,7 +18,7 @@ KVLite is the default `CMD` of the image:
 docker run -d --name=kvlite --hostname=kvlite --env KV_PROXY_PORT=8080 -p 8080:8080 oracle/nosql:ce
 ```
 
-see instuction https://github.com/oracle/docker-images/tree/main/NoSQL
+see instuction in this [link](https://github.com/oracle/docker-images/tree/main/NoSQL)
 
 2. Deploy this application
 
@@ -58,7 +58,7 @@ rm -rf video-on-demand-with-nosql-database
 curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
 unzip video-on-demand-with-nosql-database.zip
 cd $HOME
-````shell
+````
 
 2.  Run the docker-compose up command
 
@@ -105,7 +105,7 @@ rm -rf video-on-demand-with-nosql-database
 curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
 unzip video-on-demand-with-nosql-database.zip
 cd $HOME
-````shell
+````
 
 3. Startup the application
 
@@ -128,7 +128,7 @@ rm -rf video-on-demand-with-nosql-database
 curl -L https://github.com/oracle/nosql-examples/raw/master/zips/video-on-demand-with-nosql-database.zip -o video-on-demand-with-nosql-database.zip
 unzip video-on-demand-with-nosql-database.zip
 cd $HOME
-````shell
+````
 
 2.  Load some data
 
