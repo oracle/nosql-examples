@@ -73,7 +73,7 @@ docker-compose ps
 Note: https://docs.docker.com/compose/startup-order/
 
 ````shell
-cd ~/demo-tv-streaming-app
+cd ~/video-on-demand-with-nosql-database
 docker-compose start
 ````
 

@@ -34,7 +34,7 @@
      <dependency>
          <groupId>com.oracle.nosql.sdk</groupId>
          <artifactId>spring-data-oracle-nosql</artifactId>
-         <version>1.4.1</version>
+         <version>1.5.0</version>
      </dependency>
 
 
