@@ -21,7 +21,7 @@ resource "oci_identity_policy" "FunctionsServiceDynamicGroupPolicy" {
   description = "nosql_demos_ci"
   compartment_id = var.compartment_ocid
   statements = [
-    "allow dynamic-group ${oci_identity_dynamic_group.NoSQLServiceDynamicGroup.name} to manage all-resources in compartment id ${var.compartment_ocid} "
+    "allow dynamic-group ${oci_identity_dynamic_group.NoSQLServiceDynamicGroup.name} to manage nosql-family in compartment id ${var.compartment_ocid} "
   ]
 
   provisioner "local-exec" {
