@@ -3,12 +3,11 @@
 
     title: "Discover Serverless Apps Using Oracle NoSQL Database Cloud Service"
     description: "Learn and Discover why NoSQL Cloud Services and OCI native services are compelling"
-    informationalText: "Modern apps benefit from predictable low latency, flexibility, and horizontal scale-out of NoSQL databases. Join us to learn how effortless it is to develop a modern app using Oracle Cloud Infrastructure and Oracle NoSQL Database Cloud Service. This lab is based on data from an airline baggage tracking app"
-    instructions: "Please choose the region Phoenix and Choose "
+    informationalText: "Modern apps benefit from predictable low latency, flexibility, and horizontal scale-out of NoSQL databases. Join us to learn how effortless it is to develop a modern app using Oracle Cloud Infrastructure and Oracle NoSQL Database Cloud Service. Oracle NoSQL powers Video On-Demand applications"
     troubleshooting: "Need Help"
     stackDescription: "Learn and Discover why NoSQL Cloud Services and OCI native services are compelling"
     schemaVersion: 1.1.0
-    version: "20210101"
+    version: "20230101"
     locale: "en"
 
 
