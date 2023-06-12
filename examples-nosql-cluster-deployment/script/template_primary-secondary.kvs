@@ -13,10 +13,6 @@ plan deploy-admin -sn sn1 -wait;
 
 plan deploy-sn -zn zn2 -host <KVNODE_2> -port 5000 -wait;
 
-pool create -name CloudPool;
-pool join -name CloudPool -sn sn1;
-pool join -name CloudPool -sn sn2;
-
-topology create -name PrimSec -pool CloudPool -partitions 300;
+topology create -name PrimSec -pool AllStorageNodes -partitions 300;
 topology preview -name PrimSec;
 plan deploy-topology -name PrimSec -wait

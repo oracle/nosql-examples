@@ -95,6 +95,7 @@ To customize the **hostnames** or the **directories paths**, we provide a script
     bash generate-config-file.sh multi-zone-with-arb
     bash generate-config-file.sh multi-zone-with-arb-v2
     bash generate-config-file.sh primary-secondary
+	bash generate-config-file.sh primary-secondary-rf3
     cd -
     ```
     

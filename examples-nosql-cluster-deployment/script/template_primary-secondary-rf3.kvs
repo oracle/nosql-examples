@@ -1,0 +1,27 @@
+#
+# Copyright (c) 2023 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+configure -name <KVSTORE>;
+plan deploy-zone -name "DataCenter1" -rf 3 -wait;
+plan deploy-zone -name "DataCenter2" -rf 3 -type secondary -wait;
+
+
+plan deploy-sn -zn zn1 -host <KVNODE_1> -port 5000 -wait;
+plan deploy-admin -sn sn1 -wait;
+plan deploy-sn -zn zn1 -host <KVNODE_2> -port 5000 -wait;
+plan deploy-admin -sn sn2 -wait;
+plan deploy-sn -zn zn1 -host <KVNODE_3> -port 5000 -wait;
+plan deploy-admin -sn sn3 -wait;
+
+
+plan deploy-sn -zn zn2 -host <KVNODE_4> -port 5000 -wait;
+plan deploy-admin -sn sn4 -wait;
+plan deploy-sn -zn zn2 -host <KVNODE_5> -port 5000 -wait;
+plan deploy-admin -sn sn5 -wait;
+plan deploy-sn -zn zn2 -host <KVNODE_6> -port 5000 -wait;
+plan deploy-admin -sn sn6 -wait;
+
+topology create -name PrimSec -pool AllStorageNodes  -partitions 300;
+topology preview -name PrimSec;
+plan deploy-topology -name PrimSec -wait
