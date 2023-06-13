@@ -140,37 +140,48 @@ kv_admin load -file maintenance.kvs
 
 ## Administration - Failover and Switchover
 
-Data Center 1 (`node1-nosql`) | Data Center 2 ( `node2-nosql`) |
----|---|
-`cd $HOME/examples-nosql-cluster-deployment/script` | `cd $HOME/examples-nosql-cluster-deployment/script` |
-`source env.sh` | -- |
-`bash stop.sh` | -- | 
-`rm -rf $KVDATA` | -- | 
+### Failover
 
-`Data Center 2` |
+#### Simulating the lost of Data Center 1
+
+`Data Center 1`
+````shell
+cd $HOME/examples-nosql-cluster-deployment/script
+source env.sh
+bash stop.sh 
+rm -rf $KVDATA
+````
+
+#### Doing a failover to Data Center 2
+
+`Data Center 2`
 ````shell
 kv_admin repair-admin-quorum -znname DataCenter2; 
 kv_admin plan failover -znname DataCenter2 -type primary -znname DataCenter1 -type offline-secondary -wait; 
 ````
 
-Data Center 1 (`node1-nosql`) | Data Center 2 ( `node2-nosql`) |
----|---|
-`cd $HOME/examples-nosql-cluster-deployment/script` | `cd $HOME/examples-nosql-cluster-deployment/script` |
-`source env.sh` | -- |
-`mkdir -p ${KVDATA}` | -- | 
-`mkdir -p ${KVDATA}/disk1` | -- | 
-`mkdir -p ${KVDATA}/disk2` | -- | 
-`mkdir -p ${KVDATA}/disk3` | -- | 
-`bash restart.sh` | -- | 
+### Switchover
 
-`Data Center 2` |
+#### Simulating the restore of Data Center 1
+
+`Data Center 1`
 ````shell
-kv_admin plan repair-topology -wait
-kv_admin await-consistent -timeout 1800 -znname DataCenter1;
-kv_admin load -file switchvoer.kvs
+cd $HOME/examples-nosql-cluster-deployment/script
+source env.sh
+mkdir -p ${KVDATA} 
+mkdir -p ${KVDATA}/disk1
+mkdir -p ${KVDATA}/disk2 
+mkdir -p ${KVDATA}/disk3
+bash restart.sh 
 ````
 
+#### Repair the topology and doing a switchover to Data Center 1
 
-
-
-
+`Data Center 2`
+````shell
+cd $HOME/examples-nosql-cluster-deployment/script
+source env.sh
+kv_admin plan repair-topology -wait
+kv_admin await-consistent -timeout 1800 -znname DataCenter1;
+kv_admin load -file switchover.kvs
+````
