@@ -140,6 +140,8 @@ kv_admin load -file maintenance.kvs
 
 ## Administration - Failover and Switchover
 
+Note: For learning purposes, we recommend to test this administration task using a Deployment on 2 Storage Nodes
+
 ### Failover
 
 #### Simulating the lost of Data Center 1
