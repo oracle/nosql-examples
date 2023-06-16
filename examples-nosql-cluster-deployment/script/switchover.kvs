@@ -1,0 +1,10 @@
+#
+# Copyright (c) 2023 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+topology clone -current -name switchover;
+topology change-zone-type -name switchover -znname "DataCenter2" -type secondary;
+topology change-zone-type -name switchover -znname "DataCenter1" -type primary;
+plan deploy-topology -name switchover -wait;
+topology delete -name switchover;
+
