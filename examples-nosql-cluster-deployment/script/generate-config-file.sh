@@ -3,7 +3,7 @@
 # Copyright (c) 2023 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-KVNODES=(node1-nosql node2-nosql node3-nosql node4-nosql arbiter-nosql)
+KVNODES=(node1-nosql node2-nosql node3-nosql node4-nosql node5-nosql node6-nosql arbiter-nosql)
 KVDATA=(${KVDATA}/disk1 ${KVDATA}/disk2 ${KVDATA}/disk3)
 
 CONFIG_FILE=${1-config1x3}
