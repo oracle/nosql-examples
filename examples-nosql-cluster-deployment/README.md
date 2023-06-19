@@ -146,6 +146,7 @@ We have tested with multiple Oracle JDK versions, and it is working with all ver
 ```bash
 sudo yum install java
 sudo yum install jdk-17-headless
+sudo yum install jdk-17-headful
 # download the rmp 
 sudo yum localinstall jdk-13.0.2_linux-x64_bin.rpm
 sudo rpm -Uvh jdk-14.0.2_linux-x64_bin.rpm
