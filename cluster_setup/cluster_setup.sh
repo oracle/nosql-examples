@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright (C) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
+# Copyright (C) 2011, 2023 Oracle and/or its affiliates. All rights reserved.
 #
 # This file was distributed by Oracle as part of a version of Oracle NoSQL
 # Database made available at:
@@ -14,8 +14,8 @@
 # script to help set up a basic functioning Oracle NoSQL cluster
 
 # Prerequisites:
-# - a local .tar.gz or .zip file of a reasonably current kv release (ex: kv-ee-19.5.11.tar.gz)
-# - java8 or higher installed on target machine(s)
+# - a local .tar.gz or .zip file of a reasonably current kv release (ex: kv-ee-23.1.25.tar.gz)
+# - java11 or higher installed on target machine(s)
 # - ssh access to target machine(s) from local machine
 
 # A few notes about this script:
@@ -180,8 +180,8 @@ function splash_screen ()
 	echo " 1) ssh access to host machine(s)"
 	echo " 2) a downloaded Oracle NoSQL release .tar.gz or .zip file"
 	echo " If not running in Oracle OCI environment, the following are also required:"
-	echo "    3) disk/nvme data drives set up on host machine(s)"
-	echo "    4) Java 8+ installed on host machine(s)"
+	echo "    3) disk or nvme data drives set up on host machine(s)"
+	echo "    4) Java 11+ installed on host machine(s)"
 	echo ""
 	echo "Downloads can be obtained from"
 	echo "https://www.oracle.com/database/technologies/nosql-database-server-downloads.html"
@@ -847,9 +847,9 @@ if [ "\$version" = "" ] ; then
 	echo "\$javahome on $host does not appear to point to valid java installation."
 	exit 1
 fi
-if [ \$version -lt 8 -o \$version -gt 15 ] ; then
+if [ \$version -lt 11 -o \$version -gt 19 ] ; then
 	echo ""
-	echo "Oracle NoSQL requires java version 8 or higher. The java installation on"
+	echo "Oracle NoSQL requires java version 11 or higher. The java installation on"
 	echo "$host is \$version."
 	echo ""
 	exit 1
