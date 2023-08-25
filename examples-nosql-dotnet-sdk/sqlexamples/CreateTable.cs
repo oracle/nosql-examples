@@ -1,6 +1,5 @@
-/*-
- * Copyright (c) 2018, 2021 Oracle and/or its affiliates. All rights reserved.
- *
+/*
+ * Copyright (c) 2023 Oracle and/or its affiliates. All rights reserved.
  * Licensed under the Universal Permissive License v 1.0 as shown at
  *  https://oss.oracle.com/licenses/upl/
  */
@@ -76,7 +75,7 @@ namespace Oracle.NoSQL.SDK.Samples
 
             // Wait for the operation completion
             await tableResult.WaitForCompletionAsync();
-            Console.WriteLine("  Created table: ",tableResult.TableName);  
+            Console.WriteLine("  Created table: ",tableResult.TableName);
         }
    }
 }
