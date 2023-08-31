@@ -38,7 +38,7 @@ Before executing, please modify the env.sh and provide **KVSTORE** names for you
 `cp template_config1x1.kvs ${KVSTORE}_config1x1.kvs` |`cp template_config1x1.kvs ${KVSTORE}_config1x1.kvs` |
 `sed -i "s/<HERE>/$KVSTORE/g" ${KVSTORE}_config1x1.kvs` | `sed -i "s/<HERE>/$KVSTORE/g" ${KVSTORE}_config1x1.kvs` |
 `sed -i "s/<KVNODE_1>/$KVHOST/g" ${KVSTORE}_config1x1.kvs` | `sed -i "s/<KVNODE_1>/$KVHOST/g" ${KVSTORE}_config1x1.kvs` |
-`kv_admin load -file ${KVSTORE}_config1x1.kvs`|
+`kv_admin load -file ${KVSTORE}_config1x1.kvs`|`kv_admin load -file ${KVSTORE}_config1x1.kvs` |
 
 1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
 ---|---|
@@ -70,6 +70,8 @@ After building the 2 clusters
 ## Create Multi-Region Tables
 
 You must create an MR Table on each KVStore in the connected graph and specify the list of regions that the table should span. For this first example, you must create the users table as an **MR Table at both the regions**, in any order. 
+
+Use `kv_sql` to start the SQL Shell
 
 1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
 ---|---|

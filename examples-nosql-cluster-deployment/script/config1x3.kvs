@@ -3,13 +3,11 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 plan deploy-sn -zn zn1 -host node2-nosql -port 5000 -wait
-pool join -name CloudPool -sn sn2
 plan deploy-sn -zn zn1 -host node3-nosql -port 5000 -wait
-pool join -name CloudPool -sn sn3
 plan deploy-admin -sn sn2 -wait
 plan deploy-admin -sn sn3 -wait
 topology clone -current -name 1x3
-topology change-repfactor -name 1x3 -pool CloudPool -rf 3 -zn zn1
+topology change-repfactor -name 1x3 -pool AllStorageNodes -rf 3 -zn zn1
 topology preview -name 1x3
 plan deploy-topology -name 1x3 -wait
 

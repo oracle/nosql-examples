@@ -216,14 +216,14 @@ In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition 
 For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
-unzip kv-ee-23.1.21.zip -d nosql
+unzip kv-ee-23.1.25.zip -d nosql
 unzip nosql-migrator-1.5.0.zip
 ````
 
 Modify the file `env.sh` and `env-proxy.sh` with the appropriate kvhome path location. e.g.
 
 ```bash
-export KVHOME=$HOME/nosql/kv-23.1.21
+export KVHOME=$HOME/nosql/kv-23.1.25
 ```
 
 Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs 
@@ -231,10 +231,10 @@ are available which you can use, however, we are providing Java examples.
 
 ````bash
 cd $HOME
-rm -rf oracle-nosql-java-sdk-5.4.11.zip oracle-nosql-java-sdk
-curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.11/oracle-nosql-java-sdk-5.4.11.zip \
--o oracle-nosql-java-sdk-5.4.11.zip
-unzip oracle-nosql-java-sdk-5.4.11.zip
+rm -rf oracle-nosql-java-sdk-5.4.12.zip oracle-nosql-java-sdk
+curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.12/oracle-nosql-java-sdk-5.4.12.zip \
+-o oracle-nosql-java-sdk-5.4.12.zip
+unzip oracle-nosql-java-sdk-5.4.12.zip
 cd oracle-nosql-java-sdk/examples/
 javac -cp ../lib/nosqldriver.jar *.java
 cd $HOME
