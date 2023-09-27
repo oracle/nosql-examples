@@ -12,11 +12,10 @@ import oracle.nosql.driver.ops.TableLimits;
 import oracle.nosql.driver.ops.TableRequest;
 import oracle.nosql.driver.ops.TableResult;
 
-public class CreateTable{
-    /* Name of your table */
+public class Indexes{
+   /* Name of your table */
    final static String tableName = "stream_acct";
    static NoSQLHandle handle;
-
    public static void main(String[] args) throws Exception {
       //UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service
       //Add the appropriate values of your region and compartment OCID
@@ -29,7 +28,9 @@ public class CreateTable{
       //String kvstore_endpoint ="http://<your_hostname>:8080";
       //handle = generateNoSQLHandleonPrem(kvstore_endpoint);
       try {
-        createTab(handle);
+         createTab(handle);
+         crtIndex(handle);
+         dropIndex(handle);
       } catch (Exception e) {
          System.err.print(e);
       } finally {
@@ -45,18 +46,21 @@ public class CreateTable{
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
+
    /* Create a NoSQL handle to access the cloud service */
    private static NoSQLHandle generateNoSQLHandleCloud(String region, String compId) throws Exception {
       SignatureProvider ap = new SignatureProvider();
+      /* Create a NoSQL handle to access the cloud service */
       NoSQLHandleConfig config = new NoSQLHandleConfig(region, ap);
-      // set your default compartment
+      // set your mycompartment
       config.setDefaultCompartment(compId);
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
+
    /**
-     * Creates a table and sets your desired table capacity
-     */
+    * Create a table and set the desired table capacity
+   */
    private static void createTab(NoSQLHandle handle) throws Exception {
       String createTableDDL = "CREATE TABLE IF NOT EXISTS " + tableName +
                                                               "(acct_Id INTEGER," +
@@ -68,13 +72,40 @@ public class CreateTable{
       TableLimits limits = new TableLimits(20, 20, 1);
       TableRequest treq = new TableRequest()
             .setStatement(createTableDDL).setTableLimits(limits);
-      System.out.println("Creating table " + tableName);
+      TableResult tres = handle.tableRequest(treq);
+      /* The request is async,
+       * so wait for the table to become active.
+       */
+      tres.waitForCompletion(handle, 60000, /* wait 60 sec */
+            1000); /* delay ms for poll */
+      System.out.println("Table " + tableName + " is active");
+   }
+   /**
+   * Create an index acct_episodes in the stream_acct table
+   */
+   private static void crtIndex(NoSQLHandle handle) throws Exception {
+      String createIndexDDL = "CREATE INDEX acct_episodes ON " + tableName +
+                                "(acct_data.contentStreamed[].seriesInfo[].episodes[]  AS ANYATOMIC)";
+
+      TableRequest treq = new TableRequest().setStatement(createIndexDDL);
       TableResult tres = handle.tableRequest(treq);
       /* The request is async,
        * so wait for the table to become active.
       */
       tres.waitForCompletion(handle, 60000, /* wait 60 sec */
             1000); /* delay ms for poll */
-      System.out.println("Table " + tableName + " is active");
+      System.out.println("Index acct_episodes on " + tableName + " is created");
+   }
+   /* Drop the index acct_episodes*/
+   private static void dropIndex(NoSQLHandle handle) throws Exception {
+      String dropIndexDDL = "DROP INDEX acct_episodes ON " + tableName;
+      TableRequest treq = new TableRequest().setStatement(dropIndexDDL);
+      TableResult tres = handle.tableRequest(treq);
+      /* The request is async,
+       * so wait for the table to become active.
+      */
+      tres.waitForCompletion(handle, 60000, /* wait 60 sec */
+            1000); /* delay ms for poll */
+      System.out.println("Index acct_episodes on " + tableName + " is dropped");
    }
 }
