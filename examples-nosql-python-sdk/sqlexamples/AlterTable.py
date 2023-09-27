@@ -28,7 +28,6 @@ def get_connection_onprem():
    #provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
-# Create a table and set the table limits
 def create_table(handle):
    statement = '''create table if not exists stream_acct (acct_Id INTEGER,
                                                            profile_name STRING,
@@ -45,13 +44,31 @@ def create_table(handle):
    else:
       raise NameError('Table stream_acct is in an unexpected state ' + str(table_result.get_state()))
 
+def alter_table(handle):
+   statement = '''ALTER TABLE  stream_acct(ADD acctname STRING)'''
+   request = TableRequest().set_statement(statement)
+   # Ask the cloud service to create the table, waiting for a total of 40000 milliseconds
+   # and polling the service every 3000 milliseconds to see if the table is active
+   table_result = handle.do_table_request(request, 40000, 3000)
+   table_result.wait_for_completion(handle, 40000, 3000)
+   print('Table stream_acct is altered')
+
+def drop_table(handle):
+   statement = '''DROP TABLE stream_acct'''
+   request = TableRequest().set_statement(statement)
+   table_result = handle.do_table_request(request, 40000, 3000)
+   table_result.wait_for_completion(handle, 40000, 3000)
+   print('Dropped table: stream_acct')
+
 def main():
    # if cloud service uncomment this
    handle = get_connection_cloud()
    # if onPremise uncomment this
    #handle = get_connection_onprem()
    create_table(handle)
+   alter_table(handle)
+   drop_table(handle)
    os._exit(0)
 
 if __name__ == "__main__":
-   main()
+    main()
