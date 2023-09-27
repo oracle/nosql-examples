@@ -325,9 +325,9 @@ def main():
          }
       ]
    }}'''
-   # if cloud service uncomment this
+   # if cloud service uncomment this. else if onPremise comment this line
    handle = get_connection_cloud()
-   # if onPremise uncomment this
+   # if onPremise uncomment this. elkse if cloud service comment this line
    #handle = get_connection_onprem()
    create_table(handle)
    insert_record(handle,'stream_acct',acct1)

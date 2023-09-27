@@ -260,13 +260,13 @@ public class AddData {
    static FieldValue newvalue2 = FieldValue.createFromJson(acct3,null);
 
    public static void main(String[] args) throws Exception {
-      //UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service
+      //UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
       //Add the appropriate values of your region and compartment OCID
       //String region ="<your_region_identifier>";
       //String compId ="<ocid_of_your_compartment>";
       //handle = generateNoSQLHandleCloud(region,compId);
 
-      //UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database
+      //UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
       //give appropriate value of your endpoint for the onPremise kvstore.
       //String kvstore_endpoint ="http://<your_hostname>:8080";
       //handle = generateNoSQLHandleonPrem(kvstore_endpoint);
