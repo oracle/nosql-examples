@@ -90,9 +90,6 @@ public class AlterTable{
         TableRequest treq = new TableRequest().setStatement(alterTableDDL);
         System.out.println("Altering table " + tableName);
         TableResult tres = handle.tableRequest(treq);
-        /* The request is async,
-         * so wait for the table to become active.
-        */
         tres.waitForCompletion(handle, 60000, /* wait 60 sec */
             1000); /* delay ms for poll */
         System.out.println("Table " + tableName + " is altered");
@@ -102,9 +99,6 @@ public class AlterTable{
       String dropTableDDL = "DROP TABLE " + tableName;
       TableRequest treq = new TableRequest().setStatement(dropTableDDL);
       TableResult tres = handle.tableRequest(treq);
-      /* The request is async,
-       * so wait for the table to become active.
-      */
       tres.waitForCompletion(handle, 60000, /* wait 60 sec */
           1000); /* delay ms for poll */
       System.out.println("Table " + tableName + " is dropped");

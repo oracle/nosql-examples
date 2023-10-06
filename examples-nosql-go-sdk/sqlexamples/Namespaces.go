@@ -35,7 +35,6 @@ func createNS(client *nosqldb.Client, err error)(){
 		Statement: stmt,
 	}
 	sysRes, err := client.DoSystemRequest(sysReq)
-	// The create table request is asynchronous, wait for table creation to complete.
 	_, err = sysRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing CREATE NAMESPACE request: %v\n", err)
@@ -51,7 +50,6 @@ func dropNS(client *nosqldb.Client, err error)(){
 		Statement: stmt,
 	}
 	sysRes, err := client.DoSystemRequest(sysReq)
-	// The create table request is asynchronous, wait for table creation to complete.
 	_, err = sysRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing CREATE NAMESPACE request: %v\n", err)

@@ -36,8 +36,6 @@ def create_table(handle):
                                                            acct_data JSON,
                                                            primary key(acct_Id))'''
    request = TableRequest().set_statement(statement).set_table_limits(TableLimits(20, 10, 1))
-   # Ask the cloud service to create the table, waiting for a total of 40000 milliseconds
-   # and polling the service every 3000 milliseconds to see if the table is active
    table_result = handle.do_table_request(request, 40000, 3000)
    table_result.wait_for_completion(handle, 40000, 3000)
    if (table_result.get_state() == State.ACTIVE):

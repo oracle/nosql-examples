@@ -89,9 +89,6 @@ public class Indexes{
 
       TableRequest treq = new TableRequest().setStatement(createIndexDDL);
       TableResult tres = handle.tableRequest(treq);
-      /* The request is async,
-       * so wait for the table to become active.
-      */
       tres.waitForCompletion(handle, 60000, /* wait 60 sec */
             1000); /* delay ms for poll */
       System.out.println("Index acct_episodes on " + tableName + " is created");
@@ -101,9 +98,6 @@ public class Indexes{
       String dropIndexDDL = "DROP INDEX acct_episodes ON " + tableName;
       TableRequest treq = new TableRequest().setStatement(dropIndexDDL);
       TableResult tres = handle.tableRequest(treq);
-      /* The request is async,
-       * so wait for the table to become active.
-      */
       tres.waitForCompletion(handle, 60000, /* wait 60 sec */
             1000); /* delay ms for poll */
       System.out.println("Index acct_episodes on " + tableName + " is dropped");

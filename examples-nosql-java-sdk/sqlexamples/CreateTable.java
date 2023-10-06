@@ -68,7 +68,6 @@ public class CreateTable{
       TableLimits limits = new TableLimits(20, 20, 1);
       TableRequest treq = new TableRequest()
             .setStatement(createTableDDL).setTableLimits(limits);
-      System.out.println("Creating table " + tableName);
       TableResult tres = handle.tableRequest(treq);
       /* The request is async,
        * so wait for the table to become active.

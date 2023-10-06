@@ -19,8 +19,6 @@ def get_connection_onprem():
 def create_ns(handle):
    statement = '''CREATE NAMESPACE IF NOT EXISTS ns1'''
    sysreq = SystemRequest().set_statement(statement)
-   # Ask the cloud service to create the table, waiting for a total of 40000 milliseconds
-   # and polling the service every 3000 milliseconds to see if the table is active
    sys_result = handle.system_request(sysreq)
    sys_result.wait_for_completion(handle, 40000, 3000)
    print('Created namespace: ns1')
@@ -29,8 +27,6 @@ def create_ns(handle):
 def drop_ns(handle):
    statement = '''DROP NAMESPACE ns1'''
    sysreq = SystemRequest().set_statement(statement)
-   # Ask the cloud service to create the table, waiting for a total of 40000 milliseconds
-   # and polling the service every 3000 milliseconds to see if the table is active
    sys_result = handle.system_request(sysreq)
    sys_result.wait_for_completion(handle, 40000, 3000)
    print('Namespace: ns1 is dropped')

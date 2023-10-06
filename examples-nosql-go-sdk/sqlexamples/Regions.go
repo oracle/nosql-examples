@@ -35,7 +35,6 @@ func crtRegion(client *nosqldb.Client, err error)(){
 		Statement: stmt,
 	}
 	sysRes, err := client.DoSystemRequest(sysReq)
-	// The create table request is asynchronous, wait for table creation to complete.
 	_, err = sysRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing CREATE REGION request: %v\n", err)
@@ -48,7 +47,6 @@ func crtRegion(client *nosqldb.Client, err error)(){
 		Statement: stmt1,
 	}
 	sysRes1, err1 := client.DoSystemRequest(sysReq1)
-	// The create table request is asynchronous, wait for table creation to complete.
 	_, err1 = sysRes1.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err1 != nil {
 		fmt.Printf("Error finishing CREATE REGION request: %v\n", err)
@@ -98,7 +96,6 @@ func drpTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 		fmt.Printf("cannot initiate DROP TABLE request: %v\n", err)
 		return
 	}
-	// The drop table request is asynchronous, wait for table drop to complete.
 	_, err = tableRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing DROP TABLE request: %v\n", err)
@@ -114,7 +111,6 @@ func dropRegion(client *nosqldb.Client, err error)(){
 		Statement: stmt,
 	}
 	sysRes, err := client.DoSystemRequest(sysReq)
-	// The create table request is asynchronous, wait for table creation to complete.
 	_, err = sysRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing DROP REGION request: %v\n", err)
