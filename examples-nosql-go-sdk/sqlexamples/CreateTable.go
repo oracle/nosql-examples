@@ -1,3 +1,5 @@
+// Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package main
 
 import (
@@ -83,7 +85,7 @@ func createTable(client *nosqldb.Client, err error, tableName string)(){
 func main() {
    //if using cloud service uncomment the line below. else if using onPremises comment this line out
 	client, err := createClient_cloud()
-	//if using onPrem uncomment the line below, else if using cloud service, comment this line 
+	//if using onPrem uncomment the line below, else if using cloud service, comment this line
    //client, err := createClient_onPrem()
 	 if err != nil {
       fmt.Printf("cannot create NoSQL client: %v\n", err)

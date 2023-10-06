@@ -1,3 +1,5 @@
+// Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package main
 
 import (
@@ -50,7 +52,7 @@ func createClient_onPrem() (*nosqldb.Client, error) {
    client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
-	// Creates a table
+// Creates a table
 func createTable(client *nosqldb.Client, err error, tableName string)(){
 	stmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s ("+
 		 "acct_Id INTEGER," +

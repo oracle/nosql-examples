@@ -265,16 +265,16 @@ public class QueryData {
    static FieldValue newvalue2 = FieldValue.createFromJson(acct3,null);
 
    public static void main(String[] args) throws Exception {
-      //UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
-      //Add the appropriate values of your region and compartment OCID
-      //String region ="<your_region_identifier>";
-      //String compId ="<ocid_of_your_compartment>";
-      //handle = generateNoSQLHandleCloud(region,compId);
+      /*UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
+      Add the appropriate values of your region and compartment OCID
+      String region ="<your_region_identifier>";
+      String compId ="<ocid_of_your_compartment>";
+      handle = generateNoSQLHandleCloud(region,compId);*/
 
-      //UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
-      //give appropriate value of your endpoint for the onPremise kvstore.
-      //String kvstore_endpoint ="http://<your_hostname>:8080";
-      //handle = generateNoSQLHandleonPrem(kvstore_endpoint);
+      /*UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
+      give appropriate value of your endpoint for the onPremise kvstore.
+      String kvstore_endpoint ="http://<your_hostname>:8080";
+      handle = generateNoSQLHandleonPrem(kvstore_endpoint);*/
       try {
          createTable(handle);
          writeRows(handle, (MapValue)newvalue);
@@ -297,7 +297,7 @@ public class QueryData {
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
       /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider*/
-      //config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));
+      /*config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));*/
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
@@ -306,7 +306,7 @@ public class QueryData {
    private static NoSQLHandle generateNoSQLHandleCloud(String region, String compId) throws Exception {
       SignatureProvider ap = new SignatureProvider();
       NoSQLHandleConfig config = new NoSQLHandleConfig(region, ap);
-      // set your default compartment
+      /* set your default compartment*/
       config.setDefaultCompartment(compId);
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
@@ -347,7 +347,7 @@ public class QueryData {
          System.out.println("Put failed");
       }
    }
-   //Fetch rows from the table
+   /*Fetch rows from the table*/
    private static void fetchRows(NoSQLHandle handle,String sqlstmt) throws Exception {
 
       try (

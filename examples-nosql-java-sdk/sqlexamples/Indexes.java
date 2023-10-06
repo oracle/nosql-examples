@@ -17,16 +17,16 @@ public class Indexes{
    final static String tableName = "stream_acct";
    static NoSQLHandle handle;
    public static void main(String[] args) throws Exception {
-      //UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
-      //Add the appropriate values of your region and compartment OCID
-      //String region ="<your_region_identifier>";
-      //String compId ="<ocid_of_your_compartment>";
-      //handle = generateNoSQLHandleCloud(region,compId);
+      /*UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
+      Add the appropriate values of your region and compartment OCID
+      String region ="<your_region_identifier>";
+      String compId ="<ocid_of_your_compartment>";
+      handle = generateNoSQLHandleCloud(region,compId);*/
 
-      //UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
-      //give appropriate value of your endpoint for the onPremise kvstore.
-      //String kvstore_endpoint ="http://<your_hostname>:8080";
-      //handle = generateNoSQLHandleonPrem(kvstore_endpoint);
+      /*UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
+      give appropriate value of your endpoint for the onPremise kvstore.
+      String kvstore_endpoint ="http://<your_hostname>:8080";
+      handle = generateNoSQLHandleonPrem(kvstore_endpoint);*/
       try {
          createTab(handle);
          crtIndex(handle);
@@ -42,7 +42,7 @@ public class Indexes{
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
       /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider*/
-      //config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));
+      /*config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));*/
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
@@ -52,7 +52,7 @@ public class Indexes{
       SignatureProvider ap = new SignatureProvider();
       /* Create a NoSQL handle to access the cloud service */
       NoSQLHandleConfig config = new NoSQLHandleConfig(region, ap);
-      // set your mycompartment
+      /* set your mycompartment*/
       config.setDefaultCompartment(compId);
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;

@@ -30,7 +30,7 @@ public class Namespaces{
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
       /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider*/
-      //config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));
+      /*config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));*/
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }

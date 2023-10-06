@@ -18,7 +18,7 @@ public class Regions{
    final static String tableName = "stream_acct";
 
    public static void main(String[] args) throws Exception {
-      //Replace the placeholder below with your full hostname
+      /*Replace the placeholder below with your full hostname*/
       String kvstore_endpoint ="http://<your_hostname>:8080";
       NoSQLHandle handle = generateNoSQLHandleonPrem(kvstore_endpoint);
       try {
@@ -37,20 +37,20 @@ public class Regions{
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
       /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider*/
-      //config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));
+      /*config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));*/
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
    /* Create a remote region and a local region*/
    private static void crtRegion(NoSQLHandle handle) throws Exception {
-      // Create a remote region
+      /* Create a remote region*/
       String createRemRegDDL = "CREATE REGION "+ remRegName;
       SystemRequest sysreq1 = new SystemRequest();
       sysreq1.setStatement(createRemRegDDL.toCharArray());
       SystemResult sysres1 = handle.systemRequest​(sysreq1);
       sysres1.waitForCompletion​(handle, 60000,1000);
       System.out.println(" Remote Region " + remRegName + " is created");
-      // Create a local region
+      /* Create a local region*/
       String createLocRegDDL = "SET LOCAL REGION "+ localRegName;
       SystemRequest sysreq2 = new SystemRequest();
       sysreq2.setStatement(createLocRegDDL.toCharArray());

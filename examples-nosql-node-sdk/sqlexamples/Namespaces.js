@@ -1,10 +1,13 @@
+/*Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
 const TABLE_NAME = 'stream_acct';
 
 /**
   * Call the main function for this example
-  **/
+ **/
 donamespaces();
 
 async function donamespaces() {
@@ -21,7 +24,7 @@ async function donamespaces() {
 
 /* Create and return an instance of a NoSQLCLient object for onPremises*/
 function getConnection_onPrem() {
-   //replace the placeholder with your hostname
+   /*replace the placeholder with your hostname*/
    const kvstore_endpoint = `http://<hostname>:8080`;
    return new NoSQLClient({
       serviceType: "KVSTORE",
@@ -40,13 +43,13 @@ function getConnection_onPrem() {
 })*/
 }
 
-//create a namespace
+/*create a namespace*/
 async function createNS(handle) {
    const createNS = `CREATE NAMESPACE IF NOT EXISTS ns1`;
    let res = await handle.adminDDL(createNS);
    console.log('Namespace created: ns1' );
 }
-//drop a namespace
+/*drop a namespace*/
 async function dropNS(handle) {
    const dropNS = `DROP NAMESPACE ns1`;
    let res = await handle.adminDDL(dropNS);
