@@ -59,7 +59,7 @@ public class AlterTable{
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
-   /**
+   /*
    * Create a table and set your desired table capacity
    */
    private static void createTab(NoSQLHandle handle) throws Exception {
@@ -82,7 +82,7 @@ public class AlterTable{
       System.out.println("Table " + tableName + " is active");
    }
 
-    /**
+    /*
      * Alter the table stream_acct and add a column
      */
     private static void alterTab(NoSQLHandle handle) throws Exception {

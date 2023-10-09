@@ -11,10 +11,10 @@ docreatetable();
 
 async function docreatetable() {
    try {
-      /*if it is a cloud service uncomment the line below, else if it is onPremise, comment the line below*/
-      let handle = await getConnection_cloud();
-      /*if it is a onPremise uncomment the line below,else if it is cloud service, comment the line below*/
-      /*let handle = await getConnection_onPrem();*/
+      /*UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
+      let handle = await getConnection_cloud();*/
+      /*UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
+      let handle = await getConnection_onPrem();*/
       await createTable(handle);
       process.exit(0);
    } catch (error ) {

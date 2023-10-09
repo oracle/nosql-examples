@@ -58,7 +58,7 @@ public class Regions{
       sysres2.waitForCompletion​(handle, 60000,1000);
       System.out.println(" Local Region " + localRegName + " is created");
   }
-  /**
+  /*
    * Create a table and add the table in a region
    */
   private static void crtTabInRegion(NoSQLHandle handle) throws Exception {

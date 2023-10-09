@@ -54,9 +54,9 @@ public class CreateTable{
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
-   /**
-     * Creates a table and sets your desired table capacity
-     */
+   /*
+    * Creates a table and sets your desired table capacity
+   */
    private static void createTab(NoSQLHandle handle) throws Exception {
       String createTableDDL = "CREATE TABLE IF NOT EXISTS " + tableName +
                                                               "(acct_Id INTEGER," +

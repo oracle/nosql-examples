@@ -301,7 +301,7 @@ public class AddData {
       return handle;
    }
 
-   /**
+   /*
    * Create a simple table and set your desired table capacity
    */
    private static void createTable(NoSQLHandle handle) throws Exception {
@@ -325,7 +325,7 @@ public class AddData {
       System.out.println("Table " + tableName + " is active");
   }
 
-   /**
+   /*
    * Add a Row in the table
    */
    private static void writeRows(NoSQLHandle handle, MapValue value) throws Exception {

@@ -311,7 +311,7 @@ public class QueryData {
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
-  /**
+  /*
    * Create a simple table and set your desired table capacity
    */
    private static void createTable(NoSQLHandle handle) throws Exception {
@@ -334,7 +334,7 @@ public class QueryData {
       System.out.println("Table " + tableName + " is active");
     }
 
-    /**
+    /*
      * Add a row of data
      */
    private static void writeRows(NoSQLHandle handle, MapValue value) throws Exception {

@@ -58,7 +58,7 @@ public class Indexes{
       return handle;
    }
 
-   /**
+   /*
     * Create a table and set the desired table capacity
    */
    private static void createTab(NoSQLHandle handle) throws Exception {
@@ -80,7 +80,7 @@ public class Indexes{
             1000); /* delay ms for poll */
       System.out.println("Table " + tableName + " is active");
    }
-   /**
+   /*
    * Create an index acct_episodes in the stream_acct table
    */
    private static void crtIndex(NoSQLHandle handle) throws Exception {
