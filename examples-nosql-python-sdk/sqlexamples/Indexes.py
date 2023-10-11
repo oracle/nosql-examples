@@ -9,22 +9,22 @@ from borneo.kv import StoreAccessTokenProvider
 # Given a region, and compartment, instantiate a connection to the
 # cloud service and return it
 def get_connection_cloud():
-   #replace the placeholder with your region identifier
+   # replace the placeholder with your region identifier
    region = '<your_region_identifier>'
    provider = SignatureProvider()
-   #If using the DEFAULT profile with the config file in default location  =~/.oci/config
+   # If using the DEFAULT profile with the config file in default location  =~/.oci/config
    config = NoSQLHandleConfig(region, provider)
-   #replace the placeholder with the ocid of your compartment
+   # replace the placeholder with the ocid of your compartment
    config.set_default_compartment("<ocid_of_your_compartment>")
    return(NoSQLHandle(config))
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-    #replace the placeholder with the name of your local host
+    # replace the placeholder with the name of your local host
     kvstore_endpoint ='http://<hostname>:8080'
     provider = StoreAccessTokenProvider()
-    #If using a secure store pass the username, password of the store to StoreAccessTokenProvider
-    #provider = StoreAccessTokenProvider(username, password)
+    # If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+    # provider = StoreAccessTokenProvider(username, password)
     return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
 # Create a table and set the table limits
@@ -43,7 +43,7 @@ def create_table(handle):
     else:
         raise NameError('Table stream_acct is in an unexpected state ' + str(table_result.get_state()))
 
-#create an index
+# create an index
 def create_index(handle):
 
    statement = '''CREATE INDEX acct_episodes ON stream_acct (acct_data.contentStreamed[].seriesInfo[].episodes[]  AS ANYATOMIC)'''
@@ -52,7 +52,7 @@ def create_index(handle):
    table_result.wait_for_completion(handle, 40000, 3000)
    print('Index acct_episodes on the table stream_acct is created')
 
-#drop the index
+# drop the index
 def drop_index(handle):
    statement = '''DROP INDEX acct_episodes ON stream_acct'''
    request = TableRequest().set_statement(statement)
@@ -64,7 +64,7 @@ def main():
    # if cloud service uncomment this. else if onPremise comment this line
    handle = get_connection_cloud()
    # if onPremise uncomment this. elkse if cloud service comment this line
-   #handle = get_connection_onprem()
+   # handle = get_connection_onprem()
    create_table(handle)
    create_index(handle)
    drop_index(handle)

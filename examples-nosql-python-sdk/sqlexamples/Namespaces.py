@@ -8,14 +8,14 @@ from borneo.kv import StoreAccessTokenProvider
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-   #replace the placeholder with the name of your local host
+   # replace the placeholder with the name of your local host
    kvstore_endpoint ='http://<hostname>:8080'
    provider = StoreAccessTokenProvider()
-   #If using a secure store pass the username, password of the store to StoreAccessTokenProvider
-   #provider = StoreAccessTokenProvider(username, password)
+   # If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+   # provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
-#Creates a namespace
+# Creates a namespace
 def create_ns(handle):
    statement = '''CREATE NAMESPACE IF NOT EXISTS ns1'''
    sysreq = SystemRequest().set_statement(statement)
@@ -23,7 +23,7 @@ def create_ns(handle):
    sys_result.wait_for_completion(handle, 40000, 3000)
    print('Created namespace: ns1')
 
-#Drop a namespace
+# Drop a namespace
 def drop_ns(handle):
    statement = '''DROP NAMESPACE ns1'''
    sysreq = SystemRequest().set_statement(statement)

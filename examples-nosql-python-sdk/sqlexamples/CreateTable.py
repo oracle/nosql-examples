@@ -21,11 +21,11 @@ def get_connection_cloud():
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-   #replace the placeholder with the name of your local host
+   # replace the placeholder with the name of your local host
    kvstore_endpoint ='http://<hostname>:8080'
    provider = StoreAccessTokenProvider()
-   #If using a secure store pass the username, password of the store to StoreAccessTokenProvider
-   #provider = StoreAccessTokenProvider(username, password)
+   # If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+   # provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
 # Create a table and set the table limits

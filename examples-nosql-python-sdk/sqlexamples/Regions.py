@@ -8,29 +8,29 @@ from borneo.kv import StoreAccessTokenProvider
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-   #replace the placeholder with the name of your local host
+   # replace the placeholder with the name of your local host
    kvstore_endpoint ='http://<hostname>:8080'
    provider = StoreAccessTokenProvider()
-   #If using a secure store pass the username, password of the store to StoreAccessTokenProvider
-   #provider = StoreAccessTokenProvider(username, password)
+   # If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+   # provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
 # create a remote and local region
 def create_region(handle):
-   #Create a remote region
+   # Create a remote region
    statement = '''CREATE REGION LON'''
    sysreq = SystemRequest().set_statement(statement)
    sys_result = handle.system_request(sysreq)
    sys_result.wait_for_completion(handle, 40000, 3000)
    print('Remote region LON is created')
-   #Create a local region
+   # Create a local region
    statement1 = '''SET LOCAL REGION FRA'''
    sysreq1 = SystemRequest().set_statement(statement1)
    sys_result1 = handle.system_request(sysreq1)
    sys_result1.wait_for_completion(handle, 40000, 3000)
    print('Local region FRA is created')
 
-#Create a table in the local region
+# Create a table in the local region
 def create_tab_region(handle):
    statement = '''create table if not exists stream_acct (acct_Id INTEGER,
                                                            profile_name STRING,
@@ -45,7 +45,7 @@ def create_tab_region(handle):
    else:
       raise NameError('Table stream_acct is in an unexpected state ' + str(table_result.get_state()))
 
-#Drop the table from a region
+# Drop the table from a region
 def drop_tab_region(handle):
    statement = '''DROP TABLE stream_acct'''
    request = TableRequest().set_statement(statement)
@@ -53,7 +53,7 @@ def drop_tab_region(handle):
    table_result.wait_for_completion(handle, 40000, 3000)
    print('Dropped table: stream_acct')
 
-#Drop the region
+# Drop the region
 def drop_region(handle):
    statement = '''DROP REGION LON'''
    sysreq = SystemRequest().set_statement(statement)

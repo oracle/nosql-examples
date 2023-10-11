@@ -10,22 +10,22 @@ from borneo.kv import StoreAccessTokenProvider
 # cloud service and return it
 def get_connection_cloud():
    print("Connecting to the Oracle NoSQL Cloud Service")
-   #replace the placeholder with your region identifier
+   # replace the placeholder with your region identifier
    region = '<your_region_identifier>'
    provider = SignatureProvider()
-   #If using the DEFAULT profile with the config file in default location  =~/.oci/config
+   # If using the DEFAULT profile with the config file in default location  =~/.oci/config
    config = NoSQLHandleConfig(region, provider)
-   #replace the placeholder with the ocid of your compartment
+   # replace the placeholder with the ocid of your compartment
    config.set_default_compartment("<ocid_of_your_compartment>")
    return(NoSQLHandle(config))
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-   #replace the placeholder with the name of your local host
+   # replace the placeholder with the name of your local host
    kvstore_endpoint ='http://<hostname>:8080'
    provider = StoreAccessTokenProvider()
-   #If using a secure store pass the username, password of the store to StoreAccessTokenProvider
-   #provider = StoreAccessTokenProvider(username, password)
+   # If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+   # provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
 # Create a table and set the table limits
@@ -328,7 +328,7 @@ def main():
    # if cloud service uncomment this. else if onPremise comment this line
    handle = get_connection_cloud()
    # if onPremise uncomment this. elkse if cloud service comment this line
-   #handle = get_connection_onprem()
+   # handle = get_connection_onprem()
    create_table(handle)
    insert_record(handle,'stream_acct',acct1)
    insert_record(handle,'stream_acct',acct2)
