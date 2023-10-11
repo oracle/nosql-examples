@@ -1,4 +1,4 @@
-/*Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+/* Copyright (c) 2020, 2023 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 */
 import oracle.nosql.driver.NoSQLHandle;
@@ -18,7 +18,7 @@ public class Regions{
    final static String tableName = "stream_acct";
 
    public static void main(String[] args) throws Exception {
-      /*Replace the placeholder below with your full hostname*/
+      /* Replace the placeholder below with your full hostname */
       String kvstore_endpoint ="http://<your_hostname>:8080";
       NoSQLHandle handle = generateNoSQLHandleonPrem(kvstore_endpoint);
       try {
@@ -36,21 +36,21 @@ public class Regions{
    private static NoSQLHandle generateNoSQLHandleonPrem(String kvstore_endpoint) throws Exception {
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
-      /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider*/
-      /*config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password));*/
+      /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider */
+      /* config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password)); */
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
-   /* Create a remote region and a local region*/
+   /* Create a remote region and a local region */
    private static void crtRegion(NoSQLHandle handle) throws Exception {
-      /* Create a remote region*/
+      /* Create a remote region */
       String createRemRegDDL = "CREATE REGION "+ remRegName;
       SystemRequest sysreq1 = new SystemRequest();
       sysreq1.setStatement(createRemRegDDL.toCharArray());
       SystemResult sysres1 = handle.systemRequest​(sysreq1);
       sysres1.waitForCompletion​(handle, 60000,1000);
       System.out.println(" Remote Region " + remRegName + " is created");
-      /* Create a local region*/
+      /* Create a local region */
       String createLocRegDDL = "SET LOCAL REGION "+ localRegName;
       SystemRequest sysreq2 = new SystemRequest();
       sysreq2.setStatement(createLocRegDDL.toCharArray());
@@ -78,7 +78,7 @@ public class Regions{
         */
         System.out.println("Table " + tableName + " is active");
    }
-   /* Drop a table from a region*/
+   /* Drop a table from a region */
    private static void dropTabInRegion(NoSQLHandle handle) throws Exception {
       String dropTableDDL = "DROP TABLE " + tableName;
       TableRequest treq = new TableRequest().setStatement(dropTableDDL);
@@ -87,7 +87,7 @@ public class Regions{
           1000); /* delay ms for poll */
       System.out.println("Table " + tableName + " is dropped");
    }
-   /* Drop a region*/
+   /* Drop a region */
    private static void dropRegion(NoSQLHandle handle, String regName) throws Exception {
       String dropNSDDL = "DROP REGION " + regName;
       SystemRequest sysreq = new SystemRequest();

@@ -1,19 +1,15 @@
-/*-
- * Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- *  https://oss.oracle.com/licenses/upl/
- */
+// Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
+// Licensed under the Universal Permissive License v 1.0 as shown at
+//  https://oss.oracle.com/licenses/upl/
+
 namespace Oracle.NoSQL.SDK.Samples
 {
     using System;
     using System.Threading.Tasks;
     using Oracle.NoSQL.SDK;
-    // -----------------------------------------------------------------------
+   // -----------------------------------------------------------------------
    // Run the example as:
-   //
    // dotnet run -f <target framework>
-   //
    // where:
    //   - <target framework> is target framework moniker, supported values
    //     are netcoreapp5.1 and net7.0
@@ -245,14 +241,14 @@ namespace Oracle.NoSQL.SDK.Samples
         	   }]
         	}]}
       }";
-      //replace the place holder for compartment with the OCID of your compartment
+      // replace the place holder for compartment with the OCID of your compartment
       public static async Task Main(string[] args)
       {
          try {
-            //if using cloud service uncomment the code below, else if using onPremises comment it
+            // if using cloud service uncomment the code below, else if using onPremises comment it
             var client = await getconnection_cloud();
-            //if using onPremise uncomment the code below, else if using cloud service comment it
-            //var client = await getconnection_onPrem();
+            // if using onPremise uncomment the code below, else if using cloud service comment it
+            // var client = await getconnection_onPrem();
             Console.WriteLine("Created NoSQLClient instance");
             await crtTabAddData(client);
             Console.WriteLine("\nSuccess!");
@@ -270,10 +266,10 @@ namespace Oracle.NoSQL.SDK.Samples
             }
          }
       }
-      //Get a connection handle for Oracle NoSQL Database Cloud Service
+      // Get a connection handle for Oracle NoSQL Database Cloud Service
       private async static Task<NoSQLClient> getconnection_cloud()
       {
-         //replace the place holder for compartment with your region identifier and OCID of your compartment
+         // replace the place holder for compartment with your region identifier and OCID of your compartment
          var client =  new NoSQLClient(new NoSQLConfig
          {
             Region = <your_region_identifier>,
@@ -281,10 +277,10 @@ namespace Oracle.NoSQL.SDK.Samples
          });
          return client;
       }
-      //Get a connection handle for onPremise data store
+      // Get a connection handle for onPremise data store
       private async static Task<NoSQLClient> getconnection_onPrem()
       {
-         //replace the placeholder with your fullname of the host
+         // replace the placeholder with your fullname of the host
          var client = new NoSQLClient(new NoSQLConfig
          {
             ServiceType = ServiceType.KVStore,

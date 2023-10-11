@@ -16,9 +16,9 @@ import (
 // client handle to use for data operations.
 func createClient_cloud() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
-	//replace the placeholder with your region identifier
+	// replace the placeholder with your region identifier
 	region := "<your_region_identifier>"
-	//Replace the value of config file location and the ocid of your compartment
+	// Replace the value of config file location and the ocid of your compartment
 	sp, err := iam.NewSignatureProviderFromFile("<location_config_file>","","","<your_compartment_ocid>")
 	if err != nil {
 		return nil, fmt.Errorf("cannot create a Signature Provider: %v", err)
@@ -34,14 +34,14 @@ func createClient_cloud() (*nosqldb.Client, error) {
 // Creates a client with the supplied configurations for onPremise database
 func createClient_onPrem() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
-	//replace the placeholder with the fullname of your host
+	// replace the placeholder with the fullname of your host
 	endpoint := "http://<hostname>:8080"
 	cfg= nosqldb.Config{
       Endpoint: endpoint,
       Mode:     "onprem",
    }
-	//If using a secure store pass the username, password of the store to Config
-	//cfg := nosqldb.Config{
+	// If using a secure store pass the username, password of the store to Config
+	// cfg := nosqldb.Config{
    //    Mode:     "onprem",
    //    Username: "<username>",
    //    Password: []byte("<password>"),
@@ -83,10 +83,10 @@ func createTable(client *nosqldb.Client, err error, tableName string)(){
 	 return
 }
 func main() {
-   //if using cloud service uncomment the line below. else if using onPremises comment this line out
+   // if using cloud service uncomment the line below. else if using onPremises comment this line out
 	client, err := createClient_cloud()
-	//if using onPrem uncomment the line below, else if using cloud service, comment this line
-   //client, err := createClient_onPrem()
+	// if using onPrem uncomment the line below, else if using cloud service, comment this line
+   // client, err := createClient_onPrem()
 	 if err != nil {
       fmt.Printf("cannot create NoSQL client: %v\n", err)
       return

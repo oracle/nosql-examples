@@ -11,14 +11,14 @@ import (
 // Creates a client with the supplied configurations for onPremise database
 func createClient_onPrem() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
-	//replace the placeholder with the fullname of your host
+	// replace the placeholder with the fullname of your host
 	endpoint := "http://<hostname>:8080"
 	cfg= nosqldb.Config{
       Endpoint: endpoint,
       Mode:     "onprem",
    }
-	//If using a secure store pass the username, password of the store to Config
-	//cfg := nosqldb.Config{
+	// If using a secure store pass the username, password of the store to Config
+	// cfg := nosqldb.Config{
    //    Mode:     "onprem",
    //    Username: "<username>",
    //    Password: []byte("<password>"),
@@ -29,7 +29,7 @@ func createClient_onPrem() (*nosqldb.Client, error) {
    client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
-//Creates a remote and a local region
+// Creates a remote and a local region
 func crtRegion(client *nosqldb.Client, err error)(){
 	// Create a remote region
 	stmt := fmt.Sprintf("CREATE REGION LON")
@@ -57,7 +57,7 @@ func crtRegion(client *nosqldb.Client, err error)(){
 	fmt.Println("Created REGION FRA ")
 	return
 }
-//creates a table in a specific region
+// creates a table in a specific region
 func crtTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 	stmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s ("+
 		"acct_Id INTEGER," +
@@ -87,7 +87,7 @@ func crtTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 	fmt.Println("Created table ", tableName)
 	return
 }
-//drops a table from a region
+// drops a table from a region
 func drpTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 	stmt := fmt.Sprintf("DROP TABLE %s",tableName)
 	tableReq := &nosqldb.TableRequest{
@@ -106,7 +106,7 @@ func drpTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 	fmt.Println("Dropped table ", tableName)
 	return
 }
-//drop a region
+// drop a region
 func dropRegion(client *nosqldb.Client, err error)(){
 	stmt := fmt.Sprintf("DROP REGION LON")
 	sysReq := &nosqldb.SystemRequest{

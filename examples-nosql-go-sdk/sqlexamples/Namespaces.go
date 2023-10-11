@@ -12,14 +12,14 @@ import (
 // Creates a client with the supplied configurations for onPremise database
 func createClient_onPrem() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
-	//replace the placeholder with the fullname of your host
+	// replace the placeholder with the fullname of your host
 	endpoint := "http://<hostname>:8080"
 	cfg= nosqldb.Config{
       Endpoint: endpoint,
       Mode:     "onprem",
    }
-	//If using a secure store pass the username, password of the store to Config
-	//cfg := nosqldb.Config{
+	// If using a secure store pass the username, password of the store to Config
+	// cfg := nosqldb.Config{
    //    Mode:     "onprem",
    //    Username: "<username>",
    //    Password: []byte("<password>"),

@@ -1,4 +1,4 @@
-/*Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+/* Copyright (c) 2020, 2023 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 'use strict';
@@ -12,10 +12,10 @@ doindexes();
 
 async function doindexes() {
    try {
-      /*UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
-      let handle = await getConnection_cloud();*/
-      /*UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
-      let handle = await getConnection_onPrem();*/
+      /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
+      let handle = await getConnection_cloud(); */
+      /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
+      let handle = await getConnection_onPrem(); */
       await createTable(handle);
       await createIndex(handle);
       await dropIndex(handle);
@@ -26,18 +26,18 @@ async function doindexes() {
    }
 }
 /* Create and return an instance of a NoSQLCLient object for cloud service */
-/* replace the placeholder for compartment with the OCID of your compartment.*/
+/* replace the placeholder for compartment with the OCID of your compartment. */
 function getConnection_cloud() {
-   /*replace the placeholder with your region identifier and with the ocid of your compartment id*/
+   /* replace the placeholder with your region identifier and with the ocid of your compartment id */
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,
       compartment: "<ocid_of_your_compartment>",
    });
 }
-/* Create and return an instance of a NoSQLCLient object for onPremises*/
+/* Create and return an instance of a NoSQLCLient object for onPremises */
 function getConnection_onPrem() {
-   /*replace the placeholder with your hostname*/
+   /* replace the placeholder with your hostname */
    const kvstore_endpoint = `http://<hostname>:8080`;
    return new NoSQLClient({
       serviceType: "KVSTORE",
@@ -53,9 +53,9 @@ function getConnection_onPrem() {
             "password": ""
          }
       }
-})*/
+}) */
 }
-/*creates a table*/
+/* creates a table */
 async function createTable(handle) {
    const createDDL = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (acct_Id INTEGER,
                                                                  profile_name STRING,
@@ -73,13 +73,13 @@ async function createTable(handle) {
    });
    console.log('Table created: ' + TABLE_NAME);
 }
-/*creates an index*/
+/* creates an index */
 async function createIndex(handle) {
    const crtindDDL = `CREATE INDEX acct_episodes ON ${TABLE_NAME}(acct_data.contentStreamed[].seriesInfo[].episodes[]  AS ANYATOMIC)`;
    let res =  await handle.tableDDL(crtindDDL);
    console.log('Index acct_episodes is created on table:' + TABLE_NAME);
 }
-/*drops an index*/
+/* drops an index */
 async function dropIndex(handle) {
    const dropindDDL = `DROP INDEX acct_episodes ON ${TABLE_NAME}`;
    let res =  await handle.tableDDL(dropindDDL);

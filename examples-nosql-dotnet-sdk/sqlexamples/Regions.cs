@@ -1,9 +1,6 @@
-/*-
- * Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- *  https://oss.oracle.com/licenses/upl/
- */
+// Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
+// Licensed under the Universal Permissive License v 1.0 as shown at
+//  https://oss.oracle.com/licenses/upl/
 namespace Oracle.NoSQL.SDK.Samples
 {
    using System;
@@ -11,12 +8,10 @@ namespace Oracle.NoSQL.SDK.Samples
    using Oracle.NoSQL.SDK;
    // -----------------------------------------------------------------------
    // Run the example as:
-   //
    // dotnet run -f <target framework>
-   //
    // where:
    //   - <target framework> is target framework moniker, supported values
-   //     are netcoreapp3.1 and net5.0
+   //     are netcoreapp5.1 and net7.0
    // -----------------------------------------------------------------------
    public class Regions
    {
@@ -49,7 +44,7 @@ namespace Oracle.NoSQL.SDK.Samples
       }
       private async static Task<NoSQLClient> getconnection_onPrem()
       {
-         //replace the placeholder with your fullname of the host
+         // replace the placeholder with your fullname of the host
          var client = new NoSQLClient(new NoSQLConfig
          {
             ServiceType = ServiceType.KVStore,
