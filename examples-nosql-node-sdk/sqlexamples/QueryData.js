@@ -279,9 +279,9 @@ const acct3= `
 const stmt1 = 'select * from stream_acct';
 const stmt2 = 'select account_expiry, acct.acct_data.lastName, acct.acct_data.contentStreamed[].showName from stream_acct acct where acct_id=1';
 
-/**
-  * Call the main function for this example
- **/
+/*
+ * Call the main function for this example
+ */
 doQueryData();
 
 async function doQueryData() {

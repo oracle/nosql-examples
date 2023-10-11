@@ -4,9 +4,9 @@
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
 const TABLE_NAME = 'stream_acct';
-/**
+/*
   * Call the main function for this example
- **/
+ */
 docreatetable();
 
 async function docreatetable() {

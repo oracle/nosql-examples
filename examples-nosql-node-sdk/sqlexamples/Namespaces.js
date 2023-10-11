@@ -5,9 +5,9 @@
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
 const TABLE_NAME = 'stream_acct';
 
-/**
-  * Call the main function for this example
- **/
+/*
+ * Call the main function for this example
+ */
 donamespaces();
 
 async function donamespaces() {

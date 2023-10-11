@@ -5,14 +5,14 @@
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
 const TABLE_NAME = 'stream_acct';
 
-/**
-  * Call the main function for this example
- **/
+/*
+ * Call the main function for this example
+ */
 doregions();
 
-/** This function will authenticate with the cloud service,
-  * create a table, write a record to the table, then read that record back
- **/
+/* This function will authenticate with the cloud service,
+ * create a table, write a record to the table, then read that record back
+ */
 async function doregions() {
     try {
         let handle = await getConnection_onPrem();
