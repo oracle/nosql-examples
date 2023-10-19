@@ -22,6 +22,7 @@ This repository stores a variety of examples demonstrating how to use the Oracle
 | ------------- | ------------- |
 | [cluster_setup](./cluster_setup) | Deploying Oracle NoSQL Database on the Oracle Cloud Infrastructure `deploy-nosql` |
 | [examples-nosql-cluster-deployment](./examples-nosql-cluster-deployment) | Examples allowing you to learn how to deploy a NoSQL cluster/NoSQL store - the most popular topologies |
+| [examples-nosql-kvlocal](./examples-nosql-kvlocal) | example of Java Application embedding KVLocal  |
 | [examples-nosql-java-direct-driver](./examples-nosql-java-direct-driver) | Examples using the `nosql-java-direct-driver` |
 | [examples-nosql-java-sdk](./examples-nosql-java-sdk) | Examples using the `nosql-java-sdk` |
 | [examples-nosql-node-sdk](./examples-nosql-node-sdk) | Examples using the `nosql-node-sdk` |
@@ -62,7 +63,7 @@ In the development world, practice makes master. That is why you must find as ma
 ways to practice as possible. Never stop learning. Follow our LiveLabs
 
 * [Get started with tables in Oracle NoSQL Database Cloud Service](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=642) `sql-for-nosql` `nosql-java-sdk` `nosql-node-sdk` `nosql-dotnet-sdk` `nosql-go-sdk` `nosql-python-sdk`
-* [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://bit.ly/dbwlab23) `sql-for-nosql`  `nosql-node-sdk` 
+* [Discover serverless apps using Oracle NoSQL Database Cloud Service — beginner level](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=879) `sql-for-nosql`  `nosql-node-sdk` 
 
 > Those labs were specialled designed for Application Developers, Architects, Administrators
 > and DevOps Engineers.
@@ -252,4 +253,19 @@ Leverage knowledge from Oracle experts. Use our reference architectures, solutio
 hybrid, and on-premises workloads.
 
 [Explore Oracle Architecture Center](https://docs.oracle.com/pls/topic/lookup?ctx=en/solutions&id=solutions-home)
+
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
+## License
+
+Copyright (c) 2018, 2023 Oracle and/or its affiliates.
+
+Released under the Universal Permissive License v1.0 as shown at
+<https://oss.oracle.com/licenses/upl/>.
 

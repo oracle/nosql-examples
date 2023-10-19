@@ -115,4 +115,75 @@ In this section, we will use those scripts to highlight how easy is deploy a NoS
 ---|
 `kv_proxy &`|
 
+## Deployed on 6 Storage Node – capacity=3 - replication factor = 3 and secondary zone
+  ![Oracle NoSQL](./primary-secondary-cap3-rf3.jpg)
 
+`node1-nosql` | Other SN ( `node2-nosql node3-nosql node4-nosql node5-nosql node6-nosql`) |
+---|---|
+`cd $HOME/examples-nosql-cluster-deployment/script` | `cd $HOME/examples-nosql-cluster-deployment/script` |
+`source env.sh` | `source env.sh` |
+`bash stop.sh` | `bash stop.sh` | 
+`bash clean.sh` | `bash clean.sh` | 
+`bash boot-cap3.sh` | `bash boot-cap3.sh` | 
+`kv_admin load -file primary-secondary-rf3.kvs` | -- |
+
+`node1-nosql` |
+---|
+`kv_proxy &`|
+
+## Administration - Switchover
+
+````shell
+cd $HOME/examples-nosql-cluster-deployment/script
+kv_admin load -file maintenance.kvs
+````
+
+## Administration - Failover and Switchover
+
+Note: For learning purposes, we recommend to test this administration task using a Deployment on 2 Storage Nodes
+
+### Failover
+
+#### Simulating the lost of Data Center 1
+
+`Data Center 1`
+````shell
+cd $HOME/examples-nosql-cluster-deployment/script
+source env.sh
+bash stop.sh 
+rm -rf $KVDATA
+````
+
+#### Doing a failover to Data Center 2
+
+`Data Center 2`
+````shell
+kv_admin repair-admin-quorum -znname DataCenter2; 
+kv_admin plan failover -znname DataCenter2 -type primary -znname DataCenter1 -type offline-secondary -wait; 
+````
+
+### Switchover
+
+#### Simulating the restore of Data Center 1
+
+`Data Center 1`
+````shell
+cd $HOME/examples-nosql-cluster-deployment/script
+source env.sh
+mkdir -p ${KVDATA} 
+mkdir -p ${KVDATA}/disk1
+mkdir -p ${KVDATA}/disk2 
+mkdir -p ${KVDATA}/disk3
+bash restart.sh 
+````
+
+#### Repair the topology and doing a switchover to Data Center 1
+
+`Data Center 2`
+````shell
+cd $HOME/examples-nosql-cluster-deployment/script
+source env.sh
+kv_admin plan repair-topology -wait
+kv_admin await-consistent -timeout 1800 -znname DataCenter1;
+kv_admin load -file switchover.kvs
+````

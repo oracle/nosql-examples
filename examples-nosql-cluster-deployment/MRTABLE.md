@@ -38,7 +38,7 @@ Before executing, please modify the env.sh and provide **KVSTORE** names for you
 `cp template_config1x1.kvs ${KVSTORE}_config1x1.kvs` |`cp template_config1x1.kvs ${KVSTORE}_config1x1.kvs` |
 `sed -i "s/<HERE>/$KVSTORE/g" ${KVSTORE}_config1x1.kvs` | `sed -i "s/<HERE>/$KVSTORE/g" ${KVSTORE}_config1x1.kvs` |
 `sed -i "s/<KVNODE_1>/$KVHOST/g" ${KVSTORE}_config1x1.kvs` | `sed -i "s/<KVNODE_1>/$KVHOST/g" ${KVSTORE}_config1x1.kvs` |
-`kv_admin load -file ${KVSTORE}_config1x1.kvs`|
+`kv_admin load -file ${KVSTORE}_config1x1.kvs`|`kv_admin load -file ${KVSTORE}_config1x1.kvs` |
 
 1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
 ---|---|
@@ -71,21 +71,23 @@ After building the 2 clusters
 
 You must create an MR Table on each KVStore in the connected graph and specify the list of regions that the table should span. For this first example, you must create the users table as an **MR Table at both the regions**, in any order. 
 
-````
-CREATE TABLE Users(uid INTEGER, person JSON,PRIMARY KEY(uid))  IN REGIONS CO , FR;
-````
+Use `kv_sql` to start the SQL Shell
+
+1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
+---|---|
+`CREATE TABLE Users(uid INTEGER, person JSON,PRIMARY KEY(uid))  IN REGIONS CO , FR;`|`CREATE TABLE Users(uid INTEGER, person JSON,PRIMARY KEY(uid))  IN REGIONS CO , FR;`|
+
 
 After creating the MR Table, you can perform read or write operations on the table using the existing data access APIs or DML statements. There is no change to any existing
 data access APIs or DML statements to work with the MR Tables. Perform DML operations on the users table in one region, and verify if the changes are replicated to the
 other region. 
 
-````
-insert into users values(1,{"firstName":"jack","lastName":"ma","location":"FR"});
-insert into users values(2, {"firstName":"foo","lastName":"bar","location":null});
-update users u set u.person.location = "FR" where uid = 2;
-update users u set u.person.location= "CO" where uid =1;
-select * from users;
-````
+1st cluster - `node1-nosql` | 2nd cluster - `node2-nosql`
+---|---|
+`insert into users values(1,{"firstName":"jack","lastName":"ma","location":"FR"});`|`insert into users values(2, {"firstName":"foo","lastName":"bar","location":null});`|
+`update users u set u.person.location = "FR" where uid = 2;`|`update users u set u.person.location= "CO" where uid =1;`
+`select * from users;`|`select * from users;`|
+
 
 [In this blog](https://blogs.oracle.com/nosql/nosql-crdt), we discussed how vital conflict detection and resolution is in an active-active replication.
 -    Oracle NoSQL Multi-Region solution enabling predictable low latency and response time from anywhere in the world.
@@ -102,10 +104,10 @@ The instructions below specify a manual procedure for creating a backup of a mul
 The [migrator-export-users.json](./script/migrator-export-users.json) and [migrator-import-users.json](./script/migrator-import-users.json) show an example of scripts used to export/import data in a MR table configuration. In this case, we are exporting in a region, and we decided to do the import in the other region.
 
 ````
-~/nosql-migrator-1.4.0/runMigrator --config migrator-export-users.json
+~/nosql-migrator-1.5.0/runMigrator --config migrator-export-users.json
 ````
 ````
-~/nosql-migrator-1.4.0/runMigrator --config migrator-import-users.json
+~/nosql-migrator-1.5.0/runMigrator --config migrator-import-users.json
 ````
 Use the multi-region statistics to find the most up to date region for the table that you wish to back up. Use the command `show mrtable-agent-statistics -agent 0 -json` to find the region that shows the smallest laggingMS value for the “max” attribute.  This region will contain the most up-to-date version of your table.
 

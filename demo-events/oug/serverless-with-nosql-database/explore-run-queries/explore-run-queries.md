@@ -293,7 +293,7 @@ Deleting tables is an async operation, so you will not immediately see the resul
 
 
 * [Oracle NoSQL Database Cloud Service page](https://www.oracle.com/database/nosql-cloud.html)
-* [About Oracle NoSQL Database Cloud Service](https://docs.oracle.com/pls/topic/lookup?ctx=cloud&id=CSNSD-GUID-88373C12-018E-4628-B241-2DFCB7B16DE8)
+* [About Oracle NoSQL Database Cloud Service](https://docs.oracle.com/en/cloud/paas/nosql-cloud/index.html)
 * [Java API Reference Guide](https://docs.oracle.com/en/cloud/paas/nosql-cloud/csnjv/index.html)
 * [Node API Reference Guide](https://oracle.github.io/nosql-node-sdk/)
 * [Python API Reference Guide](https://nosql-python-sdk.readthedocs.io/en/latest/index.html)

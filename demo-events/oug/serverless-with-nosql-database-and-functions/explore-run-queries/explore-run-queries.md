@@ -212,8 +212,8 @@ In this task, we are going to load a record using a python function.  This uses 
     <copy>
     cd ~/serverless-with-nosql-database/
     source ~/serverless-with-nosql-database/env.sh
-    pip3 install borneo
-    pip3 install cmd2
+    pip3 install borneo --user
+    pip3 install cmd2 --user
 
     </copy>
     ```

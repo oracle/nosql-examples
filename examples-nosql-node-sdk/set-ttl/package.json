@@ -1,0 +1,16 @@
+{
+  "name": "set-ttl",
+  "version": "1.0.0",
+  "description": "Basic demo of setting TTL with Oracle NoSQL",
+  "private": true,
+  "main": "set-ttl.js",
+  "scripts": {
+    "start": "node set-ttl.js"
+  },
+  "keywords": [],
+  "author": "dario.vega@oracle.com",
+  "license": "MIT",
+  "dependencies": {
+    "oracle-nosqldb": "^5.5.0"
+  }
+}

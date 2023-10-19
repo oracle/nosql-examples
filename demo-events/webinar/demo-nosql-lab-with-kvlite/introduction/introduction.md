@@ -42,7 +42,6 @@ This workshop assumes you have:
 ## Learn More
 
 * [Oracle NoSQL Database Cloud Service page](https://www.oracle.com/database/nosql-cloud.html)
-* [About Oracle NoSQL Database Cloud Service](https://docs.oracle.com/pls/topic/lookup?ctx=cloud&id=CSNSD-GUID-88373C12-018E-4628-B241-2DFCB7B16DE8)
 * [About Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm)
 
 ## Acknowledgements

@@ -53,6 +53,11 @@ async function createTable (client) {
 }
 
 function createNoSQLClient () {
+  console.log(process.env.NOSQL_ServiceType)
+  console.log(process.env.NOSQL_REGION)
+  console.log(process.env.NOSQL_COMPID)
+  
+
   switch (process.env.NOSQL_ServiceType) {
     case 'useInstancePrincipal':
       return new NoSQLClient({
@@ -72,6 +77,16 @@ function createNoSQLClient () {
           iam: {
             useInstancePrincipal: true,
             delegationTokenProvider: process.env.OCI_DELEGATION_TOKEN_FILE
+          }
+        }
+      })
+    case 'useResourcePrincipal':
+      return new NoSQLClient({
+        region: process.env.NOSQL_REGION,
+        compartment: process.env.NOSQL_COMPID,
+        auth: {
+          iam: {
+            useResourcePrincipal: true,
           }
         }
       })

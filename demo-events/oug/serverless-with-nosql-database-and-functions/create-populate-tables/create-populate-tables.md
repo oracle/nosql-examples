@@ -86,7 +86,7 @@ In this task we are going to create tables using the Cloud Shell, and OCI CLI in
     <copy>
     oci nosql table create --compartment-id "$COMP_ID"   \
     --name demo --ddl-statement "$DDL_TABLE" \
-    --is-auto-reclaimable true \
+    --is-auto-reclaimable false \
     --table-limits="{\"maxReadUnits\": 50,  \"maxStorageInGBs\": 25,  \"maxWriteUnits\": 50 }"
     </copy>
     ```
@@ -100,7 +100,7 @@ In this task we are going to create tables using the Cloud Shell, and OCI CLI in
     <copy>
     oci nosql table create --compartment-id "$COMP_ID"   \
     --name demoKeyVal  --ddl-statement "$DDL_TABLE" \
-    --is-auto-reclaimable true \
+    --is-auto-reclaimable false \
     --table-limits="{\"maxReadUnits\": 50,  \"maxStorageInGBs\": 25,  \"maxWriteUnits\": 50 }"
     </copy>
     ```
