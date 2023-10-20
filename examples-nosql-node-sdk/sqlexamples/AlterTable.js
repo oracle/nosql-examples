@@ -4,24 +4,28 @@
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
 const TABLE_NAME = 'stream_acct';
+
 /*
  * Call the main function for this example
  */
-docreatetable();
+doaltertable();
 
-async function docreatetable() {
+async function doaltertable() {
    try {
       /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
       let handle = await getConnection_cloud(); */
       /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
       let handle = await getConnection_onPrem(); */
       await createTable(handle);
+      await alterTable(handle);
+      await dropTable(handle);
       process.exit(0);
    } catch (error ) {
       console.log(error);
       process.exit(-1);
    }
 }
+
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 /* replace the placeholder for compartment with the OCID of your compartment. */
 function getConnection_cloud() {
@@ -69,4 +73,16 @@ async function createTable(handle) {
             }
    });
    console.log('Table created: ' + TABLE_NAME);
+}
+/* alter a table and add a column */
+async function alterTable(handle) {
+   const alterDDL = `ALTER TABLE ${TABLE_NAME} (ADD acctname STRING)`;
+   let res =  await handle.tableDDL(alterDDL);
+   console.log('Table altered: ' + TABLE_NAME);
+}
+/* drop a table */
+async function dropTable(handle) {
+   const dropDDL = `DROP TABLE ${TABLE_NAME}`;
+   let res =  await handle.tableDDL(dropDDL);
+   console.log('Table dropped: ' + TABLE_NAME);
 }

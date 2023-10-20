@@ -14,9 +14,10 @@ namespace Oracle.NoSQL.SDK.Samples
    //   - <target framework> is target framework moniker, supported values
    //     are netcoreapp5.1 and net7.0
    // -----------------------------------------------------------------------
-   public class CreateTable {
+   public class Indexes
+   {
       private const string Usage =
-            "Usage: dotnet run -f <target framework> [-- <config file>]";
+               "Usage: dotnet run -f <target framework> [-- <config file>]";
       private const string TableName = "stream_acct";
 
       public static async Task Main(string[] args)
@@ -28,7 +29,8 @@ namespace Oracle.NoSQL.SDK.Samples
             // var client = await getconnection_onPrem();
             Console.WriteLine("Created NoSQLClient instance");
             await createTable(client);
-            Console.WriteLine("\nSuccess!");
+            await createIndex(client);
+            await dropIndex(client);
          }
          catch (Exception ex) {
             Console.WriteLine("Exception has occurred:\n{0}: {1}",
@@ -75,6 +77,7 @@ namespace Oracle.NoSQL.SDK.Samples
                                                           acct_data JSON,
                                                           primary key(acct_Id))";
 
+         Console.WriteLine("\nCreate table {0}", TableName);
          var tableResult = await client.ExecuteTableDDLAsync(sql,
                                  new TableDDLOptions{
                                      TableLimits = new TableLimits(20, 20, 1)
@@ -84,6 +87,28 @@ namespace Oracle.NoSQL.SDK.Samples
          Console.WriteLine("  Table {0} is created",
              tableResult.TableName);
          Console.WriteLine("  Table state: {0}", tableResult.TableState);
+      }
+
+      private static async Task createIndex(NoSQLClient client)
+      {
+         var sql =
+                $@"CREATE INDEX acct_episodes ON {TableName}(acct_data.contentStreamed[].seriesInfo[].episodes[]  AS ANYATOMIC)";
+         var tableResult = await client.ExecuteTableDDLAsync(sql);
+         // Wait for the operation completion
+         await tableResult.WaitForCompletionAsync();
+         Console.WriteLine(" Index acct_episodes is created on table Table {0}",
+                tableResult.TableName);
+      }
+
+      private static async Task dropIndex(NoSQLClient client)
+      {
+         var sql =
+                $@"DROP INDEX acct_episodes on {TableName}";
+         var tableResult = await client.ExecuteTableDDLAsync(sql);
+         // Wait for the operation completion
+         await tableResult.WaitForCompletionAsync();
+         Console.WriteLine(" Index acct_episodes is dropped from table Table {0}",
+                tableResult.TableName);
       }
    }
 }

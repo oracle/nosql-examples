@@ -4,18 +4,21 @@
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
 const TABLE_NAME = 'stream_acct';
+
 /*
  * Call the main function for this example
  */
-docreatetable();
+doindexes();
 
-async function docreatetable() {
+async function doindexes() {
    try {
       /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
       let handle = await getConnection_cloud(); */
       /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
       let handle = await getConnection_onPrem(); */
       await createTable(handle);
+      await createIndex(handle);
+      await dropIndex(handle);
       process.exit(0);
    } catch (error ) {
       console.log(error);
@@ -69,4 +72,16 @@ async function createTable(handle) {
             }
    });
    console.log('Table created: ' + TABLE_NAME);
+}
+/* creates an index */
+async function createIndex(handle) {
+   const crtindDDL = `CREATE INDEX acct_episodes ON ${TABLE_NAME}(acct_data.contentStreamed[].seriesInfo[].episodes[]  AS ANYATOMIC)`;
+   let res =  await handle.tableDDL(crtindDDL);
+   console.log('Index acct_episodes is created on table:' + TABLE_NAME);
+}
+/* drops an index */
+async function dropIndex(handle) {
+   const dropindDDL = `DROP INDEX acct_episodes ON ${TABLE_NAME}`;
+   let res =  await handle.tableDDL(dropindDDL);
+   console.log('Index acct_episodes is dropped from table: ' + TABLE_NAME);
 }

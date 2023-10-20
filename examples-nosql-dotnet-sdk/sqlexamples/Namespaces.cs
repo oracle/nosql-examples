@@ -14,7 +14,8 @@ namespace Oracle.NoSQL.SDK.Samples
    //   - <target framework> is target framework moniker, supported values
    //     are netcoreapp5.1 and net7.0
    // -----------------------------------------------------------------------
-   public class CreateTable {
+   public class Namespaces
+   {
       private const string Usage =
             "Usage: dotnet run -f <target framework> [-- <config file>]";
       private const string TableName = "stream_acct";
@@ -22,12 +23,10 @@ namespace Oracle.NoSQL.SDK.Samples
       public static async Task Main(string[] args)
       {
          try {
-            // if using cloud service uncomment the code below, else if using onPremises comment it
-            var client = await getconnection_cloud();
-            // if using onPremise uncomment the code below, else if using cloud service comment it
-            // var client = await getconnection_onPrem();
+            var client = await getconnection_onPrem();
             Console.WriteLine("Created NoSQLClient instance");
-            await createTable(client);
+            await createNS(client);
+            await dropNS(client);
             Console.WriteLine("\nSuccess!");
          }
          catch (Exception ex) {
@@ -43,18 +42,6 @@ namespace Oracle.NoSQL.SDK.Samples
             }
          }
       }
-      // Get a connection handle for Oracle NoSQL Database Cloud Service
-      private async static Task<NoSQLClient> getconnection_cloud()
-      {
-         // replace the place holder for compartment with your region identifier and OCID of your compartment
-         var client =  new NoSQLClient(new NoSQLConfig
-         {
-            Region = <your_region_identifier>,
-            Compartment = "<your_compartment_ocid"
-         });
-         return client;
-      }
-      // Get a connection handle for onPremise data store
       private async static Task<NoSQLClient> getconnection_onPrem()
       {
          // replace the placeholder with your fullname of the host
@@ -65,25 +52,25 @@ namespace Oracle.NoSQL.SDK.Samples
          });
          return client;
       }
-      // Create a table
-      private static async Task createTable(NoSQLClient client)
+
+      private static async Task createNS(NoSQLClient client)
       {
          var sql =
-                $@"CREATE TABLE IF NOT EXISTS {TableName}(acct_Id INTEGER,
-                                                          profile_name STRING,
-                                                          account_expiry TIMESTAMP(1),
-                                                          acct_data JSON,
-                                                          primary key(acct_Id))";
-
-         var tableResult = await client.ExecuteTableDDLAsync(sql,
-                                 new TableDDLOptions{
-                                     TableLimits = new TableLimits(20, 20, 1)
-                                 });
+             $@"CREATE NAMESPACE IF NOT EXISTS ns1";
+         var adminResult = await client.ExecuteAdminAsync(sql);
          // Wait for the operation completion
-         await tableResult.WaitForCompletionAsync();
-         Console.WriteLine("  Table {0} is created",
-             tableResult.TableName);
-         Console.WriteLine("  Table state: {0}", tableResult.TableState);
+         await adminResult.WaitForCompletionAsync();
+         Console.WriteLine("  Created namespace ns1");
+      }
+
+      private static async Task dropNS(NoSQLClient client)
+      {
+         var sql =
+                $@"DROP NAMESPACE ns1";
+         var adminResult = await client.ExecuteAdminAsync(sql);
+         // Wait for the operation completion
+         await adminResult.WaitForCompletionAsync();
+         Console.WriteLine("  Dropped namespace ns1");
       }
    }
 }

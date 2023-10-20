@@ -1,7 +1,6 @@
 // Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
 // Licensed under the Universal Permissive License v 1.0 as shown at
 //  https://oss.oracle.com/licenses/upl/
-
 namespace Oracle.NoSQL.SDK.Samples
 {
    using System;
@@ -14,7 +13,8 @@ namespace Oracle.NoSQL.SDK.Samples
    //   - <target framework> is target framework moniker, supported values
    //     are netcoreapp5.1 and net7.0
    // -----------------------------------------------------------------------
-   public class CreateTable {
+   public class Regions
+   {
       private const string Usage =
             "Usage: dotnet run -f <target framework> [-- <config file>]";
       private const string TableName = "stream_acct";
@@ -22,13 +22,12 @@ namespace Oracle.NoSQL.SDK.Samples
       public static async Task Main(string[] args)
       {
          try {
-            // if using cloud service uncomment the code below, else if using onPremises comment it
-            var client = await getconnection_cloud();
-            // if using onPremise uncomment the code below, else if using cloud service comment it
-            // var client = await getconnection_onPrem();
+            var client = await getconnection_onPrem();
             Console.WriteLine("Created NoSQLClient instance");
-            await createTable(client);
-            Console.WriteLine("\nSuccess!");
+            await createRegion(client);
+            await createTabInRegion(client);
+            await dropTabInRegion(client);
+            await dropRegion(client);
          }
          catch (Exception ex) {
             Console.WriteLine("Exception has occurred:\n{0}: {1}",
@@ -43,18 +42,6 @@ namespace Oracle.NoSQL.SDK.Samples
             }
          }
       }
-      // Get a connection handle for Oracle NoSQL Database Cloud Service
-      private async static Task<NoSQLClient> getconnection_cloud()
-      {
-         // replace the place holder for compartment with your region identifier and OCID of your compartment
-         var client =  new NoSQLClient(new NoSQLConfig
-         {
-            Region = <your_region_identifier>,
-            Compartment = "<your_compartment_ocid"
-         });
-         return client;
-      }
-      // Get a connection handle for onPremise data store
       private async static Task<NoSQLClient> getconnection_onPrem()
       {
          // replace the placeholder with your fullname of the host
@@ -65,25 +52,66 @@ namespace Oracle.NoSQL.SDK.Samples
          });
          return client;
       }
-      // Create a table
-      private static async Task createTable(NoSQLClient client)
+
+      private static async Task createRegion(NoSQLClient client)
       {
+         // Create a remote region
          var sql =
-                $@"CREATE TABLE IF NOT EXISTS {TableName}(acct_Id INTEGER,
+                $@"CREATE REGION LON";
+         var adminResult = await client.ExecuteAdminAsync(sql);
+         // Wait for the operation completion
+         await adminResult.WaitForCompletionAsync();
+         Console.WriteLine("  Created remote REGION LON");
+         // Create a local region
+         var sql1 =
+                $@"SET LOCAL REGION FRA";
+         var adminResult1 = await client.ExecuteAdminAsync(sql1);
+         // Wait for the operation completion
+         await adminResult1.WaitForCompletionAsync();
+         Console.WriteLine("  Created local REGION FRA");
+      }
+
+      private static async Task createTabInRegion(NoSQLClient client)
+      {
+         // Create a table
+         var sql =
+            $@"CREATE TABLE IF NOT EXISTS {TableName}(acct_Id INTEGER,
                                                           profile_name STRING,
                                                           account_expiry TIMESTAMP(1),
                                                           acct_data JSON,
-                                                          primary key(acct_Id))";
+                                                          primary key(acct_Id)) IN REGIONS FRA";
 
+         Console.WriteLine("\nCreate table {0}", TableName);
          var tableResult = await client.ExecuteTableDDLAsync(sql,
-                                 new TableDDLOptions{
-                                     TableLimits = new TableLimits(20, 20, 1)
-                                 });
+            new TableDDLOptions
+            {
+               TableLimits = new TableLimits(20, 20, 1)
+            });
          // Wait for the operation completion
          await tableResult.WaitForCompletionAsync();
          Console.WriteLine("  Table {0} is created",
              tableResult.TableName);
          Console.WriteLine("  Table state: {0}", tableResult.TableState);
+      }
+
+      private static async Task dropTabInRegion(NoSQLClient client)
+      {
+         var sql =
+             $@"DROP TABLE {TableName}";
+         var tableResult = await client.ExecuteTableDDLAsync(sql);
+         // Wait for the operation completion
+         await tableResult.WaitForCompletionAsync();
+         Console.WriteLine("  Table {0} is dropped",
+             tableResult.TableName);
+      }
+
+      private static async Task dropRegion(NoSQLClient client)
+      {
+         var sql = $@"DROP REGION LON";
+         var adminResult = await client.ExecuteAdminAsync(sql);
+         // Wait for the operation completion
+         await adminResult.WaitForCompletionAsync();
+         Console.WriteLine("  Dropped region LON");
       }
    }
 }

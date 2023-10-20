@@ -1,7 +1,6 @@
 // Copyright (c) 2020, 2023 Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package main
-
 import (
 	"fmt"
 	"time"
@@ -52,7 +51,7 @@ func createClient_onPrem() (*nosqldb.Client, error) {
    client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
-// Creates a table
+	// Creates a table
 func createTable(client *nosqldb.Client, err error, tableName string)(){
 	  stmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s ("+
 		 "acct_Id INTEGER," +
@@ -82,16 +81,59 @@ func createTable(client *nosqldb.Client, err error, tableName string)(){
 	 fmt.Println("Created table ", tableName)
 	 return
 }
+// alter an existing table and add a column
+func alterTable(client *nosqldb.Client, err error, tableName string)(){
+	stmt := fmt.Sprintf("ALTER TABLE %s (ADD acctName STRING)",tableName)
+	tableReq := &nosqldb.TableRequest{
+		Statement: stmt,
+	}
+	tableRes, err := client.DoTableRequest(tableReq)
+	if err != nil {
+		fmt.Printf("cannot initiate ALTER TABLE request: %v\n", err)
+		return
+	}
+	// The alter table request is asynchronous, wait for table alteration to complete.
+	_, err = tableRes.WaitForCompletion(client, 60*time.Second, time.Second)
+	if err != nil {
+		fmt.Printf("Error finishing ALTER TABLE request: %v\n", err)
+		return
+	}
+	fmt.Println("Altered table ", tableName)
+	return
+}
+// drop an existing table
+func dropTable(client *nosqldb.Client, err error, tableName string)(){
+	stmt := fmt.Sprintf("DROP TABLE %s",tableName)
+	tableReq := &nosqldb.TableRequest{
+		Statement: stmt,
+	}
+	tableRes, err := client.DoTableRequest(tableReq)
+	if err != nil {
+		fmt.Printf("cannot initiate DROP TABLE request: %v\n", err)
+		return
+	}
+	// The drop table request is asynchronous, wait for table drop to complete.
+	_, err = tableRes.WaitForCompletion(client, 60*time.Second, time.Second)
+	if err != nil {
+		fmt.Printf("Error finishing DROP TABLE request: %v\n", err)
+		return
+	}
+	fmt.Println("Dropped table ", tableName)
+	return
+}
+
 func main() {
-   // if using cloud service uncomment the line below. else if using onPremises comment this line out
+	// if using cloud service uncomment the line below. else if using onPremises comment this line out
 	client, err := createClient_cloud()
 	// if using onPrem uncomment the line below, else if using cloud service, comment this line
    // client, err := createClient_onPrem()
-	 if err != nil {
-      fmt.Printf("cannot create NoSQL client: %v\n", err)
-      return
-   }
+	if err != nil {
+		fmt.Printf("cannot create NoSQL client: %v\n", err)
+		return
+	}
 	defer client.Close()
 	tableName := "stream_acct"
-   createTable(client, err,tableName)
+  	createTable(client, err,tableName)
+	alterTable(client, err,tableName)
+	dropTable(client, err,tableName)
 }

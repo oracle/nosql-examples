@@ -15,7 +15,7 @@ def get_connection_cloud():
    provider = SignatureProvider()
    # If using the DEFAULT profile with the config file in default location  =~/.oci/config
    config = NoSQLHandleConfig(region, provider)
-   #replace the placeholder with the ocid of your compartment
+   # replace the placeholder with the ocid of your compartment
    config.set_default_compartment("<ocid_of_your_compartment>")
    return(NoSQLHandle(config))
 
@@ -28,7 +28,6 @@ def get_connection_onprem():
    # provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
-# Create a table and set the table limits
 def create_table(handle):
    statement = '''create table if not exists stream_acct (acct_Id INTEGER,
                                                            profile_name STRING,
@@ -43,13 +42,29 @@ def create_table(handle):
    else:
       raise NameError('Table stream_acct is in an unexpected state ' + str(table_result.get_state()))
 
+def alter_table(handle):
+   statement = '''ALTER TABLE  stream_acct(ADD acctname STRING)'''
+   request = TableRequest().set_statement(statement)
+   table_result = handle.do_table_request(request, 40000, 3000)
+   table_result.wait_for_completion(handle, 40000, 3000)
+   print('Table stream_acct is altered')
+
+def drop_table(handle):
+   statement = '''DROP TABLE stream_acct'''
+   request = TableRequest().set_statement(statement)
+   table_result = handle.do_table_request(request, 40000, 3000)
+   table_result.wait_for_completion(handle, 40000, 3000)
+   print('Dropped table: stream_acct')
+
 def main():
    # if cloud service uncomment this. else if onPremise comment this line
    handle = get_connection_cloud()
-   # if onPremise uncomment this. else if cloud service comment this line
+   # if onPremise uncomment this. elkse if cloud service comment this line
    # handle = get_connection_onprem()
    create_table(handle)
+   alter_table(handle)
+   drop_table(handle)
    os._exit(0)
 
 if __name__ == "__main__":
-   main()
+    main()
