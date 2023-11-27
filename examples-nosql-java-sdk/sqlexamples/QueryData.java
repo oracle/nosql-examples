@@ -62,14 +62,14 @@ public class QueryData {
             "\"numEpisodes\" : 2,"+
             "\"episodes\": [{"+
                "\"episodeID\": 40,"+
-				       "\"episodeName\" : \"Season 2 episode 1\","+
+				   "\"episodeName\" : \"Season 2 episode 1\","+
                "\"lengthMin\": 50,"+
                "\"minWatched\": 50,"+
                "\"date\" : \"2022-04-25\""+
             "},"+
             "{"+
                "\"episodeID\": 50,"+
-				       "\"episodeName\" : \"Season 2 episode 2\","+
+				   "\"episodeName\" : \"Season 2 episode 2\","+
                "\"lengthMin\": 45,"+
                "\"minWatched\": 30,"+
                "\"date\" : \"2022-04-27\""+
@@ -110,14 +110,14 @@ public class QueryData {
             "\"episodes\": ["+
             "{"+
                "\"episodeID\": 20,"+
-				       "\"episodeName\" : \"Bonjour\","+
+			      "\"episodeName\" : \"Bonjour\","+
                "\"lengthMin\": 45,"+
               "\"minWatched\": 45,"+
               "\"date\" : \"2022-03-07\""+
             "},"+
             "{"+
                "\"episodeID\": 30,"+
-				       "\"episodeName\" : \"Merci\","+
+				   "\"episodeName\" : \"Merci\","+
                "\"lengthMin\": 42,"+
                "\"minWatched\": 42,"+
                "\"date\" : \"2022-03-08\""+
