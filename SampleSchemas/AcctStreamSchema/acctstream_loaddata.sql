@@ -1,7 +1,6 @@
 ### CREATE table if not present ###
 CREATE TABLE IF NOT EXISTS stream_acct(
 acct_id INTEGER,
-profile_id LONG,
 profile_name STRING,
 account_expiry TIMESTAMP,
 acct_data JSON, 
@@ -11,7 +10,6 @@ PRIMARY KEY(acct_id)
 ### row 1 ###
 INSERT INTO stream_acct VALUES(
 1,
-123456789,
 "AP",
 "2023-10-18",
 {
@@ -128,6 +126,8 @@ INSERT INTO stream_acct VALUES(
 
 INSERT INTO stream_acct VALUES(
 2,
+"AW",
+"2023-12-18",
 {
     "firstName": "Adelaide",
     "lastName": "Willard",
@@ -181,6 +181,8 @@ INSERT INTO stream_acct VALUES(
 
 INSERT INTO stream_acct VALUES(
 3,
+"DA",
+"2023-12-31",
 {
     "firstName": "Dierdre",
     "lastName": "Amador",
@@ -285,6 +287,8 @@ INSERT INTO stream_acct VALUES(
 
 INSERT INTO stream_acct VALUES(
 4,
+"DM",
+"2024-03-18",
 {
     "firstName" : "Doris",
     "lastName" : "Martin",
