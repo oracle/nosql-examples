@@ -552,6 +552,15 @@ func main() {
 	upsertRows(client, err,tableName,upsert_data)
 	updt_stmt := "UPDATE stream_acct SET account_expiry='2023-12-28T00:00:00.0Z' WHERE acct_Id=3"
 	updateRows(client, err,tableName,updt_stmt)
+	upd_json_addnode := `UPDATE stream_acct acct1 ADD acct1.acct_data.contentStreamed.seriesInfo[1].episodes {
+	   "date" : "2022-04-26",
+	   "episodeID" : 43,
+	   "episodeName" : "Season 2 episode 2",
+	   "lengthMin" : 45,
+	   "minWatched" : 45} WHERE acct_Id=2 RETURNING *`
+	updateRows(client, err,tableName,upd_json_addnode)
+	upd_json_delnode := `UPDATE stream_acct acct1 REMOVE acct1.acct_data.contentStreamed.seriesInfo[1].episodes[1] WHERE acct_Id=2 RETURNING *`
+	updateRows(client, err,tableName,upd_json_delnode)
 	delRow(client, err,tableName)
 	delete_stmt := `DELETE FROM stream_acct acct1 WHERE acct1.acct_data.firstName="Adelaide" AND acct1.acct_data.lastName="Willard"`
 	deleteRows(client, err,tableName,delete_stmt)
