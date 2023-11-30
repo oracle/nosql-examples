@@ -1,4 +1,4 @@
-/* Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+/* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 'use strict';
@@ -307,9 +307,8 @@ async function doQueryData() {
 }
 
 /* Create and return an instance of a NoSQLCLient object for cloud service */
-/* replace the placeholder for compartment with the OCID of your compartment. */
 function getConnection_cloud() {
-   /* replace the placeholder with your region identifier and with the ocid of your compartment id */
+   /* replace the placeholders for compartment and region with the actual values. */
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,
@@ -318,13 +317,14 @@ function getConnection_cloud() {
 }
 /* Create and return an instance of a NoSQLCLient object for onPremises */
 function getConnection_onPrem() {
-   /* replace the placeholder with your hostname */
+   /* replace the placeholder with the fullname of your host */
    const kvstore_endpoint = `http://<hostname>:8080`;
    return new NoSQLClient({
       serviceType: "KVSTORE",
       endpoint: kvstore_endpoint
    });
-   /* if it is a secure store pass the credentials, username and password
+   /* if it is a secure store, comment the return statement above and
+   * uncomment the lines below and pass the credentials, username and password
    return new NoSQLClient({
       "serviceType": "KVSTORE",
       "endpoint": "",
@@ -334,7 +334,7 @@ function getConnection_onPrem() {
             "password": ""
          }
       }
-}) */
+   }); */
 }
 /* creates a table */
 async function createTable(handle) {

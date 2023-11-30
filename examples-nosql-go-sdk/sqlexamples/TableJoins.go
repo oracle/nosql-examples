@@ -1,4 +1,4 @@
-// Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024 Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package main
 
@@ -18,9 +18,9 @@ import (
 // client handle to use for data operations.
 func createClient_cloud() (*nosqldb.Client, error) {
    var cfg nosqldb.Config
-	//replace the placeholder with your region identifier
+	// replace the placeholder with your actual region identifier
 	region := "<your_region_identifier>"
-	//Replace the value of config file location and the ocid of your compartment
+	// Replace the placeholders with the actual value of config file location and the ocid of your compartment
 	sp, err := iam.NewSignatureProviderFromFile("<location_config_file>","","","<your_compartment_ocid>")
 	if err != nil {
 		return nil, fmt.Errorf("cannot create a Signature Provider: %v", err)
@@ -42,7 +42,7 @@ func createClient_onPrem() (*nosqldb.Client, error) {
       Endpoint: endpoint,
       Mode:     "onprem",
    }
-	//If using a secure store pass the username, password of the store to Config
+	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
 	//cfg := nosqldb.Config{
    //    Mode:     "onprem",
    //    Username: "<username>",

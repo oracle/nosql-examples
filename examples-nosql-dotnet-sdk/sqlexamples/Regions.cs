@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2023, 2024 Oracle and/or its affiliates. All rights reserved.
 // Licensed under the Universal Permissive License v 1.0 as shown at
 //  https://oss.oracle.com/licenses/upl/
 namespace Oracle.NoSQL.SDK.Samples
@@ -44,7 +44,7 @@ namespace Oracle.NoSQL.SDK.Samples
       }
       private async static Task<NoSQLClient> getconnection_onPrem()
       {
-         // replace the placeholder with your fullname of the host
+         // replace the placeholder with your fullname of your host
          var client = new NoSQLClient(new NoSQLConfig
          {
             ServiceType = ServiceType.KVStore,

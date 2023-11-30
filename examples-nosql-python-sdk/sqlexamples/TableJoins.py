@@ -1,4 +1,4 @@
-# Copyright (c) 2019, 2023 Oracle and/or its affiliates.
+# Copyright (c) 2023, 2024 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 import os
 from borneo import (Regions, NoSQLHandle, NoSQLHandleConfig, PutRequest,QueryRequest,
@@ -21,10 +21,10 @@ def get_connection_cloud():
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-   #replace the placeholder with the name of your local host
+   #replace the placeholder with the name of your host
    kvstore_endpoint ='http://<hostname>:8080'
    provider = StoreAccessTokenProvider()
-   #If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+   #If using a secure store, uncomment the line below and pass the username, password of the store to StoreAccessTokenProvider
    #provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
@@ -35,7 +35,7 @@ def create_table(handle,statement,table_flag,table_name):
    else:
       request = TableRequest().set_statement(statement)
 
-   # Ask the cloud service to create the table, waiting for a total of 40000 milliseconds
+   # Create the table, waiting for a total of 40000 milliseconds
    # and polling the service every 3000 milliseconds to see if the table is active
    table_result = handle.do_table_request(request, 40000, 3000)
    table_result.wait_for_completion(handle, 40000, 3000)

@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2023 Oracle and/or its affiliates. All rights reserved.
+// Copyright (c) 2023, 2024 Oracle and/or its affiliates. All rights reserved.
 // Licensed under the Universal Permissive License v 1.0 as shown at
 //  https://oss.oracle.com/licenses/upl/
 
@@ -46,7 +46,7 @@ namespace Oracle.NoSQL.SDK.Samples
       // Get a connection handle for Oracle NoSQL Database Cloud Service
       private async static Task<NoSQLClient> getconnection_cloud()
       {
-         // replace the place holder for compartment with your region identifier and OCID of your compartment
+         // replace the region and compartment place holders with the actual values
          var client =  new NoSQLClient(new NoSQLConfig
          {
             Region = <your_region_identifier>,
@@ -57,7 +57,7 @@ namespace Oracle.NoSQL.SDK.Samples
       // Get a connection handle for onPremise data store
       private async static Task<NoSQLClient> getconnection_onPrem()
       {
-         // replace the placeholder with your fullname of the host
+         // replace the placeholder with your fullname of your host
          var client = new NoSQLClient(new NoSQLConfig
          {
             ServiceType = ServiceType.KVStore,

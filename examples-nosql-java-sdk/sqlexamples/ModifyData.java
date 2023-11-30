@@ -1,4 +1,4 @@
-/*Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+/*Copyright (c) 2023, 2024 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 import java.io.File;
@@ -267,16 +267,16 @@ public class ModifyData {
    static FieldValue newvalue2 = FieldValue.createFromJson(acct3,null);
 
    public static void main(String[] args) throws Exception {
-      /*Uncomment the lines of code below if you are using Oracle NoSQL Database Cloud service
-      Add the appropriate values of your region and compartment OCID*/
-      /*String region ="<your_region_identifier>";
+      /* UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
+      Add the appropriate values of your region and compartment OCID
+      String region ="<your_region_identifier>";
       String compId ="<ocid_of_your_compartment>";
-      NoSQLHandle handle = generateNoSQLHandleCloud(region,compId);*/
+      handle = generateNoSQLHandleCloud(region,compId); */
 
-      /*Uncomment the 2 lines of code below if you are using onPremise Oracle NoSQL Database
-      give appropriate value of your endpoint for the onPremise kvstore.*/
-      /*String kvstore_endpoint ="http://phoenix71003.dev3sub1phx.databasede3phx.oraclevcn.com:8080";
-      NoSQLHandle handle = generateNoSQLHandleonPrem(kvstore_endpoint);*/
+      /* UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
+      give appropriate value of your endpoint for the onPremise kvstore.
+      String kvstore_endpoint ="http://<your_hostname>:8080";
+      handle = generateNoSQLHandleonPrem(kvstore_endpoint); */
       try {
          createTable(handle);
          writeRows(handle, (MapValue)newvalue);
