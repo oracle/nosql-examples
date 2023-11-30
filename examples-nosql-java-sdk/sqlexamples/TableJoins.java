@@ -37,7 +37,7 @@ public class TableJoins{
 
       /*Uncomment the 2 lines of code below if you are using onPremise Oracle NoSQL Database
       give appropriate value of your endpoint for the onPremise kvstore.*/
-      /*String kvstore_endpoint ="http://phoenix71003.dev3sub1phx.databasede3phx.oraclevcn.com:8080";
+      /*String kvstore_endpoint ="http://<your_hostname>:8080";
       NoSQLHandle handle = generateNoSQLHandleonPrem(kvstore_endpoint);*/
       try {
          String crttab_stmt = "CREATE TABLE IF NOT EXISTS " + tableName +
@@ -101,7 +101,14 @@ public class TableJoins{
                         "} ]"+
                      "}";
          writeRowData(handle,"ticket.bagInfo.flightLegs",data3);
-         fetchRows(handle);
+         /* fetching rows using left outer joins*/
+         String sql_stmt_loj ="SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo";
+         System.out.println("Fetching data using Left outer joins:");
+         fetchRows(handle,sql_stmt_loj);
+         System.out.println("Fetching data using NESTED TABLES:");
+         String sql_stmt_nt ="SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))";
+         /* fetching rows using nested tables*/
+         fetchRows(handle,sql_stmt_nt);
       } catch (Exception e) {
          System.err.print(e);
       } finally {
@@ -158,10 +165,10 @@ public class TableJoins{
       }
    }
    /* fetch rows based on joins*/
-   private static void fetchRows(NoSQLHandle handle) throws Exception {
+   private static void fetchRows(NoSQLHandle handle,String sql_stmt) throws Exception {
 
       try (
-         QueryRequest queryRequest = new QueryRequest().setStatement("SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo");
+         QueryRequest queryRequest = new QueryRequest().setStatement(sql_stmt);
          QueryIterableResult results = handle.queryIterable(queryRequest)) {
             System.out.println("Query results:");
             for (MapValue res : results) {

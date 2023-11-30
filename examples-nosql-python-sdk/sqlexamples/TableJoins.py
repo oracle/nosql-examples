@@ -127,8 +127,12 @@ def main():
    insert_record(handle,'ticket',data1)
    insert_record(handle,'ticket.bagInfo',data2)
    insert_record(handle,'ticket.bagInfo.flightLegs',data3)
-   sql_stmt='SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo'
-   fetch_data(handle,sql_stmt)
+   sql_stmt_loj='SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo'
+   print('Fetching data using Left Outer Joins ')
+   fetch_data(handle,sql_stmt_loj)
+   sql_stmt_nt='SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))'
+   print('Fetching data using NESTED TABLES ')
+   fetch_data(handle,sql_stmt_nt)
    os._exit(0)
 
 if __name__ == "__main__":

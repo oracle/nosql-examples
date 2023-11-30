@@ -226,12 +226,16 @@ func main() {
          "actionTime" : "2019-02-01T04:38:00Z"
       } ]"
    }`
-   querystmt:= "SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo"
+	querystmt_loj:= "SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo"
+	querystmt_nt:= "SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b)"
    createTable(client, err,regTableName, regtbl_crtstmt, "true")
    createTable(client, err,childTableName, childtbl_crtstmt, "false")
    createTable(client, err,descTableName, desctbl_crtstmt, "false")
    addData(client, err,regTableName,regtbl_data)
    addData(client, err,childTableName,childtbl_data)
    addData(client, err,descTableName,desctbl_data)
-   fetchData(client, err,querystmt)
+	fmt.Println("Fetching data using Left Outer Joins")
+   fetchData(client, err,querystmt_loj)
+	fmt.Println("Fetching data using NESTED TABLES")
+   fetchData(client, err,querystmt_nt)
 }
