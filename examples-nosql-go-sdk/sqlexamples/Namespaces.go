@@ -14,24 +14,25 @@ func createClient_onPrem() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
 	// replace the placeholder with the fullname of your host
 	endpoint := "http://<hostname>:8080"
-	cfg= nosqldb.Config{
-      Endpoint: endpoint,
-      Mode:     "onprem",
-   }
+	cfg = nosqldb.Config{
+		Endpoint: endpoint,
+		Mode:     "onprem",
+	}
 	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
 	// cfg := nosqldb.Config{
-   //    Mode:     "onprem",
-   //    Username: "<username>",
-   //    Password: []byte("<password>"),
-   // Specify InsecureSkipVerify
-   //    HTTPConfig: httputil.HTTPConfig{
-   //        InsecureSkipVerify: true,
-   //    },
-   client, err := nosqldb.NewClient(cfg)
+	//    Mode:     "onprem",
+	//    Username: "<username>",
+	//    Password: []byte("<password>"),
+	// Specify InsecureSkipVerify
+	//    HTTPConfig: httputil.HTTPConfig{
+	//        InsecureSkipVerify: true,
+	//    },
+	client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
+
 // Creates a namespace
-func createNS(client *nosqldb.Client, err error)(){
+func createNS(client *nosqldb.Client, err error) {
 	stmt := fmt.Sprintf("CREATE NAMESPACE IF NOT EXISTS ns1")
 	sysReq := &nosqldb.SystemRequest{
 		Statement: stmt,
@@ -45,8 +46,9 @@ func createNS(client *nosqldb.Client, err error)(){
 	fmt.Println("Created Namespace ns1 ")
 	return
 }
+
 // Drops a namespace
-func dropNS(client *nosqldb.Client, err error)(){
+func dropNS(client *nosqldb.Client, err error) {
 	stmt := fmt.Sprintf("DROP NAMESPACE ns1")
 	sysReq := &nosqldb.SystemRequest{
 		Statement: stmt,

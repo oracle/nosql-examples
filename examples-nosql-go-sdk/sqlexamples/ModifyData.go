@@ -4,13 +4,14 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"github.com/oracle/nosql-go-sdk/nosqldb"
 	"github.com/oracle/nosql-go-sdk/nosqldb/auth/iam"
-	"github.com/oracle/nosql-go-sdk/nosqldb/jsonutil"
 	"github.com/oracle/nosql-go-sdk/nosqldb/common"
+	"github.com/oracle/nosql-go-sdk/nosqldb/jsonutil"
 	"github.com/oracle/nosql-go-sdk/nosqldb/types"
+	"time"
 )
+
 // Creates a client with the supplied configurations.
 // This function encapsulates environmental differences and returns a
 // client handle to use for data operations.
@@ -19,47 +20,49 @@ func createClient_cloud() (*nosqldb.Client, error) {
 	// replace the placeholder with your actual region identifier
 	region := "<your_region_identifier>"
 	// Replace the placeholders with the actual value of config file location and the ocid of your compartment
-	sp, err := iam.NewSignatureProviderFromFile("<location_config_file>","","","<your_compartment_ocid>")
+	sp, err := iam.NewSignatureProviderFromFile("<location_config_file>", "", "", "<your_compartment_ocid>")
 	if err != nil {
 		return nil, fmt.Errorf("cannot create a Signature Provider: %v", err)
 	}
 	cfg = nosqldb.Config{
-	        Mode:                  "cloud",
-	        Region:                common.Region(region),
-			  AuthorizationProvider: sp,
+		Mode:                  "cloud",
+		Region:                common.Region(region),
+		AuthorizationProvider: sp,
 	}
 	client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
+
 // Creates a client with the supplied configurations for onPremise database
 func createClient_onPrem() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
 	//replace the placeholder with the fullname of your host
 	endpoint := "http://<hostname>:8080"
-	cfg= nosqldb.Config{
-      Endpoint: endpoint,
-      Mode:     "onprem",
-   }
+	cfg = nosqldb.Config{
+		Endpoint: endpoint,
+		Mode:     "onprem",
+	}
 	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
 	//cfg := nosqldb.Config{
-   //    Mode:     "onprem",
-   //    Username: "<username>",
-   //    Password: []byte("<password>"),
-   // Specify InsecureSkipVerify
-   //    HTTPConfig: httputil.HTTPConfig{
-   //        InsecureSkipVerify: true,
-   //    },
-   client, err := nosqldb.NewClient(cfg)
+	//    Mode:     "onprem",
+	//    Username: "<username>",
+	//    Password: []byte("<password>"),
+	// Specify InsecureSkipVerify
+	//    HTTPConfig: httputil.HTTPConfig{
+	//        InsecureSkipVerify: true,
+	//    },
+	client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
+
 // Creates a table
-func createTable(client *nosqldb.Client, err error, tableName string)(){
+func createTable(client *nosqldb.Client, err error, tableName string) {
 	stmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s ("+
-		"acct_Id INTEGER," +
-		"profile_name STRING," +
-		"account_expiry TIMESTAMP(1) ," +
-		"acct_data JSON, " +
-		"PRIMARY KEY(acct_Id))",tableName)
+		"acct_Id INTEGER,"+
+		"profile_name STRING,"+
+		"account_expiry TIMESTAMP(1) ,"+
+		"acct_data JSON, "+
+		"PRIMARY KEY(acct_Id))", tableName)
 	tableReq := &nosqldb.TableRequest{
 		Statement: stmt,
 		TableLimits: &nosqldb.TableLimits{
@@ -82,8 +85,9 @@ func createTable(client *nosqldb.Client, err error, tableName string)(){
 	fmt.Println("Created table ", tableName)
 	return
 }
+
 //Add data to table
-func insertData(client *nosqldb.Client, err error, tableName string, value1 *types.MapValue )(){
+func insertData(client *nosqldb.Client, err error, tableName string, value1 *types.MapValue) {
 	putReq := &nosqldb.PutRequest{
 		TableName: tableName,
 		Value:     value1,
@@ -97,7 +101,7 @@ func insertData(client *nosqldb.Client, err error, tableName string, value1 *typ
 }
 
 //update data in the table
-func updateRows(client *nosqldb.Client, err error, tableName string, querystmt string)(){
+func updateRows(client *nosqldb.Client, err error, tableName string, querystmt string) {
 	prepReq := &nosqldb.PrepareRequest{
 		Statement: querystmt,
 	}
@@ -107,31 +111,32 @@ func updateRows(client *nosqldb.Client, err error, tableName string, querystmt s
 		return
 	}
 	queryReq := &nosqldb.QueryRequest{
-		PreparedStatement: &prepRes.PreparedStatement,   }
-		var results []*types.MapValue
-		for {
-			queryRes, err := client.Query(queryReq)
-			if err != nil {
-				fmt.Printf("Upsert failed: %v\n", err)
-				return
-			}
-			res, err := queryRes.GetResults()
-			if err != nil {
-				fmt.Printf("GetResults() failed: %v\n", err)
-				return
-			}
-			results = append(results, res...)
-			if queryReq.IsDone() {
-				break
-			}
+		PreparedStatement: &prepRes.PreparedStatement}
+	var results []*types.MapValue
+	for {
+		queryRes, err := client.Query(queryReq)
+		if err != nil {
+			fmt.Printf("Upsert failed: %v\n", err)
+			return
 		}
-		for i, r := range results {
-			fmt.Printf("\t%d: %s\n", i+1, jsonutil.AsJSON(r.Map()))
+		res, err := queryRes.GetResults()
+		if err != nil {
+			fmt.Printf("GetResults() failed: %v\n", err)
+			return
 		}
-		fmt.Printf("Updated data in the table: \n")
+		results = append(results, res...)
+		if queryReq.IsDone() {
+			break
+		}
+	}
+	for i, r := range results {
+		fmt.Printf("\t%d: %s\n", i+1, jsonutil.AsJSON(r.Map()))
+	}
+	fmt.Printf("Updated data in the table: \n")
 }
+
 //upsert data in the table
-func upsertRows(client *nosqldb.Client, err error, tableName string, querystmt string)(){
+func upsertRows(client *nosqldb.Client, err error, tableName string, querystmt string) {
 	prepReq := &nosqldb.PrepareRequest{
 		Statement: querystmt,
 	}
@@ -141,7 +146,7 @@ func upsertRows(client *nosqldb.Client, err error, tableName string, querystmt s
 		return
 	}
 	queryReq := &nosqldb.QueryRequest{
-		PreparedStatement: &prepRes.PreparedStatement,   }
+		PreparedStatement: &prepRes.PreparedStatement}
 	var results []*types.MapValue
 	for {
 		queryRes, err := client.Query(queryReq)
@@ -163,10 +168,11 @@ func upsertRows(client *nosqldb.Client, err error, tableName string, querystmt s
 		fmt.Printf("\t%d: %s\n", i+1, jsonutil.AsJSON(r.Map()))
 	}
 }
+
 //delete with primary key
-func delRow(client *nosqldb.Client, err error, tableName string)(){
+func delRow(client *nosqldb.Client, err error, tableName string) {
 	key := &types.MapValue{}
-	key.Put("acct_Id",1)
+	key.Put("acct_Id", 1)
 	delReq := &nosqldb.DeleteRequest{
 		TableName: tableName,
 		Key:       key,
@@ -180,8 +186,9 @@ func delRow(client *nosqldb.Client, err error, tableName string)(){
 		fmt.Println("Delete succeeded")
 	}
 }
+
 //delete rows based on a filter condition
-func deleteRows(client *nosqldb.Client, err error, tableName string, querystmt string)(){
+func deleteRows(client *nosqldb.Client, err error, tableName string, querystmt string) {
 	prepReq := &nosqldb.PrepareRequest{
 		Statement: querystmt,
 	}
@@ -191,28 +198,28 @@ func deleteRows(client *nosqldb.Client, err error, tableName string, querystmt s
 		return
 	}
 	queryReq := &nosqldb.QueryRequest{
-		PreparedStatement: &prepRes.PreparedStatement,   }
-		var results []*types.MapValue
-		for {
-			queryRes, err := client.Query(queryReq)
-			if err != nil {
-				fmt.Printf("Upsert failed: %v\n", err)
-				return
-			}
-			res, err := queryRes.GetResults()
-			if err != nil {
-				fmt.Printf("GetResults() failed: %v\n", err)
-				return
-			}
-			results = append(results, res...)
-			if queryReq.IsDone() {
-				break
-			}
+		PreparedStatement: &prepRes.PreparedStatement}
+	var results []*types.MapValue
+	for {
+		queryRes, err := client.Query(queryReq)
+		if err != nil {
+			fmt.Printf("Upsert failed: %v\n", err)
+			return
 		}
-		for i, r := range results {
-			fmt.Printf("\t%d: %s\n", i+1, jsonutil.AsJSON(r.Map()))
+		res, err := queryRes.GetResults()
+		if err != nil {
+			fmt.Printf("GetResults() failed: %v\n", err)
+			return
 		}
-		fmt.Printf("Deleetd data from the table: %v\n",tableName)
+		results = append(results, res...)
+		if queryReq.IsDone() {
+			break
+		}
+	}
+	for i, r := range results {
+		fmt.Printf("\t%d: %s\n", i+1, jsonutil.AsJSON(r.Map()))
+	}
+	fmt.Printf("Deleetd data from the table: %v\n", tableName)
 }
 
 func main() {
@@ -226,7 +233,7 @@ func main() {
 	}
 	defer client.Close()
 	tableName := "stream_acct"
-	createTable(client, err,tableName)
+	createTable(client, err, tableName)
 	//adding data
 	value, err := types.NewMapValueFromJSON(`{
 		"acct_Id": 1,
@@ -324,7 +331,7 @@ func main() {
 			}
 		]}
 	}`)
-	insertData(client, err,tableName,value)
+	insertData(client, err, tableName, value)
 	value1, err := types.NewMapValueFromJSON(`{
 		"acct_Id":2,
 		"profile_name":"Adwi",
@@ -371,7 +378,7 @@ func main() {
 			}
 		]}
 	}`)
-	insertData(client, err,tableName,value1)
+	insertData(client, err, tableName, value1)
 	value2, err := types.NewMapValueFromJSON(`{
 		"acct_Id":3,
 		"profile_name":"Dee",
@@ -450,7 +457,7 @@ func main() {
 			}]
 		}
 	}`)
-	insertData(client, err,tableName,value2)
+	insertData(client, err, tableName, value2)
 	fmt.Printf("Put row succeeded: \n")
 	upsert_data := `UPSERT INTO stream_acct VALUES
 	(
@@ -549,19 +556,19 @@ func main() {
 			}]
 		}
 	) RETURNING *`
-	upsertRows(client, err,tableName,upsert_data)
+	upsertRows(client, err, tableName, upsert_data)
 	updt_stmt := "UPDATE stream_acct SET account_expiry='2023-12-28T00:00:00.0Z' WHERE acct_Id=3"
-	updateRows(client, err,tableName,updt_stmt)
+	updateRows(client, err, tableName, updt_stmt)
 	upd_json_addnode := `UPDATE stream_acct acct1 ADD acct1.acct_data.contentStreamed.seriesInfo[1].episodes {
 	   "date" : "2022-04-26",
 	   "episodeID" : 43,
 	   "episodeName" : "Season 2 episode 2",
 	   "lengthMin" : 45,
 	   "minWatched" : 45} WHERE acct_Id=2 RETURNING *`
-	updateRows(client, err,tableName,upd_json_addnode)
+	updateRows(client, err, tableName, upd_json_addnode)
 	upd_json_delnode := `UPDATE stream_acct acct1 REMOVE acct1.acct_data.contentStreamed.seriesInfo[1].episodes[1] WHERE acct_Id=2 RETURNING *`
-	updateRows(client, err,tableName,upd_json_delnode)
-	delRow(client, err,tableName)
+	updateRows(client, err, tableName, upd_json_delnode)
+	delRow(client, err, tableName)
 	delete_stmt := `DELETE FROM stream_acct acct1 WHERE acct1.acct_data.firstName="Adelaide" AND acct1.acct_data.lastName="Willard"`
-	deleteRows(client, err,tableName,delete_stmt)
+	deleteRows(client, err, tableName, delete_stmt)
 }

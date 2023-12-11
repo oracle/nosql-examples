@@ -1,6 +1,7 @@
 // Copyright (c) 2023, 2024 Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package main
+
 import (
 	"fmt"
 	"time"
@@ -13,24 +14,25 @@ func createClient_onPrem() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
 	// replace the placeholder with the fullname of your host
 	endpoint := "http://<hostname>:8080"
-	cfg= nosqldb.Config{
-      Endpoint: endpoint,
-      Mode:     "onprem",
-   }
+	cfg = nosqldb.Config{
+		Endpoint: endpoint,
+		Mode:     "onprem",
+	}
 	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
 	// cfg := nosqldb.Config{
-   //    Mode:     "onprem",
-   //    Username: "<username>",
-   //    Password: []byte("<password>"),
-   // Specify InsecureSkipVerify
-   //    HTTPConfig: httputil.HTTPConfig{
-   //        InsecureSkipVerify: true,
-   //    },
-   client, err := nosqldb.NewClient(cfg)
+	//    Mode:     "onprem",
+	//    Username: "<username>",
+	//    Password: []byte("<password>"),
+	// Specify InsecureSkipVerify
+	//    HTTPConfig: httputil.HTTPConfig{
+	//        InsecureSkipVerify: true,
+	//    },
+	client, err := nosqldb.NewClient(cfg)
 	return client, err
 }
+
 // Creates a remote and a local region
-func crtRegion(client *nosqldb.Client, err error)(){
+func crtRegion(client *nosqldb.Client, err error) {
 	// Create a remote region
 	stmt := fmt.Sprintf("CREATE REGION LON")
 	sysReq := &nosqldb.SystemRequest{
@@ -57,14 +59,15 @@ func crtRegion(client *nosqldb.Client, err error)(){
 	fmt.Println("Created REGION FRA ")
 	return
 }
+
 // creates a table in a specific region
-func crtTabInRegion(client *nosqldb.Client, err error, tableName string)(){
+func crtTabInRegion(client *nosqldb.Client, err error, tableName string) {
 	stmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s ("+
-		"acct_Id INTEGER," +
-		"profile_name STRING," +
-		"account_expiry TIMESTAMP(1) ," +
-		"acct_data JSON, " +
-		"PRIMARY KEY(acct_Id)) IN REGIONS FRA",tableName)
+		"acct_Id INTEGER,"+
+		"profile_name STRING,"+
+		"account_expiry TIMESTAMP(1) ,"+
+		"acct_data JSON, "+
+		"PRIMARY KEY(acct_Id)) IN REGIONS FRA", tableName)
 	tableReq := &nosqldb.TableRequest{
 		Statement: stmt,
 		TableLimits: &nosqldb.TableLimits{
@@ -87,9 +90,10 @@ func crtTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 	fmt.Println("Created table ", tableName)
 	return
 }
+
 // drops a table from a region
-func drpTabInRegion(client *nosqldb.Client, err error, tableName string)(){
-	stmt := fmt.Sprintf("DROP TABLE %s",tableName)
+func drpTabInRegion(client *nosqldb.Client, err error, tableName string) {
+	stmt := fmt.Sprintf("DROP TABLE %s", tableName)
 	tableReq := &nosqldb.TableRequest{
 		Statement: stmt,
 	}
@@ -106,8 +110,9 @@ func drpTabInRegion(client *nosqldb.Client, err error, tableName string)(){
 	fmt.Println("Dropped table ", tableName)
 	return
 }
+
 // drop a region
-func dropRegion(client *nosqldb.Client, err error)(){
+func dropRegion(client *nosqldb.Client, err error) {
 	stmt := fmt.Sprintf("DROP REGION LON")
 	sysReq := &nosqldb.SystemRequest{
 		Statement: stmt,
@@ -130,7 +135,7 @@ func main() {
 	defer client.Close()
 	crtRegion(client, err)
 	tableName := "stream_acct"
-	crtTabInRegion(client, err,tableName)
-	drpTabInRegion(client, err,tableName)
+	crtTabInRegion(client, err, tableName)
+	drpTabInRegion(client, err, tableName)
 	dropRegion(client, err)
 }
