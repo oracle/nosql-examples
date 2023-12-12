@@ -1,6 +1,8 @@
 ### CREATE table if not present ###
 CREATE TABLE IF NOT EXISTS stream_acct(
 acct_id INTEGER,
+profile_name STRING,
+account_expiry TIMESTAMP,
 acct_data JSON, 
 PRIMARY KEY(acct_id)
 );
@@ -8,13 +10,15 @@ PRIMARY KEY(acct_id)
 ### row 1 ###
 INSERT INTO stream_acct VALUES(
 1,
+"AP",
+"2023-10-18",
 {
-    "firstName": "Angela",
-    "lastName": "Mercel",
+    "firstName": "Adam",
+    "lastName": "Phillips",
     "country" : "Germany",
     "contentStreamed": [
       {
-        "showName" : "Casa de papel",
+        "showName" : "At the Ranch",
         "showId" : 26,
         "showtype" : "tvseries",
         "genres" : ["action", "crime", "spanish"], 
@@ -26,6 +30,7 @@ INSERT INTO stream_acct VALUES(
             "episodes": [
               {
                 "episodeID": 20,
+				"episodeName" : "Season 1 episode 1",
                 "lengthMin": 85,
                 "minWatched": 85,
                 "date" : "2022-04-18"
@@ -33,6 +38,7 @@ INSERT INTO stream_acct VALUES(
               {
                 "episodeID": 30,
                 "lengthMin": 60,
+				"episodeName" : "Season 1 episode 2",
                 "minWatched": 60,
                 "date" : "2022-04-18"
               }
@@ -40,16 +46,18 @@ INSERT INTO stream_acct VALUES(
           },
           {
             "seasonNum": 2,
-            "numEpisodes" : 4,
+            "numEpisodes" : 2,
             "episodes": [
               {
                 "episodeID": 40,
+				"episodeName" : "Season 2 episode 1",
                 "lengthMin": 50,
                 "minWatched": 50,
                 "date" : "2022-04-25"
               },
               {
                 "episodeID": 50,
+				"episodeName" : "Season 2 episode 2",
                 "lengthMin": 45,
                 "minWatched": 30,
                 "date" : "2022-04-27"
@@ -58,8 +66,30 @@ INSERT INTO stream_acct VALUES(
           }
         ]
       },
+          {
+            "seasonNum": 3,
+            "numEpisodes" : 2,
+            "episodes": [
+              {
+                "episodeID": 60,
+				"episodeName" : "Season 3 episode 1",
+                "lengthMin": 50,
+                "minWatched": 50,
+                "date" : "2022-04-25"
+              },
+              {
+                "episodeID": 70,
+				"episodeName" : "Season 3 episode 2",
+                "lengthMin": 45,
+                "minWatched": 30,
+                "date" : "2022-04-27"
+              }
+            ]
+          }
+        ]
+      },  
       {
-        "showName": "Call My Agent",
+        "showName": "Bienvenu",
         "showId": 15,
         "showtype": "tvseries",
         "genres" : ["comedy", "french"], 
@@ -71,12 +101,14 @@ INSERT INTO stream_acct VALUES(
             "episodes": [
               {
                 "episodeID": 20,
+				"episodeName" : "Bonjour",
                 "lengthMin": 45,
                 "minWatched": 45,
                 "date" : "2022-03-07"
               },
               {
                 "episodeID": 30,
+				"episodeName" : "Merci",
                 "lengthMin": 42,
                 "minWatched": 42,
                 "date" : "2022-03-08"
@@ -94,13 +126,15 @@ INSERT INTO stream_acct VALUES(
 
 INSERT INTO stream_acct VALUES(
 2,
+"AW",
+"2023-12-18",
 {
-    "firstName": "Emmanuel",
-    "lastName": "Macron",
+    "firstName": "Adelaide",
+    "lastName": "Willard",
     "country" : "France",
     "contentStreamed": [
       {
-        "showName": "Call My Agent",
+        "showName": "Bienvenu",
         "showId": 15,
         "showtype": "tvseries",
         "genres" : ["comedy", "french"], 
@@ -147,13 +181,15 @@ INSERT INTO stream_acct VALUES(
 
 INSERT INTO stream_acct VALUES(
 3,
+"DA",
+"2023-12-31",
 {
-    "firstName": "Joe",
-    "lastName": "Biden",
+    "firstName": "Dierdre",
+    "lastName": "Amador",
     "country" : "USA",
     "contentStreamed": [
       {
-        "showName": "Call My Agent",
+        "showName": "Bienvenu",
         "showId": 15,
         "showtype": "tvseries",
         "genres" : ["comedy", "french"], 
@@ -198,7 +234,7 @@ INSERT INTO stream_acct VALUES(
         ]
       },
       {
-        "showName": "Rita",
+        "showName": "Dane",
         "showId": 16,
         "showtype": "tvseries",
         "genres" : ["comedy", "drama", "danish"],
@@ -251,13 +287,15 @@ INSERT INTO stream_acct VALUES(
 
 INSERT INTO stream_acct VALUES(
 4,
+"DM",
+"2024-03-18",
 {
-    "firstName" : "Kamala",
-    "lastName" : "Harris",
+    "firstName" : "Doris",
+    "lastName" : "Martin",
     "country" : "USA",
     "contentStreamed": [
       {
-        "showName": "Call My Agent",
+        "showName": "Bienvenu",
         "showId": 15,
         "showtype": "tvseries",
         "genres" : ["comedy", "french"],
@@ -308,7 +346,7 @@ INSERT INTO stream_acct VALUES(
         ]
       },
       {
-        "showName": "Rita",
+        "showName": "Dane",
         "showId": 16,
         "showtype": "tvseries",
         "genres" : ["comedy", "drama", "danish"], 

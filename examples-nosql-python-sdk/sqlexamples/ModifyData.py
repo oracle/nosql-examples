@@ -2,20 +2,19 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 import os
 from borneo import (Regions, NoSQLHandle, NoSQLHandleConfig, PutRequest,QueryRequest,
-                    TableRequest, GetRequest, TableLimits, State)
+                    TableRequest, DeleteRequest, GetRequest, TableLimits, State)
 from borneo.iam import SignatureProvider
 from borneo.kv import StoreAccessTokenProvider
 
 # Given a region, and compartment, instantiate a connection to the
 # cloud service and return it
 def get_connection_cloud():
-   print("Connecting to the Oracle NoSQL Cloud Service")
-   # replace the placeholder with your region identifier
+   #replace the placeholder with your region identifier
    region = '<your_region_identifier>'
    provider = SignatureProvider()
-   # If using the DEFAULT profile with the config file in default location  =~/.oci/config
+   #If using the DEFAULT profile with the config file in default location  =~/.oci/config
    config = NoSQLHandleConfig(region, provider)
-   # replace the placeholder with the ocid of your compartment
+   #replace the placeholder with the ocid of your compartment
    config.set_default_compartment("<ocid_of_your_compartment>")
    return(NoSQLHandle(config))
 
@@ -51,14 +50,31 @@ def insert_record(handle,table_name,acct_data):
    handle.put(request)
    print('Loaded a row into table: stream_acct')
 
-# Fetch data from the table
-def fetch_data(handle,sqlstmt):
-      request = QueryRequest().set_statement(sqlstmt)
-      print('Query results for: ' + sqlstmt)
-      result = handle.query(request)
-      for r in result.get_results():
-         print('\t' + str(r))
+# upsert data
+def upsert_data(handle,sqlstmt):
+   request = QueryRequest().set_statement(sqlstmt)
+   result = handle.query(request)
+   print('Upsert data')
+   for r in result.get_results():
+      print('\t' + str(r))
 
+# update data
+def update_data(handle,sqlstmt):
+   request = QueryRequest().set_statement(sqlstmt)
+   result = handle.query(request)
+   print('Data Updated in table: stream_acct')
+
+# delete row with a primary KEY
+def del_row(handle,table_name):
+   request = DeleteRequest().set_key({'acct_Id': 1}).set_table_name(table_name)
+   result = handle.delete(request)
+   print('Deleted data from table: stream_acct')
+
+#delete row(s) with a filter condition
+def delete_rows(handle,sqlstmt):
+   request = QueryRequest().set_statement(sqlstmt)
+   result = handle.query(request)
+   print('Deleted data from table: stream_acct')
 
 def main():
    acct1='''
@@ -334,20 +350,131 @@ def main():
          }
       ]
    }}'''
-   # if cloud service uncomment this. else if onPremise comment this line
+   upsert_row = '''UPSERT INTO stream_acct VALUES
+   (
+      1,
+      "AP",
+      "2023-10-18",
+      {
+         "firstName": "Adam",
+         "lastName": "Phillips",
+         "country": "Germany",
+         "contentStreamed": [{
+            "showName": "At the Ranch",
+            "showId": 26,
+            "showtype": "tvseries",
+            "genres": ["action", "crime", "spanish"],
+            "numSeasons": 4,
+            "seriesInfo": [{
+               "seasonNum": 1,
+               "numEpisodes": 2,
+               "episodes": [{
+                  "episodeID": 20,
+                  "episodeName": "Season 1 episode 1",
+                  "lengthMin": 75,
+                  "minWatched": 75,
+                  "date": "2022-04-18"
+               },
+               {
+                  "episodeID": 30,
+                  "lengthMin": 60,
+                  "episodeName": "Season 1 episode 2",
+                  "minWatched": 40,
+                  "date": "2022 - 04 - 18 "
+               }]
+            },
+            {
+               "seasonNum": 2,
+               "numEpisodes": 2,
+               "episodes": [{
+                  "episodeID": 40,
+                  "episodeName": "Season 2 episode 1",
+                  "lengthMin": 40,
+                  "minWatched": 30,
+                  "date": "2022-04-25"
+               },
+               {
+                  "episodeID": 50,
+                  "episodeName": "Season 2 episode 2",
+                  "lengthMin": 45,
+                  "minWatched": 30,
+                  "date": "2022-04-27"
+               }]
+            },
+            {
+               "seasonNum": 3,
+               "numEpisodes": 2,
+               "episodes": [{
+                  "episodeID": 60,
+                  "episodeName": "Season 3 episode 1",
+                  "lengthMin": 20,
+                  "minWatched": 20,
+                  "date": "2022-04-25"
+               },
+               {
+                  "episodeID": 70,
+                  "episodeName": "Season 3 episode 2",
+                  "lengthMin": 45,
+                  "minWatched": 30,
+                  "date": "2022 - 04 - 27 "
+               }]
+            }]
+         },
+         {
+            "showName": "Bienvenu",
+            "showId": 15,
+            "showtype": "tvseries",
+            "genres": ["comedy", "french"],
+            "numSeasons": 2,
+            "seriesInfo": [{
+               "seasonNum": 1,
+               "numEpisodes": 2,
+               "episodes": [{
+                  "episodeID": 20,
+                  "episodeName": "Bonjour",
+                  "lengthMin": 45,
+                  "minWatched": 45,
+                  "date": "2022-03-07"
+               },
+               {
+                  "episodeID": 30,
+                  "episodeName": "Merci",
+                  "lengthMin": 42,
+                  "minWatched": 42,
+                  "date": "2022-03-08"
+               }]
+            }]
+         }]
+      }
+   ) RETURNING * '''
+   # if cloud service uncomment this
    handle = get_connection_cloud()
-   # if onPremise uncomment this. elkse if cloud service comment this line
+   # if onPremise uncomment this
    # handle = get_connection_onprem()
    create_table(handle)
    insert_record(handle,'stream_acct',acct1)
    insert_record(handle,'stream_acct',acct2)
    insert_record(handle,'stream_acct',acct3)
-   sqlstmt = 'select * from stream_acct'
-   print('Fetching all data from the table:')
-   fetch_data(handle,sqlstmt)
-   sqlstmt = 'select account_expiry, acct.acct_data.lastName, acct.acct_data.contentStreamed[].showName from stream_acct acct where acct_id=1'
-   print('Fetching partial data filtered from the table:')
-   fetch_data(handle,sqlstmt)
+   upsert_data(handle,upsert_row)
+   # update non-JSON data
+   upd_stmt ='''UPDATE stream_acct SET account_expiry="2023-12-28T00:00:00.0Z" WHERE acct_Id=3'''
+   update_data(handle,upd_stmt)
+   # update JSON data and add a node
+   upd_json_addnode = '''UPDATE stream_acct acct1 ADD acct1.acct_data.contentStreamed.seriesInfo[1].episodes {
+     "date" : "2022-04-26",
+     "episodeID" : 43,
+     "episodeName" : "Season 2 episode 2",
+     "lengthMin" : 45,
+     "minWatched" : 45} WHERE acct_Id=2 RETURNING *'''
+   update_data(handle,upd_json_addnode)
+   # update JSON data and delete a node
+   upd_json_delnode = '''UPDATE stream_acct acct1 REMOVE acct1.acct_data.contentStreamed.seriesInfo[1].episodes[1] WHERE acct_Id=2 RETURNING *'''
+   update_data(handle,upd_json_delnode)
+   # delete row based on primary key
+   del_row(handle,'stream_acct')
+   # delete data based on a filter condition
+   del_stmt ='''DELETE FROM stream_acct acct1 WHERE acct1.acct_data.firstName="Adelaide" AND acct1.acct_data.lastName="Willard"'''
+   delete_rows(handle,del_stmt)
    os._exit(0)
 
 if __name__ == "__main__":

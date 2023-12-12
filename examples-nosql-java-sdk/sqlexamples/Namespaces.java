@@ -1,4 +1,4 @@
-/* Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+/* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 */
 import oracle.nosql.driver.NoSQLHandle;
@@ -13,7 +13,7 @@ public class Namespaces{
    final static String nsName = "ns1";
 
    public static void main(String[] args) throws Exception {
-      /* Replace the placeholder below with your full hostname */
+      /* Replace the placeholder below with the fullname of your host */
       String kvstore_endpoint ="http://<your_hostname>:8080";
       NoSQLHandle handle = generateNoSQLHandleonPrem(kvstore_endpoint);
       try {
@@ -29,7 +29,7 @@ public class Namespaces{
    private static NoSQLHandle generateNoSQLHandleonPrem(String kvstore_endpoint) throws Exception {
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
-      /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider */
+      /* If using a secure store, uncomment the line below and pass the username, password of the store to StoreAccessTokenProvider */
       /* config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password)); */
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;

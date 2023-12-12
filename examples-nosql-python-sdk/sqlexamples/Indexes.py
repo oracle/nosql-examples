@@ -1,4 +1,4 @@
-# Copyright (c) 2019, 2023 Oracle and/or its affiliates.
+# Copyright (c) 2023, 2024 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 import os
 from borneo import (Regions, NoSQLHandle, NoSQLHandleConfig, PutRequest,QueryRequest,
@@ -20,10 +20,10 @@ def get_connection_cloud():
 
 # Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
 def get_connection_onprem():
-    # replace the placeholder with the name of your local host
+    # replace the placeholder with the name of your host
     kvstore_endpoint ='http://<hostname>:8080'
     provider = StoreAccessTokenProvider()
-    # If using a secure store pass the username, password of the store to StoreAccessTokenProvider
+    # If using a secure store, uncomment the line below and pass the username, password of the store to StoreAccessTokenProvider
     # provider = StoreAccessTokenProvider(username, password)
     return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
@@ -63,7 +63,7 @@ def drop_index(handle):
 def main():
    # if cloud service uncomment this. else if onPremise comment this line
    handle = get_connection_cloud()
-   # if onPremise uncomment this. elkse if cloud service comment this line
+   # if onPremise uncomment this. else if cloud service comment this line
    # handle = get_connection_onprem()
    create_table(handle)
    create_index(handle)

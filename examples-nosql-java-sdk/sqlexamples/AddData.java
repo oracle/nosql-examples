@@ -1,4 +1,4 @@
-/* Copyright (c) 2020, 2023 Oracle and/or its affiliates.
+/* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 */
 import java.io.File;
@@ -39,7 +39,7 @@ public class AddData {
             "\"numEpisodes\" : 2,"+
             "\"episodes\": [ {"+
                "\"episodeID\": 20,"+
-				       "\"episodeName\" : \"Season 1 episode 1\","+
+				   "\"episodeName\" : \"Season 1 episode 1\","+
                "\"lengthMin\": 85,"+
                "\"minWatched\": 85,"+
                "\"date\" : \"2022-04-18\""+
@@ -47,7 +47,7 @@ public class AddData {
             "{"+
                "\"episodeID\": 30,"+
                "\"lengthMin\": 60,"+
-				       "\"episodeName\" : \"Season 1 episode 2\","+
+				   "\"episodeName\" : \"Season 1 episode 2\","+
                "\"minWatched\": 60,"+
                "\"date\" : \"2022-04-18\""+
             "}]"+
@@ -57,14 +57,14 @@ public class AddData {
             "\"numEpisodes\" : 2,"+
             "\"episodes\": [{"+
                "\"episodeID\": 40,"+
-				       "\"episodeName\" : \"Season 2 episode 1\","+
+				   "\"episodeName\" : \"Season 2 episode 1\","+
                "\"lengthMin\": 50,"+
                "\"minWatched\": 50,"+
                "\"date\" : \"2022-04-25\""+
             "},"+
             "{"+
                "\"episodeID\": 50,"+
-				       "\"episodeName\" : \"Season 2 episode 2\","+
+				   "\"episodeName\" : \"Season 2 episode 2\","+
                "\"lengthMin\": 45,"+
                "\"minWatched\": 30,"+
                "\"date\" : \"2022-04-27\""+
@@ -105,14 +105,14 @@ public class AddData {
             "\"episodes\": ["+
             "{"+
                "\"episodeID\": 20,"+
-				       "\"episodeName\" : \"Bonjour\","+
+				   "\"episodeName\" : \"Bonjour\","+
                "\"lengthMin\": 45,"+
                "\"minWatched\": 45,"+
                "\"date\" : \"2022-03-07\""+
             "},"+
             "{"+
                "\"episodeID\": 30,"+
-				       "\"episodeName\" : \"Merci\","+
+				   "\"episodeName\" : \"Merci\","+
                "\"lengthMin\": 42,"+
                "\"minWatched\": 42,"+
                "\"date\" : \"2022-03-08\""+
@@ -142,7 +142,7 @@ public class AddData {
             "\"numEpisodes\" : 2,"+
             "\"episodes\": [ {"+
                "\"episodeID\": 22,"+
-				       "\"episodeName\" : \"Season 1 episode 1\","+
+				   "\"episodeName\" : \"Season 1 episode 1\","+
                "\"lengthMin\": 65,"+
                "\"minWatched\": 65,"+
                "\"date\" : \"2022-04-18\""+
@@ -150,7 +150,7 @@ public class AddData {
             "{"+
                "\"episodeID\": 32,"+
                "\"lengthMin\": 60,"+
-				       "\"episodeName\" : \"Season 1 episode 2\","+
+				   "\"episodeName\" : \"Season 1 episode 2\","+
                "\"minWatched\": 60,"+
                "\"date\" : \"2022-04-18\""+
             "}]"+
@@ -160,7 +160,7 @@ public class AddData {
             "\"numEpisodes\" :3,"+
             "\"episodes\": [{"+
                "\"episodeID\": 42,"+
-				       "\"episodeName\" : \"Season 2 episode 1\","+
+				   "\"episodeName\" : \"Season 2 episode 1\","+
                "\"lengthMin\": 50,"+
                "\"minWatched\": 50,"+
                "\"date\" : \"2022-04-25\""+
@@ -190,7 +190,7 @@ public class AddData {
             "\"numEpisodes\" : 2,"+
             "\"episodes\": [ {"+
                "\"episodeID\": 23,"+
-				       "\"episodeName\" : \"Season 1 episode 1\","+
+				   "\"episodeName\" : \"Season 1 episode 1\","+
                "\"lengthMin\": 45,"+
                "\"minWatched\": 40,"+
                "\"date\" : \"2022-08-18\""+
@@ -198,7 +198,7 @@ public class AddData {
             "{"+
                "\"episodeID\": 33,"+
                "\"lengthMin\": 60,"+
-				       "\"episodeName\" : \"Season 1 episode 2\","+
+				   "\"episodeName\" : \"Season 1 episode 2\","+
                "\"minWatched\": 50,"+
                "\"date\" : \"2022-08-19\""+
             "}]"+
@@ -208,14 +208,14 @@ public class AddData {
             "\"numEpisodes\" : 3,"+
             "\"episodes\": [{"+
                "\"episodeID\": 43,"+
-				       "\"episodeName\" : \"Season 2 episode 1\","+
+				   "\"episodeName\" : \"Season 2 episode 1\","+
                "\"lengthMin\": 50,"+
                "\"minWatched\": 50,"+
                "\"date\" : \"2022-08-25\""+
             "},"+
             "{"+
               "\"episodeID\": 53,"+
-				       "\"episodeName\" : \"Season 2 episode 2\","+
+			     "\"episodeName\" : \"Season 2 episode 2\","+
                "\"lengthMin\": 45,"+
                "\"minWatched\": 30,"+
                "\"date\" : \"2022-08-27\""+
@@ -237,14 +237,14 @@ public class AddData {
             "\"episodes\": ["+
             "{"+
                "\"episodeID\": 24,"+
-				       "\"episodeName\" : \"Bonjour\","+
+				   "\"episodeName\" : \"Bonjour\","+
                "\"lengthMin\": 45,"+
                "\"minWatched\": 45,"+
                "\"date\" : \"2022-06-07\""+
             "},"+
             "{"+
                "\"episodeID\": 34,"+
-				       "\"episodeName\" : \"Merci\","+
+				   "\"episodeName\" : \"Merci\","+
                "\"lengthMin\": 42,"+
                "\"minWatched\": 42,"+
                "\"date\" : \"2022-06-08\""+
@@ -285,7 +285,7 @@ public class AddData {
    private static NoSQLHandle generateNoSQLHandleonPrem(String kvstore_endpoint) throws Exception {
        NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
        config.setAuthorizationProvider(new StoreAccessTokenProvider());
-       /* If using a secure store pass the username, password of the store to StoreAccessTokenProvider */
+       /* If using a secure store, uncomment the line below and pass the username, password of the store to StoreAccessTokenProvider */
        /* config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password)); */
        NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
        return handle;
