@@ -285,11 +285,12 @@ const stmt2 = 'select account_expiry, acct.acct_data.lastName, acct.acct_data.co
 doQueryData();
 
 async function doQueryData() {
+   let handle;
    try {
       /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
-      let handle = await getConnection_cloud(); */
+      handle = await getConnection_cloud(); */
       /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
-      let handle = await getConnection_onPrem(); */
+      handle = await getConnection_onPrem(); */
       await createTable(handle);
       let putResult = await handle.put(TABLE_NAME, JSON.parse(acct1));
       let putResult1 = await handle.put(TABLE_NAME, JSON.parse(acct2));
@@ -299,11 +300,14 @@ async function doQueryData() {
       await fetchData(handle,stmt1);
       console.log("Fetching partial filtered rows");
       await fetchData(handle,stmt2);
-      process.exit(0);
    } catch (error ) {
-      console.log(error);
-      process.exit(-1);
+      console.log(error);      
     }
+    finally {
+      if (handle) {
+         handle.close();
+      }
+   }
 }
 
 /* Create and return an instance of a NoSQLCLient object for cloud service */

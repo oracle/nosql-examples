@@ -91,11 +91,14 @@ async function dotablejoins() {
       await fetchData(handle,stmt_loj);
       console.log("Fetching data using NESTED TABLES");
       await fetchData(handle,stmt_nt);
-      process.exit(0);
    } catch (error ) {
-      console.log(error);
-      process.exit(-1);
+      console.log(error);      
    }
+   finally {
+     if (handle) {
+        handle.close();
+     }
+  }
 }
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 function getConnection_cloud() {

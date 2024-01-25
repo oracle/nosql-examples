@@ -11,15 +11,19 @@ const TABLE_NAME = 'stream_acct';
 donamespaces();
 
 async function donamespaces() {
+   let handle;
    try {
-      let handle = await getConnection_onPrem();
+      handle = await getConnection_onPrem();
       await createNS(handle);
-      await dropNS(handle);
-      process.exit(0);
+      await dropNS(handle);      
    } catch (error ) {
       console.log(error);
-      process.exit(-1);
    }
+   finally {
+     if (handle) {
+        handle.close();
+     }
+  }
 }
 
 /* Create and return an instance of a NoSQLCLient object for onPremises */

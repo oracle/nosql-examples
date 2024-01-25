@@ -282,20 +282,24 @@ const acct3= `
 doAddData();
 
 async function doAddData() {
+   let handle;
    try {
       /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
-      let handle = await getConnection_cloud(); */
+      handle = await getConnection_cloud(); */
       /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
-      let handle = await getConnection_onPrem(); */
+      handle = await getConnection_onPrem(); */
       await createTable(handle);
       let putResult = await handle.put(TABLE_NAME, JSON.parse(acct1));
       let putResult1 = await handle.put(TABLE_NAME, JSON.parse(acct2));
       let putResult2 = await handle.put(TABLE_NAME, JSON.parse(acct3));
-      console.log("Wrote records of acct stream schema");
-      process.exit(0);
+      console.log("Wrote records of acct stream schema");      
    } catch (error ) {
       console.log(error);
-      process.exit(-1);
+   }
+   finally {
+      if (handle) {
+         handle.close();
+      }
    }
 }
 

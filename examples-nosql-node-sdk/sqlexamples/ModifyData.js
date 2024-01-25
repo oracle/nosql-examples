@@ -391,11 +391,12 @@ const del_stmt = 'DELETE FROM stream_acct acct1 WHERE acct1.acct_data.firstName=
 doModifyData();
 
 async function doModifyData() {
+   let handle;
    try {
       /*if it is a cloud service uncomment the line below, else if it is onPremise, comment the line below*/
-      let handle = await getConnection_cloud();
+      handle = await getConnection_cloud();
       /*if it is a onPremise uncomment the line below,else if it is cloud service, comment the line below*/
-      /*let handle = await getConnection_onPrem();*/
+      /*handle = await getConnection_onPrem();*/
       await createTable(handle);
       let putResult = await handle.put(TABLE_NAME, JSON.parse(acct1));
       let putResult1 = await handle.put(TABLE_NAME, JSON.parse(acct2));
@@ -413,11 +414,14 @@ async function doModifyData() {
       console.log("Row deleted based on primary key");
       await deleteRows(handle,del_stmt);
       console.log("Rows deleted");
-      process.exit(0);
    } catch (error ) {
-      console.log(error);
-      process.exit(-1);
+      console.log(error);      
     }
+    finally {
+      if (handle) {
+         handle.close();
+      }
+   }
 }
 
 /* Create and return an instance of a NoSQLCLient object for cloud service */

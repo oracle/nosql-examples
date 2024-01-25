@@ -11,18 +11,22 @@ const TABLE_NAME = 'stream_acct';
 doaltertable();
 
 async function doaltertable() {
+   let handle;
    try {
       /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
-      let handle = await getConnection_cloud(); */
+      handle = await getConnection_cloud(); */
       /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
-      let handle = await getConnection_onPrem(); */
+      handle = await getConnection_onPrem(); */
       await createTable(handle);
       await alterTable(handle);
-      await dropTable(handle);
-      process.exit(0);
+      await dropTable(handle);      
    } catch (error ) {
       console.log(error);
-      process.exit(-1);
+   }
+   finally {
+      if (handle) {
+         handle.close();
+      }
    }
 }
 

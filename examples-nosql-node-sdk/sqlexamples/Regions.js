@@ -14,17 +14,21 @@ doregions();
  * create a table, write a record to the table, then read that record back
  */
 async function doregions() {
+    let handle;
     try {
-        let handle = await getConnection_onPrem();
+        handle = await getConnection_onPrem();
         await createRegion(handle);
         await crtTabInRegion(handle);
         await dropTabInRegion(handle);
-        await dropRegion(handle);
-        process.exit(0);
+        await dropRegion(handle);       
     } catch (error ) {
         console.log(error);
-        process.exit(-1);
     }
+    finally {
+      if (handle) {
+         handle.close();
+      }
+   }
 }
 
 /* Create and return an instance of a NoSQLCLient object for onPremises */
