@@ -32,9 +32,12 @@ def drop_ns(handle):
    print('Namespace: ns1 is dropped')
 
 def main():
+   handle = None
    handle = get_connection_onprem()
    create_ns(handle)
    drop_ns(handle)
+   if handle is not None:
+      handle.close()
    os._exit(0)
 
 if __name__ == "__main__":

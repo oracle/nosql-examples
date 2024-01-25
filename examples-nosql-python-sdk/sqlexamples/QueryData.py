@@ -61,6 +61,7 @@ def fetch_data(handle,sqlstmt):
 
 
 def main():
+   handle = None
    acct1='''
    {
    "acct_Id":1,
@@ -348,6 +349,8 @@ def main():
    sqlstmt = 'select account_expiry, acct.acct_data.lastName, acct.acct_data.contentStreamed[].showName from stream_acct acct where acct_id=1'
    print('Fetching partial data filtered from the table:')
    fetch_data(handle,sqlstmt)
+   if handle is not None:
+      handle.close()
    os._exit(0)
 
 if __name__ == "__main__":

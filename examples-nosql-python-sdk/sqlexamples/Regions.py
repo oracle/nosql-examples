@@ -62,11 +62,14 @@ def drop_region(handle):
    print('Region LON is dropped')
 
 def main():
+   handle = None
    handle = get_connection_onprem()
    create_region(handle)
    create_tab_region(handle)
    drop_tab_region(handle)
    drop_region(handle)
+   if handle is not None:
+      handle.close()
    os._exit(0)
 
 if __name__ == "__main__":

@@ -52,6 +52,7 @@ def insert_record(handle,table_name,acct_data):
    print('Loaded a row into table: stream_acct')
 
 def main():
+   handle = None
    acct1='''
    {
    "acct_Id":1,
@@ -333,6 +334,8 @@ def main():
    insert_record(handle,'stream_acct',acct1)
    insert_record(handle,'stream_acct',acct2)
    insert_record(handle,'stream_acct',acct3)
+   if handle is not None:
+      handle.close()
    os._exit(0)
 
 if __name__ == "__main__":

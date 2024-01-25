@@ -57,6 +57,7 @@ def drop_table(handle):
    print('Dropped table: stream_acct')
 
 def main():
+   handle = None
    # if cloud service uncomment this. else if onPremise comment this line
    handle = get_connection_cloud()
    # if onPremise uncomment this. else if cloud service comment this line
@@ -64,6 +65,8 @@ def main():
    create_table(handle)
    alter_table(handle)
    drop_table(handle)
+   if handle is not None:
+      handle.close()
    os._exit(0)
 
 if __name__ == "__main__":

@@ -77,6 +77,7 @@ def delete_rows(handle,sqlstmt):
    print('Deleted data from table: stream_acct')
 
 def main():
+   handle = None
    acct1='''
    {
    "acct_Id":1,
@@ -475,6 +476,8 @@ def main():
    # delete data based on a filter condition
    del_stmt ='''DELETE FROM stream_acct acct1 WHERE acct1.acct_data.firstName="Adelaide" AND acct1.acct_data.lastName="Willard"'''
    delete_rows(handle,del_stmt)
+   if handle is not None:
+      handle.close()
    os._exit(0)
 
 if __name__ == "__main__":
