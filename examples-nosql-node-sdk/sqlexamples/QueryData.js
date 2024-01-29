@@ -300,6 +300,8 @@ async function doQueryData() {
       let putResult1 = await handle.put(TABLE_NAME, JSON.parse(acct2));
       let putResult2 = await handle.put(TABLE_NAME, JSON.parse(acct3));
       console.log("Wrote records of acct stream schema");
+      console.log("Fetch one row using get API");
+      await getRow(handle,2);
       console.log("Fetching all rows");
       await fetchData(handle,stmt1);
       console.log("Fetching partial filtered rows");
@@ -373,6 +375,15 @@ async function fetchData(handle,querystmt) {
          }
          opt.continuationKey = result.continuationKey;
       } while(opt.continuationKey);
+   } catch(error) {
+      console.error('  Error: ' + error.message);
+   }
+}
+/*fetches single row with get API*/
+async function getRow(handle,idVal) {
+   try {
+      const result = await handle.get(TABLE_NAME,{acct_Id: idVal });
+      console.log('Got row:  %O', result.row);
    } catch(error) {
       console.error('  Error: ' + error.message);
    }

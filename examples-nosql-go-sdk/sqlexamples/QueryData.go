@@ -137,6 +137,25 @@ func fetchData(client *nosqldb.Client, err error, tableName string, querystmt st
 		fmt.Printf("\t%d: %s\n", i+1, jsonutil.AsJSON(r.Map()))
 	}
 }
+//fetch data from the table
+func getRow(client *nosqldb.Client, err error, tableName string, colName string, Id int)(){
+	key:=&types.MapValue{}
+   key.Put(colName, Id)
+   req:=&nosqldb.GetRequest{
+         TableName: tableName,
+         Key: key,
+   }
+   res, err:=client.Get(req)
+	if err != nil {
+		fmt.Printf("GetResults() failed: %v\n", err)
+		return
+	}
+	if res.RowExists() {
+		fmt.Printf("Got row: %v\n", res.ValueAsJSON())
+	} else {
+		fmt.Printf("The row does not exist.\n")
+	}
+}
 
 func main() {
 	// if using cloud service uncomment the line below. else if using onPremises
@@ -376,6 +395,8 @@ func main() {
 	}`)
 	insertData(client, err, tableName, value2)
 	fmt.Printf("Put row succeeded: \n")
+	fmt.Printf("Fetch single row based on primary key: \n")
+	getRow(client, err,tableName,"acct_Id",2)
 	fmt.Printf("Fetching all data.\n")
 	stmt1 := "select * from stream_acct"
 	fetchData(client, err, tableName, stmt1)

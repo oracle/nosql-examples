@@ -285,6 +285,8 @@ public class QueryData {
          writeRows(handle, (MapValue)newvalue);
          writeRows(handle, (MapValue)newvalue1);
          writeRows(handle, (MapValue)newvalue2);
+         System.out.println("Fetching a single row based on the primary key");
+         getRow(handle,"acct_Id",2);
          String sqlstmt_allrows="select * from stream_acct acct";
          System.out.println("Fetching all data ");
          fetchRows(handle,sqlstmt_allrows);
@@ -363,6 +365,19 @@ public class QueryData {
          for (MapValue res : results) {
             System.out.println("\t" + res);
          }
+      }
+   }
+   //Fetch single row using get API
+   private static void getRow(NoSQLHandle handle,String colName,int Id) throws Exception {
+      MapValue key = new MapValue().put(colName, Id);
+      GetRequest getRequest = new GetRequest().setKey(key)
+                                        .setTableName(tableName);
+      GetResult getRes = handle.get(getRequest);
+      /* on success, GetResult.getValue() returns a non-null value */
+      if (getRes.getValue() != null) {
+         System.out.println("\t" +getRes.getValue().toString());
+      } else {
+         System.out.println("Get Failed");
       }
    }
 }

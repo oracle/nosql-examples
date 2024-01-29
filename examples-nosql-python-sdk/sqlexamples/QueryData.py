@@ -62,6 +62,13 @@ def fetch_data(handle,sqlstmt):
       for r in result.get_results():
          print('\t' + str(r))
 
+# Fetch single row using get API
+def getRow(handle,colName,Id):
+   request = GetRequest().set_table_name('stream_acct')
+   request.set_key({colName: Id})
+   print('Query results: ')
+   result = handle.get(request)
+   print('Query results are' + str(result.get_value()))
 
 def main():
    handle = None
@@ -346,6 +353,8 @@ def main():
    insert_record(handle,'stream_acct',acct1)
    insert_record(handle,'stream_acct',acct2)
    insert_record(handle,'stream_acct',acct3)
+   print('Fetching a single row based on the primary key')
+   getRow(handle,'acct_Id',2)
    sqlstmt = 'select * from stream_acct'
    print('Fetching all data from the table:')
    fetch_data(handle,sqlstmt)

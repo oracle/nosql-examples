@@ -315,6 +315,19 @@ namespace Oracle.NoSQL.SDK.Samples
          var queryEnumerable = client.GetQueryAsyncEnumerable(querystmt);
          await DoQuery(queryEnumerable);
       }
+      private static async Task getRow(NoSQLClient client,String colName, int Id){
+         var result = await client.GetAsync(TableName,
+         new MapValue
+         {
+            [colName] =Id
+         });
+         if (result.Row != null){
+            Console.WriteLine("Got row: {0}\n", result.Row.ToJsonString());
+         }
+         else {
+            Console.WriteLine("Row with primaryKey {0} doesn't exist",colName);
+         }
+      }
       // replace the place holder for compartment with OCID of your compartment
       public static async Task Main(string[] args)
       {
@@ -327,6 +340,8 @@ namespace Oracle.NoSQL.SDK.Samples
             // var client = await getconnection_onPrem();
             Console.WriteLine("Created NoSQLClient instance");
             await crtTabAddData(client);
+            Console.WriteLine("Fetching a single row based on the primary key");
+            await getRow(client,"acct_Id",2);
             Console.WriteLine("\nFetching All Data!");
             await fetchData(client,stmt1);
             Console.WriteLine("\nFetching partial filtered data!");
