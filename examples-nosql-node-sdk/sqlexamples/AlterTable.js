@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -13,13 +14,16 @@ doaltertable();
 async function doaltertable() {
    let handle;
    try {
-      /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
+      /* UNCOMMENT line of code below if you are using Oracle NoSQL Database
+      * Cloud service. Leave the line commented if you are using onPrem database
       handle = await getConnection_cloud(); */
-      /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
+      /* UNCOMMENT line of code below if you are using onPremise Oracle NoSQL
+       * Database. Leave the line commented if you are using NoSQL Database
+       * Cloud Service
       handle = await getConnection_onPrem(); */
       await createTable(handle);
       await alterTable(handle);
-      await dropTable(handle);      
+      await dropTable(handle);
    } catch (error ) {
       console.log(error);
    }
@@ -32,7 +36,7 @@ async function doaltertable() {
 
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 function getConnection_cloud() {
-   /* replace the placeholders for compartment and region with the actual values. */
+   /* replace the placeholders for compartment and region with actual values.*/
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,

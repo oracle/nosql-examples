@@ -1,5 +1,6 @@
 // Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+// Licensed under the Universal Permissive License v 1.0 as shown at
+// https://oss.oracle.com/licenses/upl/
 package main
 
 import (
@@ -18,7 +19,8 @@ func createClient_cloud() (*nosqldb.Client, error) {
 	var cfg nosqldb.Config
 	// replace the placeholder with your actual region identifier
 	region := "<your_region_identifier>"
-	// Replace the placeholders with the actual value of config file location and the ocid of your compartment
+	// Replace the placeholders with the actual value of config file location
+	// and the ocid of your compartment
 	sp, err := iam.NewSignatureProviderFromFile("<location_config_file>", "", "", "<your_compartment_ocid>")
 	if err != nil {
 		return nil, fmt.Errorf("cannot create a Signature Provider: %v", err)
@@ -41,7 +43,8 @@ func createClient_onPrem() (*nosqldb.Client, error) {
 		Endpoint: endpoint,
 		Mode:     "onprem",
 	}
-	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
+	// If using a secure store, uncomment the lines below and pass the username,
+	// password of the store to Config
 	// cfg := nosqldb.Config{
 	//    Mode:     "onprem",
 	//    Username: "<username>",
@@ -75,7 +78,8 @@ func createTable(client *nosqldb.Client, err error, tableName string) {
 		fmt.Printf("cannot initiate CREATE TABLE request: %v\n", err)
 		return
 	}
-	// The create table request is asynchronous, wait for table creation to complete.
+	// The create table request is asynchronous, wait for table creation
+	// to complete.
 	_, err = tableRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing CREATE TABLE request: %v\n", err)
@@ -96,7 +100,8 @@ func alterTable(client *nosqldb.Client, err error, tableName string) {
 		fmt.Printf("cannot initiate ALTER TABLE request: %v\n", err)
 		return
 	}
-	// The alter table request is asynchronous, wait for table alteration to complete.
+	// The alter table request is asynchronous, wait for table alteration
+	// to complete.
 	_, err = tableRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing ALTER TABLE request: %v\n", err)
@@ -128,9 +133,11 @@ func dropTable(client *nosqldb.Client, err error, tableName string) {
 }
 
 func main() {
-	// if using cloud service uncomment the line below. else if using onPremises comment this line out
+	// if using cloud service uncomment the line below. else if using onPremises
+	// comment this line out
 	client, err := createClient_cloud()
-	// if using onPrem uncomment the line below, else if using cloud service, comment this line
+	// if using onPrem uncomment the line below, else if using cloud service,
+	// comment this line
 	// client, err := createClient_onPrem()
 	if err != nil {
 		fmt.Printf("cannot create NoSQL client: %v\n", err)

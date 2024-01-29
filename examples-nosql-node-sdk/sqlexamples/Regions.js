@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -20,7 +21,7 @@ async function doregions() {
         await createRegion(handle);
         await crtTabInRegion(handle);
         await dropTabInRegion(handle);
-        await dropRegion(handle);       
+        await dropRegion(handle);
     } catch (error ) {
         console.log(error);
     }

@@ -1,5 +1,6 @@
 # Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+# Licensed under the Universal Permissive License v 1.0 as shown at
+# https://oss.oracle.com/licenses/upl/
 import os
 from borneo import (Regions, NoSQLHandle, NoSQLHandleConfig, PutRequest,QueryRequest,
                     TableRequest, GetRequest, TableLimits, State)
@@ -13,18 +14,20 @@ def get_connection_cloud():
    #replace the placeholder with your region identifier
    region = '<your_region_identifier>'
    provider = SignatureProvider()
-   #If using the DEFAULT profile with the config file in default location  =~/.oci/config
+   #If using the DEFAULT profile with the config file in default location
+   # ~/.oci/config
    config = NoSQLHandleConfig(region, provider)
    #replace the placeholder with the ocid of your compartment
    config.set_default_compartment("<ocid_of_your_compartment>")
    return(NoSQLHandle(config))
 
-# Given a endpoint, instantiate a connection to the onPremise Oracle NoSQL database
+# Given a endpoint, instantiate a connection to onPremise Oracle NoSQL database
 def get_connection_onprem():
    #replace the placeholder with the name of your host
    kvstore_endpoint ='http://<hostname>:8080'
    provider = StoreAccessTokenProvider()
-   #If using a secure store, uncomment the line below and pass the username, password of the store to StoreAccessTokenProvider
+   #If using a secure store, uncomment the line below and pass the username,
+   # password of the store to StoreAccessTokenProvider
    #provider = StoreAccessTokenProvider(username, password)
    return NoSQLHandle(NoSQLHandleConfig(kvstore_endpoint, provider))
 
@@ -36,7 +39,7 @@ def create_table(handle,statement,table_flag,table_name):
       request = TableRequest().set_statement(statement)
 
    # Create the table, waiting for a total of 40000 milliseconds
-   # and polling the service every 3000 milliseconds to see if the table is active
+   # and polling the service every 3000 milliseconds to see if table is active
    table_result = handle.do_table_request(request, 40000, 3000)
    table_result.wait_for_completion(handle, 40000, 3000)
    if (table_result.get_state() == State.ACTIVE):

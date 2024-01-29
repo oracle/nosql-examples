@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -393,10 +394,13 @@ doModifyData();
 async function doModifyData() {
    let handle;
    try {
-      /*if it is a cloud service uncomment the line below, else if it is onPremise, comment the line below*/
-      handle = await getConnection_cloud();
-      /*if it is a onPremise uncomment the line below,else if it is cloud service, comment the line below*/
-      /*handle = await getConnection_onPrem();*/
+      /* UNCOMMENT line of code below if you are using Oracle NoSQL Database
+      * Cloud service. Leave the line commented if you are using onPrem database
+      handle = await getConnection_cloud(); */
+      /* UNCOMMENT line of code below if you are using onPremise Oracle NoSQL
+       * Database. Leave the line commented if you are using NoSQL Database
+       * Cloud Service
+      handle = await getConnection_onPrem(); */
       await createTable(handle);
       let putResult = await handle.put(TABLE_NAME, JSON.parse(acct1));
       let putResult1 = await handle.put(TABLE_NAME, JSON.parse(acct2));
@@ -415,7 +419,7 @@ async function doModifyData() {
       await deleteRows(handle,del_stmt);
       console.log("Rows deleted");
    } catch (error ) {
-      console.log(error);      
+      console.log(error);
     }
     finally {
       if (handle) {
@@ -426,7 +430,7 @@ async function doModifyData() {
 
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 function getConnection_cloud() {
-   /* replace the placeholders for compartment and region with the actual values. */
+   /* replace the placeholders for compartment and region with actual values.*/
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,

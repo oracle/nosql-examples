@@ -1,5 +1,6 @@
 // Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+// Licensed under the Universal Permissive License v 1.0 as shown at
+// https://oss.oracle.com/licenses/upl/
 package main
 
 import (
@@ -18,7 +19,8 @@ func createClient_onPrem() (*nosqldb.Client, error) {
 		Endpoint: endpoint,
 		Mode:     "onprem",
 	}
-	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
+	// If using a secure store, uncomment the lines below and pass the username,
+	// password of the store to Config
 	// cfg := nosqldb.Config{
 	//    Mode:     "onprem",
 	//    Username: "<username>",

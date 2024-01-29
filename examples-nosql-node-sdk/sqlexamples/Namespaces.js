@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -15,7 +16,7 @@ async function donamespaces() {
    try {
       handle = await getConnection_onPrem();
       await createNS(handle);
-      await dropNS(handle);      
+      await dropNS(handle);
    } catch (error ) {
       console.log(error);
    }
