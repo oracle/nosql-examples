@@ -52,7 +52,7 @@ namespace Oracle.NoSQL.SDK.Samples
          var client =  new NoSQLClient(new NoSQLConfig
          {
             Region = <your_region_identifier>,
-            Compartment = "<your_compartment_ocid"
+            Compartment = "<your_compartment_ocid>"
          });
          return client;
       }

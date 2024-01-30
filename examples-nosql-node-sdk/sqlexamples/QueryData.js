@@ -308,8 +308,8 @@ async function doQueryData() {
       await fetchData(handle,stmt2);
    } catch (error ) {
       console.log(error);
-    }
-    finally {
+   }
+   finally {
       if (handle) {
          handle.close();
       }
