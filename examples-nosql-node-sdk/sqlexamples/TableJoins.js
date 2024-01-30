@@ -1,5 +1,6 @@
 /*Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 
@@ -12,10 +13,13 @@ dotablejoins();
 
 async function dotablejoins() {
    try {
-      /*if it is a cloud service uncomment the line below, else if it is onPremise, comment the line below*/
-      let handle = await getConnection_cloud();
-      /*if it is a onPremise uncomment the line below,else if it is cloud service, comment the line below*/
-      /*let handle = await getConnection_onPrem();*/
+      /* UNCOMMENT line of code below if you are using Oracle NoSQL Database
+      * Cloud service. Leave the line commented if you are using onPrem database
+      handle = await getConnection_cloud(); */
+      /* UNCOMMENT line of code below if you are using onPremise Oracle NoSQL
+       * Database. Leave the line commented if you are using NoSQL Database
+       * Cloud Service
+      handle = await getConnection_onPrem(); */
       const table_name = 'ticket';
       const regtbl_DDL = `CREATE TABLE IF NOT EXISTS ${table_name} (ticketNo LONG,
                                                                    confNo STRING,
@@ -91,15 +95,18 @@ async function dotablejoins() {
       await fetchData(handle,stmt_loj);
       console.log("Fetching data using NESTED TABLES");
       await fetchData(handle,stmt_nt);
-      process.exit(0);
    } catch (error ) {
       console.log(error);
-      process.exit(-1);
    }
+   finally {
+     if (handle) {
+        handle.close();
+     }
+  }
 }
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 function getConnection_cloud() {
-   /* replace the placeholders for compartment and region with the actual values. */
+   /* replace the placeholders for compartment and region with actual values.*/
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,

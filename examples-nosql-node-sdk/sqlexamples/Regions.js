@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -14,17 +15,21 @@ doregions();
  * create a table, write a record to the table, then read that record back
  */
 async function doregions() {
+    let handle;
     try {
-        let handle = await getConnection_onPrem();
+        handle = await getConnection_onPrem();
         await createRegion(handle);
         await crtTabInRegion(handle);
         await dropTabInRegion(handle);
         await dropRegion(handle);
-        process.exit(0);
     } catch (error ) {
         console.log(error);
-        process.exit(-1);
     }
+    finally {
+      if (handle) {
+         handle.close();
+      }
+   }
 }
 
 /* Create and return an instance of a NoSQLCLient object for onPremises */

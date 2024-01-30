@@ -357,11 +357,11 @@ namespace Oracle.NoSQL.SDK.Samples
       //Get a connection handle for Oracle NoSQL Database Cloud Service
       private async static Task<NoSQLClient> getconnection_cloud()
       {
-         // replace the region and compartment place holders with the actual values
+         // replace the region and compartment place holders with actual values
          var client =  new NoSQLClient(new NoSQLConfig
          {
             Region = <your_region_identifier>,
-            Compartment = "<your_compartment_ocid"
+            Compartment = "<your_compartment_ocid>"
          });
          return client;
       }
@@ -441,13 +441,15 @@ namespace Oracle.NoSQL.SDK.Samples
       private static async Task deleteRows(NoSQLClient client,String querystmt){
          var queryEnumerable = client.GetQueryAsyncEnumerable(querystmt);
       }
-      //replace the place holder for compartment with the OCID of your compartment
+      //replace the place holder for compartment with OCID of your compartment
       public static async Task Main(string[] args)
       {
          try {
-            // if using cloud service uncomment the code below, else if using onPremises comment it
+            // if using cloud service uncomment the code below,
+            // else if using onPremises comment it
             var client = await getconnection_cloud();
-            // if using onPremise uncomment the code below, else if using cloud service comment it
+            // if using onPremise uncomment the code below,
+            // else if using cloud service comment it
             //var client = await getconnection_onPrem();
             Console.WriteLine("Created NoSQLClient instance");
             await crtTabAddData(client);

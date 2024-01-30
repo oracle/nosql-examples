@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -11,23 +12,30 @@ const TABLE_NAME = 'stream_acct';
 doindexes();
 
 async function doindexes() {
+   let handle;
    try {
-      /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
-      let handle = await getConnection_cloud(); */
-      /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
-      let handle = await getConnection_onPrem(); */
+      /* UNCOMMENT line of code below if you are using Oracle NoSQL Database
+      * Cloud service. Leave the line commented if you are using onPrem database
+      handle = await getConnection_cloud(); */
+      /* UNCOMMENT line of code below if you are using onPremise Oracle NoSQL
+       * Database. Leave the line commented if you are using NoSQL Database
+       * Cloud Service
+      handle = await getConnection_onPrem(); */
       await createTable(handle);
       await createIndex(handle);
       await dropIndex(handle);
-      process.exit(0);
    } catch (error ) {
       console.log(error);
-      process.exit(-1);
+   }
+   finally {
+      if (handle) {
+         handle.close();
+      }
    }
 }
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 function getConnection_cloud() {
-   /* replace the placeholders for compartment and region with the actual values. */
+   /* replace the placeholders for compartment and region with actual values. */
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,

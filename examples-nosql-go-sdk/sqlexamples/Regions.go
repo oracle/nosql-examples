@@ -1,5 +1,6 @@
 // Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+// Licensed under the Universal Permissive License v 1.0 as shown at
+// https://oss.oracle.com/licenses/upl/
 package main
 
 import (
@@ -18,7 +19,8 @@ func createClient_onPrem() (*nosqldb.Client, error) {
 		Endpoint: endpoint,
 		Mode:     "onprem",
 	}
-	// If using a secure store, uncomment the lines below and pass the username, password of the store to Config
+	// If using a secure store, uncomment the lines below and pass the username,
+	// password of the store to Config
 	// cfg := nosqldb.Config{
 	//    Mode:     "onprem",
 	//    Username: "<username>",
@@ -81,7 +83,8 @@ func crtTabInRegion(client *nosqldb.Client, err error, tableName string) {
 		fmt.Printf("cannot initiate CREATE TABLE request: %v\n", err)
 		return
 	}
-	// The create table request is asynchronous, wait for table creation to complete.
+	// The create table request is asynchronous, wait for table creation
+	// to complete.
 	_, err = tableRes.WaitForCompletion(client, 60*time.Second, time.Second)
 	if err != nil {
 		fmt.Printf("Error finishing CREATE TABLE request: %v\n", err)

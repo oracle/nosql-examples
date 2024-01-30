@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
  */
 'use strict';
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
@@ -285,30 +286,39 @@ const stmt2 = 'select account_expiry, acct.acct_data.lastName, acct.acct_data.co
 doQueryData();
 
 async function doQueryData() {
+   let handle;
    try {
-      /* UNCOMMENT the line of code below if you are using Oracle NoSQL Database Cloud service. Leave the line commented if you are using onPremise database
-      let handle = await getConnection_cloud(); */
-      /* UNCOMMENT the line of code below if you are using onPremise Oracle NoSQL Database. Leave the line commented if you are using NoSQL Database Cloud Service
-      let handle = await getConnection_onPrem(); */
+      /* UNCOMMENT line of code below if you are using Oracle NoSQL Database
+      * Cloud service. Leave the line commented if you are using onPrem database
+      handle = await getConnection_cloud(); */
+      /* UNCOMMENT line of code below if you are using onPremise Oracle NoSQL
+       * Database. Leave the line commented if you are using NoSQL Database
+       * Cloud Service
+      handle = await getConnection_onPrem(); */
       await createTable(handle);
       let putResult = await handle.put(TABLE_NAME, JSON.parse(acct1));
       let putResult1 = await handle.put(TABLE_NAME, JSON.parse(acct2));
       let putResult2 = await handle.put(TABLE_NAME, JSON.parse(acct3));
       console.log("Wrote records of acct stream schema");
+      console.log("Fetch one row using get API");
+      await getRow(handle,2);
       console.log("Fetching all rows");
       await fetchData(handle,stmt1);
       console.log("Fetching partial filtered rows");
       await fetchData(handle,stmt2);
-      process.exit(0);
    } catch (error ) {
       console.log(error);
-      process.exit(-1);
-    }
+   }
+   finally {
+      if (handle) {
+         handle.close();
+      }
+   }
 }
 
 /* Create and return an instance of a NoSQLCLient object for cloud service */
 function getConnection_cloud() {
-   /* replace the placeholders for compartment and region with the actual values. */
+   /* replace the placeholders for compartment and region with actual values.*/
    const Region = `<your_region_identifier>`;
    return new NoSQLClient({
       region: Region,
@@ -365,6 +375,15 @@ async function fetchData(handle,querystmt) {
          }
          opt.continuationKey = result.continuationKey;
       } while(opt.continuationKey);
+   } catch(error) {
+      console.error('  Error: ' + error.message);
+   }
+}
+/*fetches single row with get API*/
+async function getRow(handle,idVal) {
+   try {
+      const result = await handle.get(TABLE_NAME,{acct_Id: idVal });
+      console.log('Got row:  %O', result.row);
    } catch(error) {
       console.error('  Error: ' + error.message);
    }

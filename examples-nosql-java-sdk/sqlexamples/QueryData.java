@@ -1,5 +1,6 @@
 /* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ * Licensed under the Universal Permissive License v 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
 */
 import java.io.File;
 import oracle.nosql.driver.NoSQLHandle;
@@ -265,14 +266,18 @@ public class QueryData {
    static FieldValue newvalue2 = FieldValue.createFromJson(acct3,null);
 
    public static void main(String[] args) throws Exception {
-      /* UNCOMMENT the lines of code below if you are using Oracle NoSQL Database Cloud service. Leave the lines commented if you are using onPremise database
-      Add the appropriate values of your region and compartment OCID
+      /* UNCOMMENT the lines of code below if you are using Oracle NoSQL
+      * Database Cloud service.
+      * Leave the lines commented if you are using onPremise database
+      * Add the appropriate values of your region and compartment OCID
       String region ="<your_region_identifier>";
       String compId ="<ocid_of_your_compartment>";
       handle = generateNoSQLHandleCloud(region,compId); */
 
-      /* UNCOMMENT the 2 lines of code below if you are using onPremise Oracle NoSQL Database. Leave the lines commented if you are using NoSQL Database Cloud Service
-      give appropriate value of your endpoint for the onPremise kvstore.
+      /* UNCOMMENT the 2 lines of code below if you are using onPremise Oracle
+      * NoSQL Database.
+      * Leave the lines commented if you are using NoSQL Database Cloud Service
+      * Give appropriate value of your endpoint for the onPremise kvstore.
       String kvstore_endpoint ="http://<your_hostname>:8080";
       handle = generateNoSQLHandleonPrem(kvstore_endpoint); */
       try {
@@ -280,6 +285,8 @@ public class QueryData {
          writeRows(handle, (MapValue)newvalue);
          writeRows(handle, (MapValue)newvalue1);
          writeRows(handle, (MapValue)newvalue2);
+         System.out.println("Fetching a single row based on the primary key");
+         getRow(handle,"acct_Id",2);
          String sqlstmt_allrows="select * from stream_acct acct";
          System.out.println("Fetching all data ");
          fetchRows(handle,sqlstmt_allrows);
@@ -296,7 +303,9 @@ public class QueryData {
    private static NoSQLHandle generateNoSQLHandleonPrem(String kvstore_endpoint) throws Exception {
       NoSQLHandleConfig config = new NoSQLHandleConfig(kvstore_endpoint);
       config.setAuthorizationProvider(new StoreAccessTokenProvider());
-      /* If using a secure store, uncomment the line below and pass the username, password of the store to StoreAccessTokenProvider */
+      /* If using a secure store, uncomment the line below and pass username,
+       * password of the store to StoreAccessTokenProvider
+       */
       /* config.setAuthorizationProvider(new StoreAccessTokenProvider(username, password)); */
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
@@ -356,6 +365,19 @@ public class QueryData {
          for (MapValue res : results) {
             System.out.println("\t" + res);
          }
+      }
+   }
+   //Fetch single row using get API
+   private static void getRow(NoSQLHandle handle,String colName,int Id) throws Exception {
+      MapValue key = new MapValue().put(colName, Id);
+      GetRequest getRequest = new GetRequest().setKey(key)
+                                        .setTableName(tableName);
+      GetResult getRes = handle.get(getRequest);
+      /* on success, GetResult.getValue() returns a non-null value */
+      if (getRes.getValue() != null) {
+         System.out.println("\t" +getRes.getValue().toString());
+      } else {
+         System.out.println("Get Failed");
       }
    }
 }
