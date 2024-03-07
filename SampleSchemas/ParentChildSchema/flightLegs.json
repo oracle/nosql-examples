@@ -1,0 +1,270 @@
+{
+"ticketNo":1762344493810,
+"id":79039899165297,
+"flightNo":"BM604",
+"flightDate":"2019-02-01T06:00:00Z",
+"fltRouteSrc":"MIA",
+"fltRouteDest":"LAX",
+"estimatedArrival":"2019-02-01T11:00:00Z",
+"actions":
+  [ {
+         "actionAt" : "MIA",
+         "actionCode" : "ONLOAD to LAX",
+         "actionTime" : "2019-02-01T06:13:00Z"
+       }, {
+         "actionAt" : "MIA",
+         "actionCode" : "BagTag Scan at MIA",
+         "actionTime" : "2019-02-01T05:47:00Z"
+       }, {
+         "actionAt" : "MIA",
+         "actionCode" : "Checkin at MIA",
+         "actionTime" : "2019-02-01T04:38:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762344493810,
+"id":79039899165297,
+"flightNo":"BM667",
+"flightDate":"2019-02-01T06:13:00Z",
+"fltRouteSrc":"LAX",
+"fltRouteDest":"MEL",
+"estimatedArrival":"2019-02-01T16:15:00Z",
+"actions":
+   [ {
+         "actionAt" : "MEL",
+         "actionCode" : "Offload to Carousel at MEL",
+         "actionTime" : "2019-02-01T16:15:00Z"
+       }, {
+         "actionAt" : "LAX",
+         "actionCode" : "ONLOAD to MEL",
+         "actionTime" : "2019-02-01T15:35:00Z"
+       }, {
+         "actionAt" : "LAX",
+         "actionCode" : "OFFLOAD from LAX",
+         "actionTime" : "2019-02-01T15:18:00Z"
+   } ]
+}
+
+{
+"ticketNo":1762392135540,
+"id":79039899156435,
+"flightNo":"BM79",
+"flightDate":"2019-02-15T01:00:00Z",
+"fltRouteSrc":"GRU",
+"fltRouteDest":"ORD",
+"estimatedArrival":"2019-02-15T11:00:00Z",
+"actions":
+  [ {
+         "actionAt" : "GRU",
+         "actionCode" : "ONLOAD to ORD",
+         "actionTime" : "2019-02-15T01:21:00Z"
+       }, {
+         "actionAt" : "GRU",
+         "actionCode" : "BagTag Scan at GRU",
+         "actionTime" : "2019-02-15T00:55:00Z"
+       }, {
+         "actionAt" : "GRU",
+         "actionCode" : "Checkin at GRU",
+         "actionTime" : "2019-02-14T23:49:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762392135540,
+"id":79039899156435,
+"flightNo":"BM907",
+"flightDate":"2019-02-15T01:21:00Z",
+"fltRouteSrc":"ORD",
+"fltRouteDest":"SEA",
+"estimatedArrival":"2019-02-15T21:22:00Z",
+"actions":
+  [ {
+        "actionAt" : "SEA",
+        "actionCode" : "Offload to Carousel at SEA",
+        "actionTime" : "2019-02-15T21:16:00Z"
+      }, {
+        "actionAt" : "ORD",
+        "actionCode" : "ONLOAD to SEA",
+        "actionTime" : "2019-02-15T20:52:00Z"
+      }, {
+        "actionAt" : "ORD",
+        "actionCode" : "OFFLOAD from ORD",
+        "actionTime" : "2019-02-15T20:44:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762376407826,
+"id":7903989918469,
+"flightNo":"BM495",
+"flightDate":"2019-03-07T07:00:00Z",
+"fltRouteSrc":"JFK",
+"fltRouteDest":"MAD",
+"estimatedArrival":"2019-03-07T14:00:00Z",
+"actions":
+[ {
+        "actionAt" : "MAD",
+        "actionCode" : "Offload to Carousel at MAD",
+        "actionTime" : "2019-03-07T13:54:00Z"
+      }, {
+        "actionAt" : "JFK",
+        "actionCode" : "ONLOAD to MAD",
+        "actionTime" : "2019-03-07T07:00:00Z"
+      }, {
+        "actionAt" : "JFK",
+        "actionCode" : "BagTag Scan at JFK",
+        "actionTime" : "2019-03-07T06:53:00Z"
+      }, {
+        "actionAt" : "JFK",
+        "actionCode" : "Checkin at JFK",
+        "actionTime" : "2019-03-07T05:03:00Z"
+ } ]
+}
+
+{
+"ticketNo":1762355527825,
+"id":79039899197492,
+"flightNo":"BM704",
+"flightDate":"2019-03-22T07:00:00Z",
+"fltRouteSrc":"BZN",
+"fltRouteDest":"SEA",
+"estimatedArrival":"2019-03-22T09:00:00Z",
+"actions":
+[ {
+        "actionAt" : "BZN",
+        "actionCode" : "ONLOAD to SEA",
+        "actionTime" : "2019-03-22T07:23:00Z"
+      }, {
+        "actionAt" : "BZN",
+        "actionCode" : "BagTag Scan at BZN",
+        "actionTime" : "2019-03-22T06:58:00Z"
+      }, {
+        "actionAt" : "BZN",
+        "actionCode" : "Checkin at BZN",
+        "actionTime" : "2019-03-22T05:20:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762355527825,
+"id":79039899197492,
+"flightNo":"BM578",
+"flightDate":"2019-03-22T07:23:00Z",
+"fltRouteSrc":"SEA",
+"fltRouteDest":"CDG",
+"estimatedArrival":"2019-03-21T23:24:00Z",
+"actions":
+ [ {
+        "actionAt" : "SEA",
+        "actionCode" : "ONLOAD to CDG",
+        "actionTime" : "2019-03-22T11:26:00Z"
+      }, {
+        "actionAt" : "SEA",
+        "actionCode" : "BagTag Scan at SEA",
+        "actionTime" : "2019-03-22T10:57:00Z"
+      }, {
+        "actionAt" : "SEA",
+        "actionCode" : "OFFLOAD from SEA",
+        "actionTime" : "2019-03-22T11:07:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762355527825,
+"id":79039899197492,
+"flightNo":"BM386",
+"flightDate":"2019-03-22T07:23:00Z",
+"fltRouteSrc":"CDG",
+"fltRouteDest":"MXP",
+"estimatedArrival":"2019-03-22T10:24:00Z",
+"actions":
+  [ {
+        "actionAt" : "MXP",
+        "actionCode" : "Offload to Carousel at MXP",
+        "actionTime" : "2019-03-22T10:15:00Z"
+      }, {
+        "actionAt" : "CDG",
+        "actionCode" : "ONLOAD to MXP",
+        "actionTime" : "2019-03-22T10:09:00Z"
+      }, {
+        "actionAt" : "CDG",
+        "actionCode" : "OFFLOAD from CDG",
+        "actionTime" : "2019-03-22T10:01:00Z"
+ } ]
+}
+
+{
+"ticketNo":1762324912391,
+"id":79039899168383,
+"flightNo":"BM936",
+"flightDate":"2019-03-15T08:00:00Z",
+"fltRouteSrc":"MXP",
+"fltRouteDest":"CDG",
+"estimatedArrival":"2019-03-15T09:00:00Z",
+"actions":
+  [ {
+        "actionAt" : "MXP",
+        "actionCode" : "ONLOAD to CDG",
+        "actionTime" : "2019-03-15T08:13:00Z"
+      }, {
+        "actionAt" : "MXP",
+        "actionCode" : "BagTag Scan at MXP",
+        "actionTime" : "2019-03-15T07:48:00Z"
+      }, {
+        "actionAt" : "MXP",
+        "actionCode" : "Checkin at MXP",
+        "actionTime" : "2019-03-15T07:38:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762324912391,
+"id":79039899168383,
+"flightNo":"BM490",
+"flightDate":"2019-03-15T08:13:00Z",
+"fltRouteSrc":"CDG",
+"fltRouteDest":"SLC",
+"estimatedArrival":"2019-03-15T10:14:00Z",
+"actions":
+  [ {
+        "actionAt" : "CDG",
+        "actionCode" : "ONLOAD to SLC",
+        "actionTime" : "2019-03-15T09:42:00Z"
+      }, {
+        "actionAt" : "CDG",
+        "actionCode" : "BagTag Scan at CDG",
+        "actionTime" : "2019-03-15T09:17:00Z"
+      }, {
+        "actionAt" : "CDG",
+        "actionCode" : "OFFLOAD from CDG",
+        "actionTime" : "2019-03-15T09:19:00Z"
+  } ]
+}
+
+{
+"ticketNo":1762324912391,
+"id":79039899168383,
+"flightNo":"BM170",
+"flightDate":"2019-03-15T08:13:00Z",
+"fltRouteSrc":"SLC",
+"fltRouteDest":"BZN",
+"estimatedArrival":"2019-03-15T10:14:00Z",
+"actions":
+ [ {
+        "actionAt" : "BZN",
+        "actionCode" : "Offload to Carousel at BZN",
+        "actionTime" : "2019-03-15T10:13:00Z"
+      }, {
+        "actionAt" : "SLC",
+        "actionCode" : "ONLOAD to BZN",
+        "actionTime" : "2019-03-15T10:06:00Z"
+      }, {
+        "actionAt" : "SLC",
+        "actionCode" : "OFFLOAD from SLC",
+        "actionTime" : "2019-03-15T09:59:00Z"
+  } ]
+}
+
+
+
