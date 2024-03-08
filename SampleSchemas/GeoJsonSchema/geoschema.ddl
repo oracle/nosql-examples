@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS PointsOfInterest (
+    id INTEGER, poi JSON, 
+PRIMARY KEY(id));
