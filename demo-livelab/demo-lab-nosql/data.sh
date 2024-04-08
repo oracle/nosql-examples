@@ -1,6 +1,7 @@
 mkdir ~/BaggageData
 cd ~/BaggageData
-curl https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/data-management-library-files/BaggageData.tar.gz -o BaggageData.tar.gztar xvzf BaggageData.tar.gz
+curl https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/data-management-library-files/BaggageData.tar.gz -o BaggageData.tar.gz
+tar xvzf BaggageData.tar.gz
 rm  BaggageData.tar.gz
 
 # Create a file to do a multi line load
