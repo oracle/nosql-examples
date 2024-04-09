@@ -9,6 +9,7 @@ resource oci_functions_application export_nosql_demos_1 {
   defined_tags = {
   }
   display_name = "nosql_demos"
+  shape = "GENERIC_ARM"
   freeform_tags = {
   }
   subnet_ids = [

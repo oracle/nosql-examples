@@ -1,7 +1,10 @@
 schema_version: 20180708
 name: demo-load
 version: 0.0.1
-runtime: docker
+runtime: node
+build_image: fnproject/node:18-dev
+run_image: fnproject/node:18
+entrypoint: node func.js
 memory: 256
 timeout: 120
 idle_timeout: 1800

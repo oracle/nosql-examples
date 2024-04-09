@@ -216,14 +216,14 @@ In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition 
 For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
-unzip kv-ee-23.3.30.zip -d nosql
+unzip kv-ee-23.3.32.zip -d nosql
 unzip nosql-migrator-1.5.0.zip
 ````
 
 Modify the file `env.sh` and `env-proxy.sh` with the appropriate kvhome path location. e.g.
 
 ```bash
-export KVHOME=$HOME/nosql/kv-23.3.30
+export KVHOME=$HOME/nosql/kv-23.3.32
 ```
 
 Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs 
@@ -509,7 +509,7 @@ The following error can be safely ignored when running the command `bash stop.sh
 
 ````bash
 $ bash stop.sh
-23.3.30 2023-12-01 19:36:45 UTC  Build id: c5db6593507b Edition: Client
+23.3.32 2024-03-06 18:21:38 UTC  Build id: 69f48431fc69 Edition: Client
 Failed to stop SNA: Bootstrap config file /home/opc/nosql/kvroot/config.xml does not exist
 ````
 
