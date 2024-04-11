@@ -1,0 +1,5 @@
+fastapi[all]
+oci
+borneo
+uvicorn
+pydantic
