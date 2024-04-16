@@ -109,11 +109,11 @@ def get_items(page: int = 0, limit: int = 10, orderby: str = "item_id", where: s
        for row in qiresult:
          try:
            items.append(Item.parse_obj(row))
-           return items
          except Exception as e:
            print("---- Ignoring bad records")
            print(f"Error: {e}")
            continue
+       return items
     except Exception as e:
        raise HTTPException(status_code=500, detail=f"Error: {e}")
 
