@@ -1,4 +1,4 @@
-name: Build and publish Demo VoD container image to GitHub Container Registry
+name: Build and publish Demo Movie container image to GitHub Container Registry
 
 on:
   push:
@@ -11,6 +11,7 @@ on:
 
 env:
   IMAGE_NAME: demo-nosql-movie-example-app
+
 
 jobs:
   build-and-push:
