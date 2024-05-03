@@ -3,7 +3,7 @@
 
     title: "Discover Serverless Apps Using Oracle NoSQL Database Cloud Service"
     description: "Learn and Discover why NoSQL Cloud Services and OCI native services are compelling"
-    informationalText: "Modern apps benefit from predictable low latency, flexibility, and horizontal scale-out of NoSQL databases. Join us to learn how effortless it is to develop a modern app using Oracle Cloud Infrastructure and Oracle NoSQL Database Cloud Service. Oracle NoSQL powers Video On-Demand applications"
+    informationalText: "Modern apps benefit from predictable low latency, flexibility, and horizontal scale-out of NoSQL databases. Join us to learn how effortless it is to develop a modern app using Oracle Cloud Infrastructure and Oracle NoSQL Database Cloud Service. Creating Scalable, Global Microservices with OCI, Spring Data, and NoSQL"
     troubleshooting: "Need Help"
     stackDescription: "Learn and Discover why NoSQL Cloud Services and OCI native services are compelling"
     schemaVersion: 1.1.0
