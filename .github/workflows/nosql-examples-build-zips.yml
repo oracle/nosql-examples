@@ -18,7 +18,7 @@ jobs:
           for EXAMPLE_FOLDER in $FOLDERS;
           do
             RESOURCE=$(cut -d "/" -f 1 <<< "$EXAMPLE_FOLDER")
-            zip -r ../zips/$RESOURCE.zip $EXAMPLE_FOLDER
+            zip -r ../zips/$RESOURCE.zip $EXAMPLE_FOLDER  -x \*.jar -x \*.gif 
           done
           cd ..
           FOLDERS=$(ls -1 -d examples-nosql-*/*/ )
