@@ -55,7 +55,6 @@ def main():
    create_table(handle)
    if handle is not None:
       handle.close()
-   os._exit(0)
-
+   
 if __name__ == "__main__":
    main()

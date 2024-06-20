@@ -431,7 +431,6 @@ def main():
    fetch_data(handle,seq_trn_expr)
    if handle is not None:
       handle.close()
-   os._exit(0)
-
+  
 if __name__ == "__main__":
     main()
