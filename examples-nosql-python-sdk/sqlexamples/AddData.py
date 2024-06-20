@@ -339,7 +339,6 @@ def main():
    insert_record(handle,'stream_acct',acct3)
    if handle is not None:
       handle.close()
-   os._exit(0)
-
+  
 if __name__ == "__main__":
     main()
