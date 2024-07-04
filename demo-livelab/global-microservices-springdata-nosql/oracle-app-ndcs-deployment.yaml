@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: ghcr.io/oracle/demo-vod-example-app:latest
+        image: ghcr.io/oracle/demo-nosql-movie-example-app:latest
         env:
         - name: NOSQL_SERVICETYPE
           value: "useInstancePrincipal"
