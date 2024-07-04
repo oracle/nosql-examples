@@ -8,7 +8,7 @@ env:
 
 jobs:
   deploy-oci:
-    name: Deploy VoD Demo in OCI
+    name: Deploy Movie Demo in OCI
     #needs: push-build-image
     runs-on: ubuntu-latest
     environment: OCI    
