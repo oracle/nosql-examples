@@ -92,9 +92,6 @@ the top-level shows array and also the `date` field inside the episodes arrays,
      info.shows[].showId as integer,
      info.shows[].seriesInfo[].episodes[].date as string);
 ````
-See the NoSQL documentaion [here](https://docs.oracle.com/en/database/other-databases/nosql-database/22.1/sqlreferencefornosql/indexes.html) for more details
-about creating
- indexes on arrays
 
 3. View the description of  the tables created.
 ```
