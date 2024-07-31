@@ -57,7 +57,6 @@ def get_connection():
 
 def create_table ():
     # Learn more https://nosql-python-sdk.readthedocs.io/en/stable/tables.html
-    # Learn more https://docs.oracle.com/en/database/other-databases/nosql-database/23.3/nsdev/schema-flexibility-oracle-nosql-database.html
     statement = 'create table if not exists fapi_items(item_id LONG, primary key(item_id)) AS JSON COLLECTION'
     request = TableRequest().set_statement(statement).set_table_limits( TableLimits(20, 10, 5))
     result = handle.do_table_request(request, 40000, 3000)

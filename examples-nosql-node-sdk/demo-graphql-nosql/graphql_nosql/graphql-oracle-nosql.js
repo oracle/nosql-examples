@@ -69,7 +69,6 @@ async function createBlogHelper(input) {
 async function updateBlogHelper(id, input) {
   // Because we are using GENERATED ALWAYS AS IDENTITY I am using UPDATE command
   // We can use the command putIfPresent in other cases - see updateBlogHelperWithoutSeq
-  //  https://docs.oracle.com/en/database/other-databases/nosql-database/19.5/java-driver-table/inserting-identity-values-programmatically.html
   //const preparedStmt = Object.assign({ __proto__: globalPreparedStmt.__proto__ }, globalPreparedStmt);
   const preparedStmt = globalPreparedStmt.copyStatement();
   preparedStmt.bindings = {
