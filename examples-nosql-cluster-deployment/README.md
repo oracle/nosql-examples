@@ -231,10 +231,10 @@ are available which you can use, however, we are providing Java examples.
 
 ````bash
 cd $HOME
-rm -rf oracle-nosql-java-sdk-5.4.14.zip oracle-nosql-java-sdk
-curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.14/oracle-nosql-java-sdk-5.4.14.zip \
--o oracle-nosql-java-sdk-5.4.14.zip
-unzip oracle-nosql-java-sdk-5.4.14.zip
+rm -rf oracle-nosql-java-sdk-5.4.15.zip oracle-nosql-java-sdk
+curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.15/oracle-nosql-java-sdk-5.4.15.zip \
+-o oracle-nosql-java-sdk-5.4.15.zip
+unzip oracle-nosql-java-sdk-5.4.15.zip
 cd oracle-nosql-java-sdk/examples/
 javac -cp ../lib/nosqldriver.jar *.java
 cd $HOME

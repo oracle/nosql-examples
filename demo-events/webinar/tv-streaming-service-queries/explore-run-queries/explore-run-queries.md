@@ -18,7 +18,7 @@ Execute the following in your Shell. You are invoking the sql command line to ex
 
 ```
 <copy>
-KV_VERSION=21.2.46
+KV_VERSION=23.3.32
 KVHOME=$HOME/kv-$KV_VERSION
 
 cd ~/oracle-nosql-arrays
