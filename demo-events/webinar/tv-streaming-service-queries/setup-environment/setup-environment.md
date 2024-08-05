@@ -28,13 +28,14 @@ In this lab you will be using the 20.3.19 version of the Community Edition of Or
 NoSQL Database. You download the file and unzip and extract the contents.
 ````
 <copy>
-KV_VERSION=21.2.46
+KV_VERSION=23.3.32
 rm -rf kv-$KV_VERSION
 DOWNLOAD_ROOT=http://download.oracle.com/otn-pub/otn_software/nosql-database
-DOWNLOAD_FILE="kv-ce-${KV_VERSION}.zip"
+DOWNLOAD_FILE="community-edition-${KV_VERSION}.zip"
 DOWNLOAD_LINK="${DOWNLOAD_ROOT}/${DOWNLOAD_FILE}"
 curl -OL $DOWNLOAD_LINK
 unzip $DOWNLOAD_FILE
+rm $DOWNLOAD_FILE
 KVHOME=$PWD/kv-$KV_VERSION
 </copy>
 ````
