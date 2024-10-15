@@ -24,7 +24,7 @@ Clone this repository
 Download and unzip the binaries including `kvstore.jar`. You should download CE or EE;.
 
 Download the [Oracle NoSQL Database bundle](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html)
-- Community Edition: Oracle NoSQL Database Community Edition (CE) software is licensed pursuant to the Apache 2.0 License (Apache 2.0). 
+- Community Edition: Oracle NoSQL Database Community Edition (CE) software is licensed pursuant to the Apache 2.0 License (Apache 2.0).
 - Enterprise Edition: Oracle NoSQL Database Enterprise Edition (EE) software is licensed pursuant to the Oracle commercial license
 
 In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition (e.g 22.3.32)
@@ -32,19 +32,17 @@ In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition 
 For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
-unzip kv-ee-22.3.32.zip -d nosql
+unzip kv-ee-24.3.9.zip -d nosql
 ````
 
-## Compile and Run the application 
+## Compile and Run the application
 
 Compile the App code:
 ```shell
-javac -cp .:$HOME/nosql/kv-22.3.32/lib/kvstore.jar Quickstart.java 
+javac -cp .:$HOME/nosql/kv-24.3.9/lib/kvstore.jar Quickstart.java 
 ```
 
 Running the App code:
 ```shell
 java -cp .:$HOME/nosql/kv-22.3.32/lib/kvstore.jar Quickstart
 ```
-
-
