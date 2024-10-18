@@ -145,7 +145,7 @@ such as episodes they watched, the watch time per episode, the total number of s
 The data is stored in the NoSQL Database and the application performs SQL queries to retrieve the required data and make it available to the user.
 
 The scripts allowing to run this tutorial are hosted in this Repository ( `AcctStreamSchema` and `BaggageSchema` ) but follow the instructions provided
-in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/nsdev/getting-started-oracle-nosql-database1.html)
+in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/nsdev/getting-started-oracle-nosql-database1.html)
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 
