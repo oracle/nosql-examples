@@ -18,7 +18,7 @@ Execute the following in your Shell. You are invoking the sql command line to ex
 
 ```
 <copy>
-KV_VERSION=23.3.32
+KV_VERSION=24.3.9
 KVHOME=$HOME/kv-$KV_VERSION
 
 cd ~/oracle-nosql-arrays
@@ -486,13 +486,6 @@ spent watching that show and season. The results are returned ordered by that ti
 in descending order.
 
 The query uses `idx_showid_seasonNum_minWatched` as a covering index.
-
-## Learn More
-
-
-* [Oracle NoSQL Database page](https://www.oracle.com/database/nosql-cloud.html)
-* [Java API Reference Guide](https://docs.oracle.com/en/cloud/paas/nosql-cloud/csnjv/index.html)
-* [NoSQL SQL Reference Manual](https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/sqlreferencefornosql/sql-reference-guide.pdf)
 
 
 ## Acknowledgements

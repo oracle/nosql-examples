@@ -22,9 +22,9 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
 1. Execute the following in your Shell.
     ```
     <copy>
-    KV_VERSION=21.2.46
+    KV_VERSION=24.3.9
     KVHOME=$HOME/kv-$KV_VERSION
-    cd ~/demo-lab-nosql-kvlite 
+    cd ~/demo-lab-nosql-kvlite
     </copy>
     ```
 
@@ -61,6 +61,7 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
     </copy>
     ```
   3. View the description of both the tables created.
+
      ```
      <copy>
      show tables
@@ -77,7 +78,9 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
      describe table demoKeyVal;
      </copy>
      ```
+
 4. Load data into the `demo` table using the data file `baggage_data_file0.json`.
+
     ```
     <copy>
     put -table  demo -file objects/baggage_data_file0.json
@@ -96,6 +99,7 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
     ```
     This is because the structure of the data files `baggage_data_file0-value.json` and `baggage_data_file0.json` are very different. The data file `baggage_data_file0-value.json` has the JSON document inside the **value** field. But the demo table expects the ticketNo which is the primary key as a separate field. Thats why you get the error that the primary key is empty.
 5. Load data into the `demoKeyVal` table using the data file `baggage_data_file0.json`.
+
     ```
     <copy>
      put -table  demoKeyVal -file objects/baggage_data_file0.json
@@ -104,7 +108,9 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
     You get a success message saying one row is inserted. If you view the data that got inserted , you will see that there was a NULL inserted into the JSON document.
     ```
     Loaded 1 row to table demoKeyVal
-    sql-> select * from demoKeyVal;
+    <copy>
+    select * from demoKeyVal;
+    </copy>
     {"key":1,"value":null}
     ```
     The reason is that the data file `baggage_data_file0.json` has the static field and then a JSON column but the `demoKeyVal` table expects all information inside a "Value" field. Since this is a JSON document, the put statement does not fail , rather it succeeds and inserts a NULL JSON.
@@ -117,6 +123,7 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
    This is successful and the JSON document gets inserted as there is a perfect match between the format in the datafile and what the `demoKeyVal` table expects.
 
 6. View the data that you populated in both the tables. Fetch the data from `demoKeyVal` table when it is NULL and NOT NULL. This explains that both NULL and NOT NULL JSON documents gor inserted into the `demoKeyVal` table.
+
     ```
     <copy>
     mode json -pretty;

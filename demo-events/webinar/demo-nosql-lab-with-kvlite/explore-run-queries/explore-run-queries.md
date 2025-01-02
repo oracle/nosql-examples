@@ -44,25 +44,30 @@ Estimated Time: 15 minutes
     ````
 
 4. You can run a query by ticket number and passengers on a flight.  Execute in your Shell.   Each of these produced slightly different results.
+
   * Displays the document with a specific ticket number
+
     ````
     <copy>
     curl -X GET http://localhost:3500/getBagInfoByTicketNumber?ticketNo=1762322446040  | jq
     </copy>
     ````
   * Displays all the records
+
     ````
     <copy>
     curl -X GET http://localhost:3500/getBagInfoByTicketNumber  | jq
     </copy>
     ````
   *  Displays a count of the records.
+
     ````
     <copy>
     curl -X GET http://localhost:3500/getBagInfoByTicketNumber | jq '. | length'
     </copy>
     ````
   * For the below command, you can see in the field "message" the getPassengersAffectedByFlight endpoint is still under construction. In other words the code for that endpoint has not been completed yet.
+
     ````
     <copy>
     curl -X GET http://localhost:3500/getPassengersAffectedByFlight?flightNo=BM715  | jq
@@ -75,7 +80,7 @@ Estimated Time: 15 minutes
 
     ````
     <copy>
-    KV_VERSION=21.2.46
+    KV_VERSION=24.3.9
     KVHOME=$HOME/kv-$KV_VERSION
     cd ~/demo-lab-nosql-kvlite/
     java -jar $KVHOME/lib/sql.jar -helper-hosts localhost:5000 -store kvstore
@@ -141,15 +146,6 @@ Estimated Time: 15 minutes
     **Note:** The Learn More contains a link to the SQL Reference Guide.  Lab 2 contains an example of the JSON record to look at.
 
 5. Type in **exit** to exit from the CLI application.
-
-
-## Learn More
-
-
-* [Oracle NoSQL Database page](https://www.oracle.com/database/nosql-cloud.html)
-* [Java API Reference Guide](https://docs.oracle.com/en/cloud/paas/nosql-cloud/csnjv/index.html)
-* [Node API Reference Guide](https://oracle.github.io/nosql-node-sdk/)
-* [Python API Reference Guide](https://nosql-python-sdk.readthedocs.io/en/latest/index.html)
 
 
 ## Acknowledgements

@@ -24,16 +24,18 @@ This lab assumes you have:
 
 ## Task 1: Download Oracle NoSQL CE
 
-In this lab you will be using the 20.3.19 version of the Community Edition of Oracle NoSQL Database. You download the file and unzip and extract the contents.
+In this lab you will be using the 24.3.9 version of the Community Edition of Oracle NoSQL Database. You download the file and unzip and extract the contents.
 ````
 <copy>
-KV_VERSION=21.2.46
+KV_VERSION=24.3.9
 rm -rf kv-$KV_VERSION
 DOWNLOAD_ROOT=http://download.oracle.com/otn-pub/otn_software/nosql-database
 DOWNLOAD_FILE="kv-ce-${KV_VERSION}.zip"
 DOWNLOAD_LINK="${DOWNLOAD_ROOT}/${DOWNLOAD_FILE}"
-curl -OL $DOWNLOAD_LINK
-unzip $DOWNLOAD_FILE
+curl -OLs $DOWNLOAD_LINK
+jar tf $DOWNLOAD_FILE | grep "kv-$KV_VERSION/lib" > extract.libs
+jar xf $DOWNLOAD_FILE @extract.libs
+rm -f $DOWNLOAD_FILE extract.libs
 KVHOME=$PWD/kv-$KV_VERSION
 </copy>
 ````

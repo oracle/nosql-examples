@@ -19,7 +19,7 @@ Estimated Time: 15 minutes
 1. Execute the following in your Shell.
 ```
 <copy>
-KV_VERSION=23.3.32
+KV_VERSION=24.3.9
 KVHOME=$HOME/kv-$KV_VERSION
 </copy>
 ```
@@ -170,8 +170,8 @@ The java driver can be downloaded from [here](https://github.com/oracle/nosql-ja
 ```
 <copy>
 cd ~/oracle-nosql-arrays
-curl -OL https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.15/oracle-nosql-java-sdk-5.4.15.zip
-unzip oracle-nosql-java-sdk-5.4.15.zip
+curl -OL https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.16/oracle-nosql-java-sdk-5.4.16.zip
+unzip oracle-nosql-java-sdk-5.4.16.zip
 </copy>
 ```
 
