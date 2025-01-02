@@ -1,0 +1,144 @@
+= Books
+:toc: auto
+
+Sample Helidon MP project that includes multiple REST operations. This project requires Oracle NoSQL for data storage, which can be run locally or online.
+
+== Requirements
+
+This application requires Oracle NoSQL Database, which can be set up to run locally using Docker.
+
+== Setting up Oracle NoSQL Locally with Docker
+
+To run Oracle NoSQL Database locally, use the following Docker command:
+
+[source,bash]
+----
+docker run -d --name oracle-instance -p 8080:8080 ghcr.io/oracle/nosql:latest-ce
+----
+
+This command starts an Oracle NoSQL instance running on port `8080` of your local machine.
+
+Alternatively, you may run Oracle NoSQL Database online. For more details, refer to Oracle's official documentation on running NoSQL in the cloud.
+
+== Build and run
+
+To build and run this project, use JDK 21.
+
+[source,bash]
+----
+mvn package
+java -jar target/books.jar
+----
+
+The application will start on `localhost` at port `8181`.
+
+== Try Health Check
+
+To verify if the application is running, check its health status with:
+
+[source,bash]
+----
+curl -s -X GET http://localhost:8181/health
+----
+Expected Output:
+`{"outcome":"UP",...}`
+
+== Try Metrics
+
+You can retrieve application metrics in Prometheus or JSON format.
+
+=== Prometheus Format
+
+[source,bash]
+----
+curl -s -X GET http://localhost:8181/metrics
+----
+Expected Output:
+`# TYPE base:gc_g1_young_generation_count gauge...`
+
+=== JSON Format
+
+[source,bash]
+----
+curl -H 'Accept: application/json' -X GET http://localhost:8181/metrics
+----
+Expected Output:
+`{"base":...}`
+
+== OpenAPI UI
+
+This project includes an OpenAPI UI, which provides an interactive interface for exploring and testing API endpoints.
+
+To access the OpenAPI UI, navigate to the following URL in your browser:
+
+http://localhost:8181/openapi/ui/index.html#
+
+The OpenAPI UI displays all available API endpoints and allows you to test requests directly within the browser.
+
+== Using the OpenAPI Endpoints with curl
+
+Below are examples of using `curl` to interact with the API.
+
+[source,bash]
+----
+# Example: Fetch all books
+curl -X GET http://localhost:8181/books
+curl -X POST -H "Content-Type: application/json" -d '{"title":"The Catcher in the Rye","genre":"FICTION","publicationYear":1951,"author":"J.D. Salinger","tags":["Classic","Literature","American"]}' http://localhost:8181/books
+curl -X POST -H "Content-Type: application/json" -d '{"title":"1984","genre":"DYSTOPIAN","publicationYear":1949,"author":"George Orwell","tags":["Political","Classic","Science Fiction"]}' http://localhost:8181/books
+curl -X POST -H "Content-Type: application/json" -d '{"title":"To Kill a Mockingbird","genre":"FICTION","publicationYear":1960,"author":"Harper Lee","tags":["Classic","Justice","American"]}' http://localhost:8181/books
+curl -X POST -H "Content-Type: application/json" -d '{"title":"Brave New World","genre":"SCIENCE_FICTION","publicationYear":1932,"author":"Aldous Huxley","tags":["Dystopian","Classic","Philosophical"]}' http://localhost:8181/books
+# Example: Update a book
+curl -X PUT -H "Content-Type: application/json" -d '{"title":"The Catcher in the Rye - Updated","genre":"FICTION","publicationYear":1951,"author":"J.D. Salinger","tags":["Classic","Literature","American","Updated"]}' http://localhost:8181/books/{id}
+
+# Example: Delete a book
+curl -X DELETE http://localhost:8181/books/{id}
+----
+
+== Building the Docker Image
+
+To build a Docker image for the application:
+
+[source,bash]
+----
+docker build -t books .
+----
+
+== Running the Docker Image
+
+To run the Docker image:
+
+[source,bash]
+----
+docker run --rm -p 8181:8181 books:latest
+----
+
+== Run the Application in Kubernetes
+
+If you don’t have access to a Kubernetes cluster, you can https://helidon.io/docs/latest/#/about/kubernetes[install one] on your desktop.
+
+=== Verify connectivity to cluster
+
+[source,bash]
+----
+kubectl cluster-info                        # Verify which cluster
+kubectl get pods                            # Verify connectivity to cluster
+----
+
+=== Deploy the application to Kubernetes
+
+[source,bash]
+----
+kubectl create -f app.yaml                              # Deploy application
+kubectl get pods                                        # Wait for quickstart pod to be RUNNING
+kubectl get service books                              # Get service info
+kubectl port-forward service/books 8181:8080           # Forward service port to 8181
+----
+
+You can now exercise the application as described above but use port `8181`.
+
+After you're done, clean up:
+
+[source,bash]
+----
+kubectl delete -f app.yaml
+----
