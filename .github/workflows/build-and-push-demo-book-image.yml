@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'demo-livelab/books-management/*'
+      - 'demo-livelab/books-management/src/*'
       - '.github/workflows/build-and-push-demo-book-image.yml'
   workflow_dispatch:
 
