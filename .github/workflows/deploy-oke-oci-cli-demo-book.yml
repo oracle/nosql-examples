@@ -1,0 +1,73 @@
+name: Deploy Demo VoD in OCI
+
+on:
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: demo-nosql-book-example-app
+
+jobs:
+  deploy-oci:
+    name: Deploy Book Demo in OCI
+    #needs: push-build-image
+    runs-on: ubuntu-latest
+    environment: OCI    
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Retrieve the OCID of a named compartment in tenancy
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: find-compartment-id
+        with:
+          command: 'iam compartment list --compartment-id-in-subtree=true'
+          query: "data[?name=='davega'].id"
+
+      - name: Set the ddl-table-name
+        id: ddl-table-name
+        run: |
+          DDL_TABLE=$(cat nosql/mbooks-create-table-for-jakarta-nosq-with-frozen.ddl)
+          DDL_TABLE="${DDL_TABLE//$'\n'/' '}"
+          DDL_TABLE="${DDL_TABLE//$'\r'/' '}"
+          echo $DDL_TABLE
+          echo "ddl-table-name=${DDL_TABLE,,}" >> $GITHUB_OUTPUT
+
+      - name: Set the ddl-limits
+        id: table-limits
+        run: |
+          TABLE_LIMITS='{\"maxReadUnits\":50,\"maxStorageInGBs\":25,\"maxWriteUnits\": 50}'
+          echo $TABLE_LIMITS
+          echo "table-limits=${TABLE_LIMITS,,}" >> $GITHUB_OUTPUT
+
+      - name: Create NoSQL Table
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: create-table
+        with:
+          command: 'nosql table create --compartment-id ${{ steps.find-compartment-id.outputs.raw_output }}  --name stream_acct --ddl-statement "${{ steps.ddl-table-name.outputs.ddl-table-name  }}" --table-limits "${{ steps.table-limits.outputs.table-limits  }}" --wait-for-state SUCCEEDED --wait-for-state FAILED'
+
+      - name: Retrieve the display name and table limits of the NoSQL tables in my compartment
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: find-tables
+        with:
+          command: 'nosql table list --compartment-id ${{ steps.find-compartment-id.outputs.raw_output }}'
+          query: 'data.items[*].{name:name,tlimits:\"table-limits\"}'
+
+      - name: List the display name and table limits of the NoSQL tables in my compartment
+        run: |
+          echo ${{ steps.find-tables.outputs.output }} | jq .
+
+      - name: Configure Kubectl for Oracle Container Engine for Kubernetes (OKE)
+        uses: oracle-actions/configure-kubectl-oke@v1.3
+        id: configure-kubectl-oke-action
+        with:
+          cluster: ${{ secrets.OKE_CLUSTER_OCID }}        
+      - name: Deploy oracle-app-ndcs-deployment and Get all resources
+        run:  | 
+          kubectl apply -f ./oracle-app-ndcs-deployment.yaml
+          sleep 120
+          kubectl get all 

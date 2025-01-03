@@ -43,10 +43,10 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: ghcr.io/oracle/demo-nosql-movie-example-app:latest
+        image: ghcr.io/oracle/ demo-nosql-book-example-app:latest
         env:
-        - name: NOSQL_SERVICETYPE
-          value: "useInstancePrincipal"
+        - name: NOSQL_DEPLOYMENT
+          value: "CLOUD_INSTANCE_PRINCIPAL"
         - name: OCI_REGION
           value: "eu-paris-1"
         - name: OCI_NOSQL_COMPID
