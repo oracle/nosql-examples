@@ -1,0 +1,69 @@
+name: Build and publish Demo Movie container image to GitHub Container Registry
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'demo-livelab/books-management/src/*'
+      - '.github/workflows/build-and-push-demo-book-image.yml'
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: demo-nosql-book-example-app
+
+
+jobs:
+  build-and-push:
+    name: Build and push Book Demo container image
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - 
+        name: Repository owner needs to be lowercase
+        id: repo-owner
+        run: |
+          REPO_OWNER="${{ github.repository_owner }}"
+          echo "repo-owner=${REPO_OWNER,,}" >> "$GITHUB_OUTPUT"
+      - 
+        name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m')" >> "$GITHUB_OUTPUT"
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - 
+        name: Generate container image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.repo-owner.outputs.repo-owner }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=false
+          tags: |
+                type=raw,value=latest
+                type=raw,value=${{ env.TAG }}
+        env:
+          TAG: ${{ steps.date.outputs.date }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./demo-livelab/books-management/
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
