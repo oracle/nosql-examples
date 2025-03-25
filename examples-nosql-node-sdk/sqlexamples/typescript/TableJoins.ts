@@ -106,6 +106,7 @@ async function dotablejoins() {
       }`
       const stmt_loj = 'SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo';
       const stmt_nt = 'SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))';
+      const stmt_ij = 'SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo';
       await createTable(handle,regtbl_DDL,true,table_name);
       await createTable(handle,childtbl_DDL,false,childtable_name);
       await createTable(handle,desctbl_DDL,false,desctable_name);
@@ -119,6 +120,8 @@ async function dotablejoins() {
       await fetchData(handle,stmt_loj);
       console.log("Fetching data using NESTED TABLES");
       await fetchData(handle,stmt_nt);
+      console.log("Fetching data using Inner Joins");
+      await fetchData(handle,stmt_ij);		  
    } catch (error ) {
       console.log(error);
    }
