@@ -137,6 +137,9 @@ def main():
    sql_stmt_nt='SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))'
    print('Fetching data using NESTED TABLES ')
    fetch_data(handle,sql_stmt_nt)
+   sql_stmt_ij='SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo'
+   print('Fetching data using Inner Joins ')
+   fetch_data(handle,sql_stmt_ij)      
    if handle is not None:
       handle.close()
   
