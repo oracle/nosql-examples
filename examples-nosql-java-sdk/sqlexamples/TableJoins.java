@@ -114,6 +114,10 @@ public class TableJoins{
          String sql_stmt_nt ="SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))";
          /* fetching rows using nested tables*/
          fetchRows(handle,sql_stmt_nt);
+         System.out.println("Fetching data using Inner Joins:");
+         String sql_stmt_ij ="SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo";
+         /* fetching rows using nested tables*/
+         fetchRows(handle,sql_stmt_ij);			 
       } catch (Exception e) {
          System.err.print(e);
       } finally {
