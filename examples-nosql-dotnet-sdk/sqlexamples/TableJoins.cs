@@ -153,11 +153,11 @@ namespace Oracle.NoSQL.SDK.Samples
             Console.WriteLine("Added a row to the {0} table",childTblName);
             await client.PutAsync(descTblName, FieldValue.FromJsonString(data3).AsMapValue);
             Console.WriteLine("Added a row to the {0} table",descTblName);
-            Console.WriteLine("Fetching data using Left Outer Joins: ");
+            Console.WriteLine("Fetching data using Left Outer Join: ");
             await fetchData(client,stmt_loj);
             Console.WriteLine("Fetching data using NESTED TABLES: ");
             await fetchData(client,stmt_nt);
-            Console.WriteLine("Fetching data using Inner Joins: ");
+            Console.WriteLine("Fetching data using Inner Join: ");
             await fetchData(client,stmt_ij);
          }
          catch (Exception ex) {

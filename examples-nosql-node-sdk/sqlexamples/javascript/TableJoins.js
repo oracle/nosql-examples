@@ -92,11 +92,11 @@ async function dotablejoins() {
       console.log("Wrote records in bagInfo table");
       let putResult2 = await handle.put(desctable_name, JSON.parse(data3));
       console.log("Wrote records in flightLegs table");
-      console.log("Fetching data using Left Outer Joins");
+      console.log("Fetching data using Left Outer Join");
       await fetchData(handle,stmt_loj);
       console.log("Fetching data using NESTED TABLES");
       await fetchData(handle,stmt_nt);
-      console.log("Fetching data using Inner Joins");
+      console.log("Fetching data using Inner Join");
       await fetchData(handle,stmt_ij);		  
    } catch (error ) {
       console.log(error);

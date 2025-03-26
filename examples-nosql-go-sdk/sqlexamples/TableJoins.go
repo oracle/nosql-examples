@@ -244,10 +244,10 @@ func main() {
 	addData(client, err, regTableName, regtbl_data)
 	addData(client, err, childTableName, childtbl_data)
 	addData(client, err, descTableName, desctbl_data)
-	fmt.Println("Fetching data using Left Outer Joins")
+	fmt.Println("Fetching data using Left Outer Join")
 	fetchData(client, err, querystmt_loj)
 	fmt.Println("Fetching data using NESTED TABLES")
 	fetchData(client, err, querystmt_nt)
-	fmt.Println("Fetching data using Inner Joins")
+	fmt.Println("Fetching data using Inner Join")
 	fetchData(client, err, querystmt_ij)		
 }
