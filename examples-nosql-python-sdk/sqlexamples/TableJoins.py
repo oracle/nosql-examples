@@ -132,11 +132,14 @@ def main():
    insert_record(handle,'ticket.bagInfo',data2)
    insert_record(handle,'ticket.bagInfo.flightLegs',data3)
    sql_stmt_loj='SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo'
-   print('Fetching data using Left Outer Joins ')
+   print('Fetching data using Left Outer Join ')
    fetch_data(handle,sql_stmt_loj)
    sql_stmt_nt='SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))'
    print('Fetching data using NESTED TABLES ')
    fetch_data(handle,sql_stmt_nt)
+   sql_stmt_ij='SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo'
+   print('Fetching data using Inner Join ')
+   fetch_data(handle,sql_stmt_ij)      
    if handle is not None:
       handle.close()
   

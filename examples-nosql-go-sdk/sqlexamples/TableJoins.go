@@ -237,14 +237,17 @@ func main() {
    }`
 	querystmt_loj := "SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo"
 	querystmt_nt := "SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b)"
+	querystmt_ij := "SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo"	
 	createTable(client, err, regTableName, regtbl_crtstmt, "true")
 	createTable(client, err, childTableName, childtbl_crtstmt, "false")
 	createTable(client, err, descTableName, desctbl_crtstmt, "false")
 	addData(client, err, regTableName, regtbl_data)
 	addData(client, err, childTableName, childtbl_data)
 	addData(client, err, descTableName, desctbl_data)
-	fmt.Println("Fetching data using Left Outer Joins")
+	fmt.Println("Fetching data using Left Outer Join")
 	fetchData(client, err, querystmt_loj)
 	fmt.Println("Fetching data using NESTED TABLES")
 	fetchData(client, err, querystmt_nt)
+	fmt.Println("Fetching data using Inner Join")
+	fetchData(client, err, querystmt_ij)		
 }

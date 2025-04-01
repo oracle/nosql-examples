@@ -108,12 +108,16 @@ public class TableJoins{
          writeRowData(handle,"ticket.bagInfo.flightLegs",data3);
          /* fetching rows using left outer joins*/
          String sql_stmt_loj ="SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo";
-         System.out.println("Fetching data using Left outer joins:");
+         System.out.println("Fetching data using Left outer join:");
          fetchRows(handle,sql_stmt_loj);
          System.out.println("Fetching data using NESTED TABLES:");
          String sql_stmt_nt ="SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))";
          /* fetching rows using nested tables*/
          fetchRows(handle,sql_stmt_nt);
+         System.out.println("Fetching data using Inner Join:");
+         String sql_stmt_ij ="SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo";
+         /* fetching rows using nested tables*/
+         fetchRows(handle,sql_stmt_ij);			 
       } catch (Exception e) {
          System.err.print(e);
       } finally {

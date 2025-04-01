@@ -74,6 +74,7 @@ namespace Oracle.NoSQL.SDK.Samples
                                        ""actionTime"" : ""2019-02-01T04:38:00Z""} ]}";
       private const string stmt_loj ="SELECT * FROM ticket a LEFT OUTER JOIN ticket.bagInfo.flightLegs b ON a.ticketNo=b.ticketNo";
       private const string stmt_nt ="SELECT * FROM NESTED TABLES (ticket a descendants(ticket.bagInfo.flightLegs b))";
+      private const string stmt_ij ="SELECT * FROM ticket a, ticket.bagInfo.flightLegs b WHERE a.ticketNo=b.ticketNo";
 
       //Get a connection handle for Oracle NoSQL Database Cloud Service
       private async static Task<NoSQLClient> getconnection_cloud()
@@ -152,10 +153,12 @@ namespace Oracle.NoSQL.SDK.Samples
             Console.WriteLine("Added a row to the {0} table",childTblName);
             await client.PutAsync(descTblName, FieldValue.FromJsonString(data3).AsMapValue);
             Console.WriteLine("Added a row to the {0} table",descTblName);
-            Console.WriteLine("Fetching data using Left Outer Joins: ");
+            Console.WriteLine("Fetching data using Left Outer Join: ");
             await fetchData(client,stmt_loj);
             Console.WriteLine("Fetching data using NESTED TABLES: ");
             await fetchData(client,stmt_nt);
+            Console.WriteLine("Fetching data using Inner Join: ");
+            await fetchData(client,stmt_ij);
          }
          catch (Exception ex) {
             Console.WriteLine("Exception has occurred:\n{0}: {1}",
