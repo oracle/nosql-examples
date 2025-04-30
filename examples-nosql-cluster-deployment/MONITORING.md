@@ -139,11 +139,11 @@ rnTable_0.json
 
 You can then Set Up a tool like Filebeat on Each Storage Node to send the JSON files to your favorite APM System (e.g ELK setup)
 
-e.g. (https://docs.oracle.com/pls/topic/lookup?ctx=en/database/other-databases/nosql-database/24.3/nsmon&id=filebeat-yml)
+e.g. (https://docs.oracle.com/pls/topic/lookup?ctx=en/database/other-databases/nosql-database/25.1/nsmon&id=filebeat-yml)
 
 For ELK, Oracle Nosql is providing all the configuration templates to setup the metrics and do analysis using Kibana.
 
-https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/nsmon/using-elk-monitor-oracle-nosql-database.html
+https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/nsmon/using-elk-monitor-oracle-nosql-database.html
 
 If you use the template files provided above, then the following indexes are available:
     kvrnjvmstats-*
