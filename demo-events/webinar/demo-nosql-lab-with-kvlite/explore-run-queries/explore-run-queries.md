@@ -80,7 +80,7 @@ Estimated Time: 15 minutes
 
     ````
     <copy>
-    KV_VERSION=24.3.9
+    KV_VERSION=24.4.9
     KVHOME=$HOME/kv-$KV_VERSION
     cd ~/demo-lab-nosql-kvlite/
     java -jar $KVHOME/lib/sql.jar -helper-hosts localhost:5000 -store kvstore
