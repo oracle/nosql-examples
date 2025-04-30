@@ -22,7 +22,7 @@ Which data model you use depends on your business model.   Oracle NoSQL Database
 1. Execute the following in your Shell.
     ```
     <copy>
-    KV_VERSION=24.3.9
+    KV_VERSION=24.4.9
     KVHOME=$HOME/kv-$KV_VERSION
     cd ~/demo-lab-nosql-kvlite
     </copy>

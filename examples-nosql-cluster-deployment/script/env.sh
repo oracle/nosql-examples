@@ -3,7 +3,7 @@
 # Copyright (c) 2023, 2024 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-export KVHOME=$HOME/nosql/kv-24.3.9
+export KVHOME=$HOME/nosql/kv-25.1.13
 
 export KVROOT=$HOME/nosql/kvroot
 export KVDATA=$HOME/nosql/data

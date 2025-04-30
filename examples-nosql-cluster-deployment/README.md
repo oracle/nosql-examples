@@ -30,7 +30,7 @@ In the examples in this repository, we will use the default configuration, which
 
 The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the world.
 
-To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/concepts/index.html)
+To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/concepts/index.html)
 
 For those of you that prefer a fully serverless managed service - learn more **Oracle NoSQL Database Cloud Service** [here.](https://www.oracle.com/database/nosql/)
 
@@ -110,8 +110,8 @@ bash clean.sh
 ```
 
 Just before starting an Oracle NoSQL installation, we recommend reading those links:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/release-notes/overview.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/installation-prerequisites.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/release-notes/overview.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/installation-prerequisites.html
 
 ## Java Version
 
@@ -166,7 +166,7 @@ Often physical machines and/or VMs (storage nodes) have built-in firewalls. Addi
 the storage nodes need to communicate with one another, so communication must pass through the firewalls.  Open the firewall ports used by the communication channels
 in the NoSQL Cluster. To make sure your network firewall works with your topology, you should set the ports specified by the `-port`, `-harange`, `-servicerange`, and `-admin-web-port` parameters of the `makebootconfig` command (see section: Configure and start a set of storage Nodes). This parameter is used to constraint a store to
 a limited set of ports, usually for security or data center policy reasons. By **default** the services use anonymous ports. Refer to your network administrator.
-The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/configuring-firewall.html)
+The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/configuring-firewall.html)
 
 
 e.g VMs in Oracle OCI are configured with a Linux firewall. For demo purposes, we will stop the firewall in all the VMs.
@@ -211,19 +211,19 @@ Download the [Oracle NoSQL Database bundle](https://www.oracle.com/database/tech
 - Enterprise Edition: Oracle NoSQL Database Enterprise Edition (EE) software is licensed pursuant to the Oracle commercial license
 - Oracle NoSQL Database Migrator: software is licensed pursuant to the Oracle UPL license
 
-In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 24.3](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/release-notes/index.html)
+In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 25.1](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/release-notes/index.html)
 
 For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
-unzip kv-ee-24.3.9.zip -d nosql
-unzip nosql-migrator-1.6.0.zip
+unzip kv-ee-25.1.13.zip -d nosql
+unzip nosql-migrator-1.6.5.zip
 ````
 
 Modify the file `env.sh` and `env-proxy.sh` with the appropriate kvhome path location. e.g.
 
 ```bash
-export KVHOME=$HOME/nosql/kv-24.3.9
+export KVHOME=$HOME/nosql/kv-25.1.13
 ```
 
 Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs 
@@ -231,10 +231,10 @@ are available which you can use, however, we are providing Java examples.
 
 ````bash
 cd $HOME
-rm -rf oracle-nosql-java-sdk-5.4.15.zip oracle-nosql-java-sdk
-curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.15/oracle-nosql-java-sdk-5.4.15.zip \
--o oracle-nosql-java-sdk-5.4.15.zip
-unzip oracle-nosql-java-sdk-5.4.15.zip
+rm -rf oracle-nosql-java-sdk-5.4.17.zip oracle-nosql-java-sdk
+curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.17/oracle-nosql-java-sdk-5.4.17.zip \
+-o oracle-nosql-java-sdk-5.4.17.zip
+unzip oracle-nosql-java-sdk-5.4.17.zip
 cd oracle-nosql-java-sdk/examples/
 javac -cp ../lib/nosqldriver.jar *.java
 cd $HOME
@@ -258,7 +258,7 @@ Note: you can use those scripts as templates to create your own.
 
 If the Storage Node you are configuring has the resources to support more than a one Replication Node, set the capacity value to the appropriate number.
 As a general heuristic, Replication Nodes require sufficient disk, cpu, memory, and network bandwidth to satisfy peak runtime demands.
-See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/initial-capacity-planning1.html) for more details.
+See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/initial-capacity-planning1.html) for more details.
 
 Consider the following configuration settings for Storage Nodes:
 - We recommend configuring each Storage Node with a capacity equal to the number of available disks on the machine. This permits a disk for each Replication Node, ensuring that Replication Nodes on the Storage Node are not competing for I/O resources. The `–storagedir` parameter lets you specify the directory location for each Replication Node disk. 
@@ -307,14 +307,14 @@ First node | Other nodes|
 
 Topologies can be modified to change the characteristics of the Storage Nodes. In one of the scenarios, we will show how to change the capacity.  We will setup all the Storage nodes of our cluster with `capacity = 1`, then we will change all Storage nodes to `capacity = 3`.
 
-To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/installation-configuration-parameters.html)
+To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/installation-configuration-parameters.html)
 
 ## Deploy YOUR topology
 
 
 A topology is the collection of zones, storage nodes, shards, replication nodes, and administrative services that make up your NoSQL Database store. 
 A deployed store has one topology that describes its state at a given time.  Read this architecture section in the documentation for a detailed 
-[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/concepts/architecture.html)
+[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/concepts/architecture.html)
 
 Topologies can be changed to achieve different performance characteristics, or to change characteristics of the Storage Nodes.
 Changing and deploying a topology is an iterative process.
@@ -336,14 +336,14 @@ file|topology|nodes needed|
 
 For information on how to use the command line interface to create, transform, view, validate and preview 
 a topology, see the following chapters in the Administrator's Guide.
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/name-your-data-store.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/steps-changing-stores-topology.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/using-plans.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/name-your-data-store.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/steps-changing-stores-topology.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/using-plans.html
 
 
 ## Create users
 
-In this step, we will create the initial users with [password complexity policy enabled.](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/security/password-complexity-policies.html)  The following users need to be created: root, proxy and application.
+In this step, we will create the initial users with [password complexity policy enabled.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/security/password-complexity-policies.html)  The following users need to be created: root, proxy and application.
 - Create the `root` user and the file `root.login` that contain property settings for the login as admin
 - Create the `proxy_user` user and the file proxy.login that contain property settings for the login as `proxy_user` user
 - Password for `root` and `proxy_user` are generated randomly using `openssl` tool and stored in a wallet
@@ -365,8 +365,8 @@ bash create-users.sh
 ```
 
 To learn more, we recommend reading:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/security/configuring-authentication.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/security/configuring-authorization.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/security/configuring-authentication.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/security/configuring-authorization.html
 
 ## Validate your deployment
 
@@ -446,7 +446,7 @@ pkill -f httpproxy.jar
 ```
 
 
-To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/admin/configuring-proxy.html)
+To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/configuring-proxy.html)
 
 ### Test using the Oracle NoSQL SDK for Java examples
 
@@ -509,7 +509,7 @@ The following error can be safely ignored when running the command `bash stop.sh
 
 ````bash
 $ bash stop.sh
-24.3.9 2024-09-26 18:00:26 UTC  Build id: 0d82533c492e Edition: Client
+25.1.13 2025-04-17 17:26:21 UTC  Build id: 61136aad405f Edition: Client
 Failed to stop SNA: Bootstrap config file /home/opc/nosql/kvroot/config.xml does not exist
 ````
 
@@ -522,7 +522,6 @@ The following error happen when trying to start the proxy and it is already runn
 
 ````bash
 $ kv_proxy
-Starting Proxy
 Failed to start proxy: java.lang.RuntimeException: Unable to start proxy: Address already in use. Configuration used:
 async=false
 helperHosts=node1-nosql:5000
@@ -531,6 +530,7 @@ httpsPort=0
 idleReadTimeout=0
 kvConsistency=NONE_REQUIRED
 kvDurability=COMMIT_NO_SYNC
+kvRequestLimit=-1
 kvRequestTimeout=-1
 monitorStatsEnabled=false
 numAcceptThreads=3
@@ -540,8 +540,8 @@ sslProtocols=TLSv1.2,TLSv1.1,TLSv1
 storeName=OUG
 verbose=true
 
-        at oracle.nosql.proxy.Proxy.start(Proxy.java:386)
-        at oracle.nosql.proxy.Proxy.initialize(Proxy.java:293)
+        at oracle.nosql.proxy.Proxy.start(Proxy.java:388)
+        at oracle.nosql.proxy.Proxy.initialize(Proxy.java:295)
         at oracle.nosql.proxy.ProxyMain.startProxy(ProxyMain.java:227)
         at oracle.nosql.proxy.ProxyMain.main(ProxyMain.java:53)
 Caused by: java.net.BindException: Address already in use
@@ -550,21 +550,22 @@ Caused by: java.net.BindException: Address already in use
         at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:337)
         at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:294)
         at io.netty.channel.socket.nio.NioServerSocketChannel.doBind(NioServerSocketChannel.java:141)
-        at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:562)
-        at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1334)
+        at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:561)
+        at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1281)
         at io.netty.channel.AbstractChannelHandlerContext.invokeBind(AbstractChannelHandlerContext.java:600)
         at io.netty.channel.AbstractChannelHandlerContext.bind(AbstractChannelHandlerContext.java:579)
-        at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:973)
-        at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:260)
+        at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:922)
+        at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:259)
         at io.netty.bootstrap.AbstractBootstrap$2.run(AbstractBootstrap.java:380)
         at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
         at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
-        at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470)
+        at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
         at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
-        at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+        at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
         at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
         at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
         at java.base/java.lang.Thread.run(Thread.java:833)
+
 
 ````
 
