@@ -24,12 +24,12 @@ This lab assumes you have:
 
 ## Task 1: Download Oracle NoSQL CE
 
-In this lab you will be using the 24.4.9 version of the Community Edition of Oracle NoSQL Database. You download the file and unzip and extract the contents.
+In this lab you will be using the 25.1.13 version of the Community Edition of Oracle NoSQL Database. You download the file and unzip and extract the contents.
 ````
 <copy>
-KV_VERSION=24.4.9
+KV_VERSION=25.1.13
 rm -rf kv-$KV_VERSION
-DOWNLOAD_ROOT=http://download.oracle.com/otn-pub/otn_software/nosql-database
+DOWNLOAD_ROOT="https://github.com/oracle/nosql/releases/download/v${KV_VERSION}/"
 DOWNLOAD_FILE="kv-ce-${KV_VERSION}.zip"
 DOWNLOAD_LINK="${DOWNLOAD_ROOT}/${DOWNLOAD_FILE}"
 curl -OLs $DOWNLOAD_LINK
@@ -68,16 +68,16 @@ sh ~/demo-lab-nosql-kvlite/data.sh
 </copy>
 ````
 
-In this lab you have successfully installed the 20.3.19 version of the Community edition of Oracle NoSQL Database. You have also downloaded the scripts and data needed for the subsequent labs.
+In this lab you have successfully installed the 25.1.13 version of the Community edition of Oracle NoSQL Database. You have also downloaded the scripts and data needed for the subsequent labs.
 
 You may now **proceed to the next lab.**
 
 ## Learn More
 
-* [Oracle NoSQL](https://www.oracle.com/database/nosql/)
+* [Oracle NoSQL](https://github.com/oracle/nosql)
 * [About NoSQL Documentation](https://docs.oracle.com/en/database/other-databases/nosql-database/index.html)
 
 
 ## Acknowledgements
 * **Author** - Dario Vega, Product Manager, NoSQL Product Management and Michael Brey, Director, NoSQL Product Development
-* **Last Updated By/Date** - Vandana Rajamani, Principal UA Developer, Oracle NoSQL Database, May 2022
+* **Last Updated By/Date** -  Dario Vega, Product Manager, NoSQL Product Management June 2025
