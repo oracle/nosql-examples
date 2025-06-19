@@ -80,7 +80,7 @@ Estimated Time: 15 minutes
 
     ````
     <copy>
-    KV_VERSION=24.4.9
+    KV_VERSION=25.1.13
     KVHOME=$HOME/kv-$KV_VERSION
     cd ~/demo-lab-nosql-kvlite/
     java -jar $KVHOME/lib/sql.jar -helper-hosts localhost:5000 -store kvstore
@@ -150,4 +150,4 @@ Estimated Time: 15 minutes
 
 ## Acknowledgements
 * **Author** - Dario Vega, Product Manager, NoSQL Product Management and Michael Brey, Director, NoSQL Product Development
-* **Last Updated By/Date** - Vandana Rajamani, Principal UA Developer, Oracle NoSQL Database, May 2022
+* **Last Updated By/Date** - Dario Vega, Product Manager, NoSQL Product Management June 2025
