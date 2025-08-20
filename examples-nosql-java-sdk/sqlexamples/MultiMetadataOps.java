@@ -1,4 +1,4 @@
-/* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+/* Copyright (c) 2024, 2025 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at
  * https://oss.oracle.com/licenses/upl/
 */
@@ -95,13 +95,13 @@ public class MultiMetadataOps {
    private static NoSQLHandle generateNoSQLHandleCloud(String region, String compId) throws Exception {
       SignatureProvider ap = new SignatureProvider();
       NoSQLHandleConfig config = new NoSQLHandleConfig(region, ap);
-      // set your default compartment
+      /* set your default compartment */
       config.setDefaultCompartment(compId);
       NoSQLHandle handle = NoSQLHandleFactory.createNoSQLHandle(config);
       return handle;
    }
    
-  /**
+  /*
    * Create a simple table and set your desired table capacity
    */
    private static void createTable(NoSQLHandle handle) throws Exception {
@@ -119,13 +119,13 @@ public class MultiMetadataOps {
       TableResult tres = handle.tableRequest(treq);
         /* The request is async,
          * so wait for the table to become active.
-        */
+         */
       tres.waitForCompletion(handle, 60000, /* wait 60 sec */
             1000); /* delay ms for poll */
       System.out.println("Table " + tableName + " is active");
     }
 
-    /**
+    /*
      * Add a row of data
      */
    private static void writeRows(NoSQLHandle handle, int idval,String add1, String aad2, int pinval, String rm4) throws Exception {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+/* Copyright (c) 2024, 2025 Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at
  * https://oss.oracle.com/licenses/upl/
 */
@@ -141,8 +141,8 @@ public class ManageMetadata {
    public static void main(String[] args) throws Exception {
       /* UNCOMMENT the lines of code below if you are using Oracle NoSQL
       *  Database Cloud service. Leave the lines commented if you are using
-      * onPremise database
-      * Add the appropriate values of your region and compartment OCID
+      *  onPremise database
+      *  Add the appropriate values of your region and compartment OCID
        String region ="<your_region_identifier>";
        String compId ="<ocid_of_your_compartment>";
        handle = generateNoSQLHandleCloud(region,compId); */
@@ -270,8 +270,8 @@ public class ManageMetadata {
         DeleteRequest delRequest = new DeleteRequest()
             .setKey(key)                                      
             .setTableName(tableName)                          
-            .setReturnRow(true)                               // Ask to return the deleted row and its metadata
-            .setRowMetadata("{\"deletedBy\": \"Hannah Lee\",\"reason\":\"User requested account removal\"}");    // Metadata attached to deletion 
+            .setReturnRow(true)                               /* Ask to return the deleted row and its metadata */
+            .setRowMetadata("{\"deletedBy\": \"Hannah Lee\",\"reason\":\"User requested account removal\"}");    /* Metadata attached to deletion */
 
         DeleteResult del = handle.delete(delRequest);
         String rm = del.getExistingRowMetadata();             
@@ -285,7 +285,7 @@ public class ManageMetadata {
       
       /*Update query and row metadata using QueryRequest API */
       private static void updateRowViaQuery(NoSQLHandle handle) throws Exception {
-      // UPDATE acct_Id 1 with new profile_name and metadata using SQL query
+      /* UPDATE acct_Id 1 with new profile_name and metadata using SQL query */
          String updateQuery = "UPDATE " + tableName + " SET profile_name = 'Amelia Pure' WHERE acct_Id = 1";
          String rowMetadata = "{\"modifiedBy\": \"Priya Kaul\", \"updateReason\": \"full name\"}";
 
@@ -299,7 +299,7 @@ public class ManageMetadata {
 
       /*Fetch row metadata via query function using QueryRequest API */
       private static void readAllRowMetadataViaQuery(NoSQLHandle handle) throws Exception {
-         // SELECT query to retrieve only row metadata for all rows
+         /* SELECT query to retrieve only row metadata for all rows */
          String query = "SELECT row_metadata($t) as rmt FROM " + tableName + " $t";
  
          QueryRequest queryReq = new QueryRequest()
