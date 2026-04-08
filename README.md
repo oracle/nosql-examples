@@ -29,7 +29,7 @@ This repository stores a variety of examples demonstrating how to use the Oracle
 | [examples-nosql-spring-sdk](./examples-nosql-spring-sdk) | Examples using the `nosql-spring-sdk` |
 | [demo-livelab](./demo-livelab) | you can find the code used in our NoSQL LiveLabs workshops in this directory and more information [here](#oracle-nosql-livelabs) |
 | [demo-events](./demo-events) | The NoSQL team is delivering content in Webinars and Events around the world. You can also find the instructions for workshops showcased in NoSQL events and have more information [here](#oracle-nosql-livelabs)|
-| [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/nsdev/getting-started-oracle-nosql-database1.html) | Getting started with SQL for Oracle NoSQL Database `sql-for-nosql`|
+| [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/nsdev/getting-started-oracle-nosql-database1.html) | Getting started with SQL for Oracle NoSQL Database `sql-for-nosql`|
 | [terraform Provider for Oracle NoSQL Database tutorial](https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql)| This is a Terraform configuration that creates the NoSQL service on Oracle Cloud Infrastructure. `nosql-cloud-devops`|
 
 
@@ -120,7 +120,7 @@ Read this [whitepaper](https://www.oracle.com/a/otn/docs/database/oracle-nosql-c
 
 **Tags:** `sql-for-nosql`
 
-Welcome to [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/nsdev/getting-started-oracle-nosql-database1.html). 
+Welcome to [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/nsdev/getting-started-oracle-nosql-database1.html). 
 
 
 The SQL for Oracle NoSQL Database data model supports flat relational data, hierarchical typed (schema-full) data, and schema-less JSON data.
@@ -145,7 +145,7 @@ such as episodes they watched, the watch time per episode, the total number of s
 The data is stored in the NoSQL Database and the application performs SQL queries to retrieve the required data and make it available to the user.
 
 The scripts allowing to run this tutorial are hosted in this Repository ( `AcctStreamSchema` and `BaggageSchema` ) but follow the instructions provided
-in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/24.3/nsdev/getting-started-oracle-nosql-database1.html)
+in the [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/nsdev/getting-started-oracle-nosql-database1.html)
 
 ## Terraform Provider for Oracle Cloud Infrastructure
 

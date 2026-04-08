@@ -19,7 +19,7 @@ Estimated Time: 15 minutes
 1. Execute the following in your Shell.
 ```
 <copy>
-KV_VERSION=24.3.9
+KV_VERSION=24.4.9
 KVHOME=$HOME/kv-$KV_VERSION
 </copy>
 ```

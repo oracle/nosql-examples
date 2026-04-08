@@ -28,7 +28,7 @@ In this lab you will be using the 20.3.19 version of the Community Edition of Or
 NoSQL Database. You download the file and unzip and extract the contents.
 ````
 <copy>
-KV_VERSION=24.3.9
+KV_VERSION=24.4.9
 rm -rf kv-$KV_VERSION
 DOWNLOAD_ROOT=http://download.oracle.com/otn-pub/otn_software/nosql-database
 DOWNLOAD_FILE="kv-ce-${KV_VERSION}.zip"

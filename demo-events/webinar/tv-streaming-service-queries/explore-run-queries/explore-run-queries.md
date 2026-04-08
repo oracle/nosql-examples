@@ -18,7 +18,7 @@ Execute the following in your Shell. You are invoking the sql command line to ex
 
 ```
 <copy>
-KV_VERSION=24.3.9
+KV_VERSION=24.4.9
 KVHOME=$HOME/kv-$KV_VERSION
 
 cd ~/oracle-nosql-arrays
@@ -56,7 +56,7 @@ The query returns the number of users in USA that have shown an interest in the 
 
 Notice the use of the `=any` operator here. Using the simple `=` operator would cause a runtime error to be raised, because `=` expects each of its operands to be at most one value, but the `u.info.shows.showId` path expression returns all the show ids in the shows array. Instead, the  `=any` acts like a `contains` here, i.e., it returns true if the shows array contains a show id with value 16.
 
-[Here] (https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/sqlreferencefornosql/sequence-comparison-operators.html) for more details on the `=any` operations.
+[Here] (https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/sqlreferencefornosql/sequence-comparison-operators.html) for more details on the `=any` operations.
 
 The query could also have been written equivalently like this:
 
@@ -74,13 +74,13 @@ condition `$element.showId = 16` selects the show whose id is 16. Since the path
 expression `u.info.shows[$element.showId = 16]` returns a set of shows (at most one
 show in this case), rather than a boolean value, the exists operator is needed to
 convert this set to a boolean value (returning true if the set is not empty).
-Click [Here](https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/sqlreferencefornosql/path-expressions.html) for the full specification of path
+Click [Here](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/sqlreferencefornosql/path-expressions.html) for the full specification of path
 expressions.
 
 Both of the above (equivalent) queries uses the `idx_country_showid_date` index.
 Both of the query conditions are pushed to the index. In fact, the index is
 “covering” each query, i.e., it contains all the info needed by the query, and as a
-result, no table rows are retrieved during execution. Click [Here](https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/sqlreferencefornosql/query-optimization.html) for more examples and details about
+result, no table rows are retrieved during execution. Click [Here](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/sqlreferencefornosql/query-optimization.html) for more examples and details about
 how indexes are used by queries.
 
 To confirm the use of the index and to see what conditions are pushed to it, you
@@ -300,7 +300,7 @@ info from the values bound to the `$sk1`, `$sk2`, and `$sk3` variables.
 
 The query also illustrates the use of a sequence aggregation function (`seq_sum`)
 to sum up the time spent by a user watching episodes that satisfy a condition (the
-  episodes of show 16). Click [here](https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/sqlreferencefornosql/sequence-aggregate-functions.html)
+  episodes of show 16). Click [here](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/sqlreferencefornosql/sequence-aggregate-functions.html)
 for details on sequence aggregation functions.
 
 8. More complex conditions on nested arrays

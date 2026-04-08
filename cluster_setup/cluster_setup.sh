@@ -2674,7 +2674,7 @@ EOT
 		echo "httpproxy setup failed."
 		if [ $secure_store -eq 1 ] ; then
 			echo ""
-			echo "See https://docs.oracle.com/en/database/other-databases/nosql-database/24.1/admin/secure-proxy.html for information on how to configure a secure proxy."
+			echo "See https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/admin/secure-proxy.html for information on how to configure a secure proxy."
 		fi
 		echo ""
 		exit 1
