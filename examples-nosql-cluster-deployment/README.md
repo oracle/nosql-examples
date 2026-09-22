@@ -30,7 +30,7 @@ In the examples in this repository, we will use the default configuration, which
 
 The code in this repository was used in **Getting started with an Oracle NoSQL** workshops showcased in NoSQL events around the world.
 
-To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/concepts/index.html)
+To learn more about the **Oracle NoSQL Concepts**, we recommend reading this [documentation.](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/concepts/index.html)
 
 For those of you that prefer a fully serverless managed service - learn more **Oracle NoSQL Database Cloud Service** [here.](https://www.oracle.com/database/nosql/)
 
@@ -95,7 +95,7 @@ To customize the **hostnames** or the **directories paths**, we provide a script
     bash generate-config-file.sh multi-zone-with-arb
     bash generate-config-file.sh multi-zone-with-arb-v2
     bash generate-config-file.sh primary-secondary
-	bash generate-config-file.sh primary-secondary-rf3
+    bash generate-config-file.sh primary-secondary-rf3
     cd -
     ```
     
@@ -110,55 +110,51 @@ bash clean.sh
 ```
 
 Just before starting an Oracle NoSQL installation, we recommend reading those links:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/release-notes/overview.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/installation-prerequisites.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/release-notes/overview.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/installation-prerequisites.html
+
 
 ## Java Version
 
-The Oracle NoSQL Database server and client requires Java SE 8 (64-bit) at a minimum. It also works with more recent Java SE versions.
+Since the 26.1 release, the Oracle NoSQL Database client and server have been
+compatible with Java SE 17.
 
-### Open JDK
+For the 26.1 release, the client and server were tested and certified against
+Oracle Java SE 21.0.9 and OpenJDK 21.0.2.
 
-We have tested with multiple Open JDK versions, and it is working with all versions up to OpenJDK 17.0.2.  You can install OpenJDK using one of the examples below.
-```bash
-sudo yum -y install java-8-openjdk-devel
-sudo yum -y install java-11-openjdk-devel
-sudo yum -y install java-13-openjdk-devel
-sudo yum -y install java-latest-openjdk-devel
-#donwload openjdk-11.0.2_linux-x64_bin.tar.gz
+### OpenJDK
+
+We have tested multiple OpenJDK versions. You can install your preferred
+OpenJDK version.
+
+If you encounter an issue with the OpenJDK version you are running, you can
+file an issue on GitHub and provide us with additional information so that we
+can investigate it. We validate the OpenJDK version during deployment when
+running the `makebootconfig` command.
+
+If you see this error:
+
+```text
+N/A JDK is not supported. Please use a Java version equal to or newer than
+the following recommended versions:
+Private Build Java 1.8.0, Azul Systems, Inc. Java 1.8.0, IBM Corporation
+Java 1.7.0, Oracle Corporation Java 1.8.0
 ```
-If you have an issue with the Open JDK version you are running, you can file an issue on GitHub and supply us with additional information and
-we can look at it. We validate the Open JDK Java version during deployment when running the command `makebootconfig`.  If you see this error: 
 
-````
-N/A JDK is not supported. Please use a Java version equal to or newer than the following recommended versions: 
-Private Build Java 1.8.0, Azul Systems, Inc. Java 1.8.0, IBM Corporation Java 1.7.0, Oracle Corporation Java 1.8.0
-````
-Then please, file an issue on GitHub and provide us the output of the following command:
-  
-````bash
+Please file an issue on GitHub and provide the output of the following command:
+
+```bash
 java -XshowSettings:properties 2>&1 | grep vendor
-````
+```
+
 ### Oracle JDK
 
-We have tested with multiple Oracle JDK versions, and it is working with all versions up to Oracle Java SE 17.0.3. You can install Oracle JDK/JRE using one of the examples below.
+We have tested multiple Oracle JDK versions. You can download the JDK from
+https://www.oracle.com/java/technologies/downloads/.
 
-```bash
-sudo yum install java
-sudo yum install jdk-17-headless
-sudo yum install jdk-17-headful
-# download the rmp 
-sudo yum localinstall jdk-13.0.2_linux-x64_bin.rpm
-sudo rpm -Uvh jdk-14.0.2_linux-x64_bin.rpm
-```
-
-If you have installed multiple versions on your machine, you select which version using the following command:
-```bash
-sudo alternatives --config java
-```
-
-**FYI**, In this demo, we install our cluster using a **Oracle JDK17** which also gives us access to `javac` and `jps` - Java Virtual Machine Process Status Tool.
-
+**FYI**, in this demo, we install our cluster using Oracle JDK 25, which also
+provides access to `javac` and `jps`, the Java Virtual Machine Process Status
+Tool.
 
 ### Configuring the Network Firewalls
 
@@ -166,7 +162,7 @@ Often physical machines and/or VMs (storage nodes) have built-in firewalls. Addi
 the storage nodes need to communicate with one another, so communication must pass through the firewalls.  Open the firewall ports used by the communication channels
 in the NoSQL Cluster. To make sure your network firewall works with your topology, you should set the ports specified by the `-port`, `-harange`, `-servicerange`, and `-admin-web-port` parameters of the `makebootconfig` command (see section: Configure and start a set of storage Nodes). This parameter is used to constraint a store to
 a limited set of ports, usually for security or data center policy reasons. By **default** the services use anonymous ports. Refer to your network administrator.
-The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/configuring-firewall.html)
+The documentation has additional [information.](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/configuring-firewall.html)
 
 
 e.g VMs in Oracle OCI are configured with a Linux firewall. For demo purposes, we will stop the firewall in all the VMs.
@@ -211,19 +207,19 @@ Download the [Oracle NoSQL Database bundle](https://www.oracle.com/database/tech
 - Enterprise Edition: Oracle NoSQL Database Enterprise Edition (EE) software is licensed pursuant to the Oracle commercial license
 - Oracle NoSQL Database Migrator: software is licensed pursuant to the Oracle UPL license
 
-In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 25.3](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/release-notes/index.html)
+In this demo, we will use the Oracle NoSQL Database bundle - Enterprise Edition [Release 26.1](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/release-notes/index.html)
 
 For more information about difference between versions (CE vs EE) and other topics, visit the [FAQ](https://www.oracle.com/database/technologies/nosqldb-learnmore-nosqldb-faq.html)
 
 ```bash
-unzip kv-ee-25.3.21.zip -d nosql
-unzip nosql-migrator-1.7.0.zip
+unzip kv-ee-26.1.14.zip -d nosql
+unzip nosql-migrator-1.9.0.zip
 ````
 
 Modify the file `env.sh` and `env-proxy.sh` with the appropriate kvhome path location. e.g.
 
 ```bash
-export KVHOME=$HOME/nosql/kv-25.3.21
+export KVHOME=$HOME/nosql/kv-26.1.14
 ```
 
 Download, unzip NoSQL SDK for Java and compile the NoSQL SDK for Java examples.  We will use java programs to test the configuration.  Other language SDKs 
@@ -231,10 +227,10 @@ are available which you can use, however, we are providing Java examples.
 
 ````bash
 cd $HOME
-rm -rf oracle-nosql-java-sdk-5.4.18.zip oracle-nosql-java-sdk
-curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.18/oracle-nosql-java-sdk-5.4.18.zip \
--o oracle-nosql-java-sdk-5.4.18.zip
-unzip oracle-nosql-java-sdk-5.4.18.zip
+rm -rf oracle-nosql-java-sdk-5.4.24.zip oracle-nosql-java-sdk
+curl -L https://github.com/oracle/nosql-java-sdk/releases/download/v5.4.24/oracle-nosql-java-sdk-5.4.24.zip \
+-o oracle-nosql-java-sdk-5.4.24.zip
+unzip oracle-nosql-java-sdk-5.4.24.zip
 cd oracle-nosql-java-sdk/examples/
 javac -cp ../lib/nosqldriver.jar *.java
 cd $HOME
@@ -258,7 +254,7 @@ Note: you can use those scripts as templates to create your own.
 
 If the Storage Node you are configuring has the resources to support more than a one Replication Node, set the capacity value to the appropriate number.
 As a general heuristic, Replication Nodes require sufficient disk, cpu, memory, and network bandwidth to satisfy peak runtime demands.
-See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/initial-capacity-planning1.html) for more details.
+See [Initial Capacity Planning](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/initial-capacity-planning1.html) for more details.
 
 Consider the following configuration settings for Storage Nodes:
 - We recommend configuring each Storage Node with a capacity equal to the number of available disks on the machine. This permits a disk for each Replication Node, ensuring that Replication Nodes on the Storage Node are not competing for I/O resources. The `–storagedir` parameter lets you specify the directory location for each Replication Node disk. 
@@ -307,14 +303,14 @@ First node | Other nodes|
 
 Topologies can be modified to change the characteristics of the Storage Nodes. In one of the scenarios, we will show how to change the capacity.  We will setup all the Storage nodes of our cluster with `capacity = 1`, then we will change all Storage nodes to `capacity = 3`.
 
-To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/installation-configuration-parameters.html)
+To learn more about it, we recommend to read this [link.](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/installation-configuration-parameters.html)
 
 ## Deploy YOUR topology
 
 
 A topology is the collection of zones, storage nodes, shards, replication nodes, and administrative services that make up your NoSQL Database store. 
 A deployed store has one topology that describes its state at a given time.  Read this architecture section in the documentation for a detailed 
-[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/concepts/architecture.html)
+[description.](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/concepts/architecture.html)
 
 Topologies can be changed to achieve different performance characteristics, or to change characteristics of the Storage Nodes.
 Changing and deploying a topology is an iterative process.
@@ -336,14 +332,14 @@ file|topology|nodes needed|
 
 For information on how to use the command line interface to create, transform, view, validate and preview 
 a topology, see the following chapters in the Administrator's Guide.
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/name-your-data-store.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/steps-changing-stores-topology.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/using-plans.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/name-your-data-store.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/steps-changing-stores-topology.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/using-plans.html
 
 
 ## Create users
 
-In this step, we will create the initial users with [password complexity policy enabled.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/security/password-complexity-policies.html)  The following users need to be created: root, proxy and application.
+In this step, we will create the initial users with [password complexity policy enabled.](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/security/password-complexity-policies.html)  The following users need to be created: root, proxy and application.
 - Create the `root` user and the file `root.login` that contain property settings for the login as admin
 - Create the `proxy_user` user and the file proxy.login that contain property settings for the login as `proxy_user` user
 - Password for `root` and `proxy_user` are generated randomly using `openssl` tool and stored in a wallet
@@ -365,8 +361,8 @@ bash create-users.sh
 ```
 
 To learn more, we recommend reading:
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/security/configuring-authentication.html
-- https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/security/configuring-authorization.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/security/configuring-authentication.html
+- https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/security/configuring-authorization.html
 
 ## Validate your deployment
 
@@ -446,7 +442,7 @@ pkill -f httpproxy.jar
 ```
 
 
-To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/25.3/admin/configuring-proxy.html)
+To learn more, we recommend [reading.](https://docs.oracle.com/en/database/other-databases/nosql-database/26.1/admin/configuring-proxy.html)
 
 ### Test using the Oracle NoSQL SDK for Java examples
 
@@ -464,7 +460,7 @@ Instructions for secure cluster
 
 ````bash
 cd $HOME/oracle-nosql-java-sdk/examples/
-java -Djavax.net.ssl.trustStorePassword=`cat /home/opc/proxy/pwd`  -Djavax.net.ssl.trustStore=$PROXYHOME/driver.trust \
+java -Djavax.net.ssl.trustStorePassword=`cat $PROXYHOME/pwd`  -Djavax.net.ssl.trustStore=$PROXYHOME/driver.trust \
 -cp .:../lib/nosqldriver.jar     BasicTableExample https://$HOSTNAME:$PROXYPORTSEC -useKVProxy \
 -user application_user -password  'DriverPass@@123'
 cd -
@@ -509,8 +505,8 @@ The following error can be safely ignored when running the command `bash stop.sh
 
 ````bash
 $ bash stop.sh
-25.3.21 2025-10-08 13:27:27 UTC  Build id: c208f3d60d11 Edition: Client
-Failed to stop SNA: Bootstrap config file /home/opc/nosql/kvroot/config.xml does not exist
+26.1.14 2026-07-08 11:37:41 UTC  Build id: 738806fc6c89 Edition: Client
+Failed to stop SNA: Bootstrap config file /home/davega/nosql/kvroot/config.xml does not exist
 ````
 
 Do not forget to execute the Linux command `pkill` to stop the proxy from a previous execution
