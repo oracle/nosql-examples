@@ -1,4 +1,4 @@
-# GLangChain and NoSql Integration
+# LangChain and NoSql Integration
 
 This example illustrates the use of LangChain to save and retrieve checkpoints into Oracle NoSQL Database. 
 
@@ -24,6 +24,15 @@ Install them using:
 python3.14 -m venv venv
 source ./venv/bin/activate
 pip install borneo langchain langgraph langgraph-checkpoint oci
+```
+
+Make sure the NoSQL DB and Model are configured corectly.
+For example a local on-preemises DB and local LMStudio:
+
+```shell
+export ORACLE_NOSQL_DB_ENDPOINT="http://localhost:8080"
+export LMSTUDIO_MODEL="lfm2.5-1.2b-thinking-mlx"
+export LMSTUDIO_BASE_URL="http://localhost:1234/v1"
 ```
 
 Run example
