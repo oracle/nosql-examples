@@ -1,8 +1,11 @@
 # LangChain and NoSql Integration
 
-This example illustrates the use of LangChain to save and retrieve checkpoints into Oracle NoSQL Database. 
+This example illustrates the use of LangChain to save and retrieve an LLM 
+context state (checkpoints) into Oracle NoSQL Database. 
 
-Integrating LangChain with Oracle NoSQL Database is accomplished by developing a custom checkpointer using Oracle NoSQL's Python APIs.
+Integrating LangChain with Oracle NoSQL Database is accomplished by developing 
+a LangChain component that saves and restores state using Oracle NoSQL's 
+Python APIs.
  
 Source code implements LangChain's Checkpointer interface.
 
