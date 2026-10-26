@@ -1,2 +1,3 @@
-langchain/logs/driver.log
-langchain/__pycache__/OracleNoSqlDbTools.cpython-314.pyc
+/langchain/logs/
+__pycache__/
+.vscode/

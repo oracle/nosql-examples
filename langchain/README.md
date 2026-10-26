@@ -1,4 +1,4 @@
-# LangChain and NoSql Integration
+# LangChain and NoSQL Database Integration
 
 This example illustrates the use of LangChain to save and retrieve an LLM 
 context state (checkpoints) into Oracle NoSQL Database. 
@@ -9,7 +9,7 @@ Python APIs.
  
 Source code implements LangChain's Checkpointer interface.
 
-### Requirements ###
+### Requirements
 
 The following packages are required:
  - A LangChain supported LLM
@@ -38,7 +38,7 @@ export LMSTUDIO_MODEL="lfm2.5-1.2b-thinking-mlx"
 export LMSTUDIO_BASE_URL="http://localhost:1234/v1"
 ```
 
-Run example
+Run the example
 ```shell
 python example.py
 ```

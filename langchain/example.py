@@ -20,12 +20,11 @@ def build_llm():
     return ChatOpenAI(
         model=os.getenv("EXAMPLE_MODEL", LMSTUDIO_MODEL),
         base_url=os.getenv("EXAMPLE_BASE_URL", LMSTUDIO_BASE_URL),
-        #api_key=os.getenv("EXAMPLE_API_KEY", "LLM_PROVIDER_KEY"),
+        api_key=os.getenv("EXAMPLE_API_KEY", "LLM_PROVIDER_KEY"),
     )
 
 
 def main() -> None:
-
     print("=== List checkpoints ===")
 
     checkpointer = OracleNoSqlDbCheckpointer.create_from_db_endpoint(ORACLE_NOSQL_DB_ENDPOINT, debug=True, drop_tables=False)
@@ -99,8 +98,8 @@ def main() -> None:
         }
     )
 
-    # print("\n  - LLM 2nd Response ===")
-    # print(response["messages"][-1].content)
+    print("\n  - LLM 2nd Response:")
+    print(response["messages"][-1].content)
 
 
 if __name__ == "__main__":

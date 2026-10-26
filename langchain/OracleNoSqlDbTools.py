@@ -2,8 +2,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at
 # https://oss.oracle.com/licenses/upl/
 
-from collections.abc import AsyncIterator, Iterator, Sequence
-from logging import config
+from collections.abc import Iterator, Sequence
 from typing import Any
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.base import (
@@ -23,7 +22,7 @@ from datetime import datetime as Datetime
 
 
 class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
-    # staic metho for creating a checkpointer from an endpoint string
+    # static method for creating a checkpointer from an endpoint string
     @staticmethod
     def create_from_db_endpoint(dbEndpoint: str,
                  tableName: str = "checkpoints",
@@ -53,7 +52,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if self._table_created:
             return False  # Table already created, no need to create again
         if not self._handle:
-            raise ValueError("NoSQL DB Handle is not initialized.")
+            raise ValueError("NoSQL DB handle is not initialized.")
 
         if drop_tables:
             try:
