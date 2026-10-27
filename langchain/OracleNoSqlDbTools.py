@@ -297,17 +297,22 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if row is None:
                 return None
         else:
-            qRes = self._handle.query(
-                QueryRequest().set_statement(
-                    f"SELECT * FROM {self._table_name} \
-                      WHERE thread_id = '{thread_id}' and checkpoint_ns = '{checkpoint_ns}' \
-                      ORDER BY checkpoint_id DESC LIMIT 1"
-                )
-            )
-            row = qRes.get_results()
-            if not row:
+            qReq = QueryRequest().set_statement(
+                                f"SELECT * FROM {self._table_name} \
+                                  WHERE thread_id = '{thread_id}' and checkpoint_ns = '{checkpoint_ns}' \
+                                  ORDER BY checkpoint_id DESC LIMIT 1"
+                            )
+            row = None
+            while True:
+                qRes = self._handle.query(qReq)
+                rows = qRes.get_results()
+                if len(rows) > 0:
+                    row = rows[0]
+                    break
+                if qReq.is_done():
+                    break
+            if row is None:
                 return None
-            row = row[0]
 
         # read writes associated with the checkpoint
         qReq = QueryRequest().set_statement(
@@ -323,15 +328,12 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         while True:
             qRes = self._handle.query(qReq)
             qRecs = qRes.get_results()
+            pending_writes.extend([
+                (r["task_id"], r["channel"], self.serde.loads_typed((r["type"], base64.b64decode(r["value"]))))
+                for r in qRecs
+            ])
             if qReq.is_done():
                 break
-            else: 
-                pending_writes.append([
-                    (r["task_id"], r["channel"], self.serde.loads_typed((r["type"], r["value"])))
-                    for r in qRecs
-                ])
-        else:
-            pending_writes = []
 
         checkpoint = self.serde.loads_typed((row["val_"]["type"], base64.b64decode(row["val_"]["blob"].encode('utf-8'))))
         metadata = self.serde.loads_typed((row["val_"]["metadata_type"], base64.b64decode(row["val_"]["metadata"].encode('utf-8'))))
@@ -367,8 +369,11 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         *,
         filter: dict[str, Any] | None = None,
         before: RunnableConfig | None = None,
-        limit: int | None = None,
+        limit: int | None = 10,
     ) -> Iterator[CheckpointTuple]:
+        if limit is not None and limit <= 0:
+            return iter([])  # Return an empty iterator if limit is non-positive
+        
         thread_id = config.get("configurable", {}).get("thread_id")
         checkpoint_ns = config.get("configurable", {}).get("checkpoint_ns", "")
 
@@ -384,11 +389,10 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                                         thread_id = '{thread_id}' AND \
                                         checkpoint_ns = '{checkpoint_ns}' "
         query += f"                     AND checkpoint_id < '{checkpoint_id}' " if checkpoint_id else ""
-        query += f"                 ORDER BY checkpoint_id DESC LIMIT {limit if limit else 10}"
+        query += f"                 ORDER BY checkpoint_id DESC {'LIMIT ' + str(limit) if limit and limit > 0 else ''}"
 
         qReq = QueryRequest().set_statement(query)
-        qRes = self._handle.query(qReq)
-
+        
         while True:
             if self._debug:
                 print(f"DBG: list: querying...")
@@ -430,20 +434,29 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if self._debug:
             print(f"DBG: delete_thread: thread_id={thread_id}")
 
-        delRes = self._handle.multi_delete(
-            MultiDeleteRequest().set_table_name(self._table_name).set_key({ 
-                "thread_id": thread_id
-            })
-        )
+        req = MultiDeleteRequest().set_table_name(self._table_name).set_key({ 
+                        "thread_id": thread_id
+                    })
+        while True:
+            delRes = self._handle.multi_delete(req)
+            if delRes.get_continuation_key() is None:
+                break
+            req.set_continuation_key(delRes.get_continuation_key())
+
 
         if self._debug:
             print(f"  DBG: delete_thread: deleted {delRes.get_num_deletions()} checkpoints for '{thread_id}'")
 
-        delRes = self._handle.multi_delete(
-            MultiDeleteRequest().set_table_name(self._table_name + ".writes").set_key({ 
+
+        req = MultiDeleteRequest().set_table_name(self._table_name + ".writes").set_key({ 
                 "thread_id": thread_id
             })
-        )
+
+        while True:
+            delRes = self._handle.multi_delete(req)
+            if delRes.get_continuation_key() is None:
+                break
+            req.set_continuation_key(delRes.get_continuation_key())
 
         if self._debug:
             print(f"  DBG: delete_thread: deleted {delRes.get_num_deletions()} writes for '{thread_id}'")
