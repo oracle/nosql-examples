@@ -31,6 +31,7 @@ This repository stores a variety of examples demonstrating how to use the Oracle
 | [demo-events](./demo-events) | The NoSQL team is delivering content in Webinars and Events around the world. You can also find the instructions for workshops showcased in NoSQL events and have more information [here](#oracle-nosql-livelabs)|
 | [SQL for Oracle NoSQL Database tutorial](https://docs.oracle.com/en/database/other-databases/nosql-database/25.1/nsdev/getting-started-oracle-nosql-database1.html) | Getting started with SQL for Oracle NoSQL Database `sql-for-nosql`|
 | [terraform Provider for Oracle NoSQL Database tutorial](https://github.com/oracle/terraform-provider-oci/tree/master/examples/nosql)| This is a Terraform configuration that creates the NoSQL service on Oracle Cloud Infrastructure. `nosql-cloud-devops`|
+| [LangChain and Oracle NoSQL Database Integration](./langchain/)| This example illustrates the use of LangChain to save and retrieve context state (checkpoints) to and from a NoSQL Database or service on Oracle Cloud Infrastructure.|
 
 
 We also collected in this repository exciting content about How to use the Oracle NoSQL database with other OCI services - more information  [here](#other-examples-and-resources).
