@@ -447,8 +447,13 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if limit is not None and limit <= 0:
             return iter([])  # Return an empty iterator if limit is non-positive
         
-        thread_id = config.get("configurable", {}).get("thread_id")
-        checkpoint_ns = config.get("configurable", {}).get("checkpoint_ns", "")
+        configurable = config.get("configurable", {}) if config is not None else None
+        thread_id = configurable.get("thread_id") if configurable is not None else None
+        checkpoint_ns = (
+            configurable.get("checkpoint_ns", "")
+            if configurable is not None
+            else None
+        )
 
         if self._debug:
             print(f"DBG: list: thread_id={thread_id}, checkpoint_ns={checkpoint_ns}")
@@ -457,14 +462,18 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if before:
             checkpoint_id = before.get("configurable", {}).get("checkpoint_id", None)
 
-        query = (
-            f"SELECT * FROM {self._table_name} "
-            "WHERE thread_id = $thread_id "
-            "AND checkpoint_ns = $checkpoint_ns "
-        )
-        bind_variables = {"thread_id": thread_id, "checkpoint_ns": checkpoint_ns}
+        query = f"SELECT * FROM {self._table_name} "
+        where_clauses = []
+        bind_variables = {}
+        if configurable is not None:
+            if thread_id is not None:
+                where_clauses.append("thread_id = $thread_id")
+                bind_variables["thread_id"] = thread_id
+            if checkpoint_ns is not None:
+                where_clauses.append("checkpoint_ns = $checkpoint_ns")
+                bind_variables["checkpoint_ns"] = checkpoint_ns
         if checkpoint_id:
-            query += "AND checkpoint_id < $checkpoint_id "
+            where_clauses.append("checkpoint_id < $checkpoint_id")
             bind_variables["checkpoint_id"] = checkpoint_id
 
         has_filter = bool(filter)
@@ -494,12 +503,14 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if filter_predicates:
                 # Rows written before metadata became a JSON map still need to
                 # be checked after deserialization.
-                query += (
-                    "AND (val_.metadata_type IS NOT NULL OR ("
+                where_clauses.append(
+                    "(val_.metadata_type IS NOT NULL OR ("
                     + " AND ".join(filter_predicates)
-                    + ")) "
+                    + "))"
                 )
 
+        if where_clauses:
+            query += "WHERE " + " AND ".join(where_clauses) + " "
         query += "ORDER BY checkpoint_id DESC"
         # Apply the limit after metadata matching. The SQL query can include
         # legacy rows that need to be checked using their decoded metadata.
@@ -528,7 +539,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 yield CheckpointTuple(
                     config={
                         "configurable": {
-                            "thread_id": thread_id,
+                            "thread_id": r.get("thread_id"),
                             "checkpoint_ns": r.get("checkpoint_ns"),
                             "checkpoint_id": r.get("checkpoint_id"),
                             "ts": r.get("val_", {}).get("ts")
