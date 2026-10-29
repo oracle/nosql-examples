@@ -56,11 +56,21 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if not bind_variables:
             return QueryRequest().set_statement(statement)
 
-        declarations = " ".join(
-            f"${name} STRING;" for name in bind_variables
-        )
+        declarations = []
+        for name, value in bind_variables.items():
+            if isinstance(value, str):
+                sql_type = "STRING"
+            elif type(value) is int:
+                sql_type = "INTEGER"
+            else:
+                raise TypeError(
+                    f"Unsupported bind value type for ${name}: {type(value).__name__}"
+                )
+            declarations.append(f"${name} {sql_type};")
         prepared = self._handle.prepare(
-            PrepareRequest().set_statement(f"DECLARE {declarations} {statement}")
+            PrepareRequest().set_statement(
+                f"DECLARE {' '.join(declarations)} {statement}"
+            )
         ).get_prepared_statement()
         for name, value in bind_variables.items():
             prepared.set_variable(f"${name}", value)
@@ -437,7 +447,8 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             bind_variables["checkpoint_id"] = checkpoint_id
         query += "ORDER BY checkpoint_id DESC"
         if limit is not None:
-            query += f" LIMIT {limit}"
+            query += " LIMIT $limit"
+            bind_variables["limit"] = limit
 
         qReq = self._query_request(query, bind_variables)
         
