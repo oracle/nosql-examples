@@ -18,7 +18,7 @@ from langgraph.checkpoint.base import (
 )
 from borneo import MultiDeleteRequest, GetTableRequest, NoSQLHandle, NoSQLHandleConfig, QueryRequest, \
     TableRequest, PutRequest, GetRequest, PrepareRequest, WriteMultipleRequest, \
-    GetResult
+    GetResult, TableNotFoundException
 from borneo.kv import StoreAccessTokenProvider
 
 
@@ -45,7 +45,10 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         self._debug = debug
 
         self._handle = NoSQLHandle(dbConfig)
-        self.create_table(tableName, drop_tables=drop_tables)
+        if not self.create_table(tableName, drop_tables=drop_tables):
+            raise RuntimeError(
+                f"Failed to initialize Oracle NoSQL tables for '{tableName}'."
+            )
 
     def _query_request(
         self,
@@ -171,39 +174,29 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             raise ValueError("NoSQL DB handle is not initialized.")
 
         if drop_tables:
-            try:
-                if self._debug:
-                    print(f"   ...Dropping table '{table_name}.writes' if it exists...")
-                ddl = f"""DROP TABLE IF EXISTS {table_name}.writes"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}.writes' dropped.")
-                self._table_created = False
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error dropping table '{table_name}.writes': {e}")
-                self._table_created = False
-        
-            try:
-                if self._debug:
-                    print(f"   ...Dropping table '{table_name}' if it exists...")
-                ddl = f"""DROP TABLE IF EXISTS {table_name}"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}' dropped.")
-                self._table_created = False
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error dropping table '{table_name}': {e}")
-                self._table_created = False
+            if self._debug:
+                print(f"   ...Dropping table '{table_name}.writes' if it exists...")
+            ddl = f"""DROP TABLE IF EXISTS {table_name}.writes"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}.writes' dropped.")
+            self._table_created = False
+
+            if self._debug:
+                print(f"   ...Dropping table '{table_name}' if it exists...")
+            ddl = f"""DROP TABLE IF EXISTS {table_name}"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}' dropped.")
+            self._table_created = False
 
         parent_table_created = False
         child_table_created = False
@@ -214,29 +207,24 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if self._debug:
                 print(f"   ...Table '{table_name}' already exists.")
             parent_table_created = True
-        except Exception:
-            try:
-                if self._debug:
-                    print(f"   ...Creating table '{table_name}'...")
-                ddl = f"""CREATE TABLE IF NOT EXISTS {table_name} (
-                            thread_id     string,
-                            checkpoint_ns string,
-                            checkpoint_id string,
-                            val_        JSON,
-                            PRIMARY KEY(SHARD(thread_id), checkpoint_ns, checkpoint_id)
-                    )"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}' created.")
-                parent_table_created = True
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error creating table '{table_name}': {e}")
-                parent_table_created = False
+        except TableNotFoundException:
+            if self._debug:
+                print(f"   ...Creating table '{table_name}'...")
+            ddl = f"""CREATE TABLE IF NOT EXISTS {table_name} (
+                        thread_id     string,
+                        checkpoint_ns string,
+                        checkpoint_id string,
+                        val_        JSON,
+                        PRIMARY KEY(SHARD(thread_id), checkpoint_ns, checkpoint_id)
+                )"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}' created.")
+            parent_table_created = True
 
         try:
             request = GetTableRequest().set_table_name(table_name + ".writes")
@@ -244,31 +232,30 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if self._debug:
                 print(f"   ...Table '{table_name}.writes' already exists.")
             child_table_created = True
-        except Exception:
-            try:
-                if self._debug:
-                    print(f"   ...Creating table '{table_name}.writes'...")
-                ddl = f"""CREATE TABLE IF NOT EXISTS {table_name}.writes (
-                            task_id       string,
-                            task_path     string,
-                            idx           INTEGER,
-                            val_        JSON,
-                            PRIMARY KEY(task_id, task_path, idx)
-                    )"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}.writes' created.")
-                child_table_created = True
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error creating table '{table_name}.writes': {e}")
-                child_table_created = False
+        except TableNotFoundException:
+            if self._debug:
+                print(f"   ...Creating table '{table_name}.writes'...")
+            ddl = f"""CREATE TABLE IF NOT EXISTS {table_name}.writes (
+                        task_id       string,
+                        task_path     string,
+                        idx           INTEGER,
+                        val_        JSON,
+                        PRIMARY KEY(task_id, task_path, idx)
+                )"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}.writes' created.")
+            child_table_created = True
 
         self._table_created = parent_table_created and child_table_created
+        if not self._table_created:
+            raise RuntimeError(
+                f"Failed to initialize Oracle NoSQL tables for '{table_name}'."
+            )
         return self._table_created
 
 
