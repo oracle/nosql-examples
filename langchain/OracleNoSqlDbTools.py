@@ -455,7 +455,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         *,
         filter: dict[str, Any] | None = None,
         before: RunnableConfig | None = None,
-        limit: int | None = 10,
+        limit: int | None = None,
     ) -> Iterator[CheckpointTuple]:
         if limit is not None and type(limit) is not int:
             raise TypeError("limit must be an integer or None")
