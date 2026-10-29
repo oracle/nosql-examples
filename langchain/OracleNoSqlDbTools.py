@@ -339,6 +339,9 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         task_id: str,
         task_path: str = "",
     ) -> None:
+        if not writes:
+            return
+
         thread_id = config.get("configurable", {}).get("thread_id")
         checkpoint_ns = config.get("configurable", {}).get("checkpoint_ns", "")
         checkpoint_id = config.get("configurable", {}).get("checkpoint_id")
