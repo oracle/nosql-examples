@@ -361,12 +361,12 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
 
         # read writes associated with the checkpoint
         qReq = self._query_request(
-            f"SELECT w.task_id, w.val_.channel as channel, w.val_.type as type, w.val_.value as value "
+            f"SELECT w.task_path, w.task_id, w.val_.channel as channel, w.val_.type as type, w.val_.value as value "
             f"FROM {self._table_name}.writes as w "
             "WHERE thread_id = $thread_id "
             "AND checkpoint_ns = $checkpoint_ns "
             "AND checkpoint_id = $checkpoint_id "
-            "ORDER BY task_id, idx",
+            "ORDER BY w.task_path, w.task_id, w.idx",
             {
                 "thread_id": thread_id,
                 "checkpoint_ns": checkpoint_ns,
