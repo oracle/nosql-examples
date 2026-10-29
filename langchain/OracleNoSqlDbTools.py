@@ -87,6 +87,20 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             )
         return table_name
 
+    @staticmethod
+    def _parent_config(row: dict[str, Any]) -> RunnableConfig | None:
+        value = row.get("val_", {})
+        parent_id = value.get("parent_id") or value.get("parent_checkpoint_id")
+        if not parent_id:
+            return None
+        return {
+            "configurable": {
+                "thread_id": row.get("thread_id"),
+                "checkpoint_ns": row.get("checkpoint_ns", ""),
+                "checkpoint_id": parent_id,
+            }
+        }
+
     def create_table(self, table_name: str, drop_tables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
            Only first time at init, drop the table if drop_tables is True.
@@ -389,16 +403,6 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         metadata = self.serde.loads_typed((row["val_"]["metadata_type"], base64.b64decode(row["val_"]["metadata"].encode('utf-8'))))
 
 
-        # parent_config = None
-        # if row["val_"].get("parent_checkpoint_id"):
-        #     parent_config = {
-        #         "configurable": {
-        #             "thread_id": thread_id,
-        #             "checkpoint_ns": checkpoint_ns,
-        #             "checkpoint_id": row["val_"].get("parent_checkpoint_id"),
-        #         }
-        #     }
-
         return CheckpointTuple(
             config={
                 "configurable": {
@@ -409,7 +413,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             },
             checkpoint = checkpoint,         
             metadata = metadata,             
-            parent_config = None, 
+            parent_config = self._parent_config(row),
             pending_writes = pending_writes,
         )
 
@@ -474,6 +478,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                     },
                     checkpoint = checkpoint,
                     metadata = metadata,
+                    parent_config = self._parent_config(r),
                     pending_writes = None,
                 )
 
