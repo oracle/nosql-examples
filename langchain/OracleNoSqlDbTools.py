@@ -120,6 +120,46 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             )
         return metadata
 
+    def _pending_writes_for_checkpoint(
+        self,
+        thread_id: str,
+        checkpoint_ns: str,
+        checkpoint_id: str,
+    ) -> list[tuple[str, str, Any]]:
+        """Load writes associated with one checkpoint."""
+        q_req = self._query_request(
+            f"SELECT w.task_path, w.task_id, w.val_.channel as channel, "
+            f"w.val_.type as type, w.val_.value as value "
+            f"FROM {self._table_name}.writes as w "
+            "WHERE thread_id = $thread_id "
+            "AND checkpoint_ns = $checkpoint_ns "
+            "AND checkpoint_id = $checkpoint_id "
+            "ORDER BY w.task_path, w.task_id, w.idx",
+            {
+                "thread_id": thread_id,
+                "checkpoint_ns": checkpoint_ns,
+                "checkpoint_id": checkpoint_id,
+            },
+        )
+
+        pending_writes = []
+        while True:
+            q_res = self._handle.query(q_req)
+            q_recs = q_res.get_results()
+            pending_writes.extend(
+                (
+                    row["task_id"],
+                    row["channel"],
+                    self.serde.loads_typed(
+                        (row["type"], base64.b64decode(row["value"]))
+                    ),
+                )
+                for row in q_recs
+            )
+            if q_req.is_done():
+                break
+        return pending_writes
+
     def create_table(self, table_name: str, drop_tables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
            Only first time at init, drop the table if drop_tables is True.
@@ -390,31 +430,9 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if row is None:
                 return None
 
-        # read writes associated with the checkpoint
-        qReq = self._query_request(
-            f"SELECT w.task_path, w.task_id, w.val_.channel as channel, w.val_.type as type, w.val_.value as value "
-            f"FROM {self._table_name}.writes as w "
-            "WHERE thread_id = $thread_id "
-            "AND checkpoint_ns = $checkpoint_ns "
-            "AND checkpoint_id = $checkpoint_id "
-            "ORDER BY w.task_path, w.task_id, w.idx",
-            {
-                "thread_id": thread_id,
-                "checkpoint_ns": checkpoint_ns,
-                "checkpoint_id": row["checkpoint_id"],
-            },
+        pending_writes = self._pending_writes_for_checkpoint(
+            row["thread_id"], row["checkpoint_ns"], row["checkpoint_id"]
         )
-
-        pending_writes = []
-        while True:
-            qRes = self._handle.query(qReq)
-            qRecs = qRes.get_results()
-            pending_writes.extend([
-                (r["task_id"], r["channel"], self.serde.loads_typed((r["type"], base64.b64decode(r["value"]))))
-                for r in qRecs
-            ])
-            if qReq.is_done():
-                break
 
         checkpoint = self.serde.loads_typed((row["val_"]["type"], base64.b64decode(row["val_"]["blob"].encode('utf-8'))))
         metadata = self._metadata_from_row(row)
@@ -535,6 +553,10 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 ):
                     continue
 
+                pending_writes = self._pending_writes_for_checkpoint(
+                    r["thread_id"], r["checkpoint_ns"], r["checkpoint_id"]
+                )
+
                 # yield  # make this an async generator
                 yield CheckpointTuple(
                     config={
@@ -548,7 +570,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                     checkpoint = checkpoint,
                     metadata = metadata,
                     parent_config = self._parent_config(r),
-                    pending_writes = None,
+                    pending_writes = pending_writes,
                 )
 
                 if has_filter and limit is not None:
