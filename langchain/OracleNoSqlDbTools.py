@@ -2,7 +2,10 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at
 # https://oss.oracle.com/licenses/upl/
 
+import base64
+import re
 from collections.abc import Iterator, Sequence
+from datetime import datetime as Datetime
 from typing import Any
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.base import (
@@ -14,11 +17,9 @@ from langgraph.checkpoint.base import (
     CheckpointTuple,
 )
 from borneo import MultiDeleteRequest, GetTableRequest, NoSQLHandle, NoSQLHandleConfig, QueryRequest, \
-    TableRequest, PutRequest, GetRequest, WriteMultipleRequest, \
+    TableRequest, PutRequest, GetRequest, PrepareRequest, WriteMultipleRequest, \
     GetResult
 from borneo.kv import StoreAccessTokenProvider
-import base64
-from datetime import datetime as Datetime
 
 
 class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
@@ -38,6 +39,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                  debug: bool = False,
                  serde: Any = None):
         super().__init__(serde = serde)  # Use default serde
+        tableName = self._validate_table_name(tableName)
         self._table_name = tableName
         self._table_created = False
         self._debug = debug
@@ -45,10 +47,41 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         self._handle = NoSQLHandle(dbConfig)
         self.create_table(tableName, drop_tables=drop_tables)
 
+    def _query_request(
+        self,
+        statement: str,
+        bind_variables: dict[str, Any] | None = None,
+    ) -> QueryRequest:
+        """Build a query request with values bound separately from its SQL."""
+        if not bind_variables:
+            return QueryRequest().set_statement(statement)
+
+        declarations = " ".join(
+            f"${name} STRING;" for name in bind_variables
+        )
+        prepared = self._handle.prepare(
+            PrepareRequest().set_statement(f"DECLARE {declarations} {statement}")
+        ).get_prepared_statement()
+        for name, value in bind_variables.items():
+            prepared.set_variable(f"${name}", value)
+        return QueryRequest().set_prepared_statement(prepared)
+
+    @staticmethod
+    def _validate_table_name(table_name: str) -> str:
+        if not isinstance(table_name, str) or not re.fullmatch(
+            r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*", table_name
+        ):
+            raise ValueError(
+                "table name must contain only SQL identifier segments "
+                "separated by dots."
+            )
+        return table_name
+
     def create_table(self, table_name: str, drop_tables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
            Only first time at init, drop the table if drop_tables is True.
         """
+        table_name = self._validate_table_name(table_name)
         if self._table_created:
             return False  # Table already created, no need to create again
         if not self._handle:
@@ -297,11 +330,13 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if row is None:
                 return None
         else:
-            qReq = QueryRequest().set_statement(
-                                f"SELECT * FROM {self._table_name} \
-                                  WHERE thread_id = '{thread_id}' and checkpoint_ns = '{checkpoint_ns}' \
-                                  ORDER BY checkpoint_id DESC LIMIT 1"
-                            )
+            qReq = self._query_request(
+                f"SELECT * FROM {self._table_name} "
+                "WHERE thread_id = $thread_id "
+                "AND checkpoint_ns = $checkpoint_ns "
+                "ORDER BY checkpoint_id DESC LIMIT 1",
+                {"thread_id": thread_id, "checkpoint_ns": checkpoint_ns},
+            )
             row = None
             while True:
                 qRes = self._handle.query(qReq)
@@ -315,13 +350,18 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 return None
 
         # read writes associated with the checkpoint
-        qReq = QueryRequest().set_statement(
-            f"SELECT w.task_id, w.val_.channel as channel, w.val_.type as type, w.val_.value as value \
-                FROM {self._table_name}.writes as w \
-                WHERE thread_id='{thread_id}' AND \
-                    checkpoint_ns='{checkpoint_ns}' AND \
-                    checkpoint_id='{row["checkpoint_id"]}' \
-                ORDER BY task_id, idx"
+        qReq = self._query_request(
+            f"SELECT w.task_id, w.val_.channel as channel, w.val_.type as type, w.val_.value as value "
+            f"FROM {self._table_name}.writes as w "
+            "WHERE thread_id = $thread_id "
+            "AND checkpoint_ns = $checkpoint_ns "
+            "AND checkpoint_id = $checkpoint_id "
+            "ORDER BY task_id, idx",
+            {
+                "thread_id": thread_id,
+                "checkpoint_ns": checkpoint_ns,
+                "checkpoint_id": row["checkpoint_id"],
+            },
         )
 
         pending_writes = []
@@ -371,6 +411,8 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         before: RunnableConfig | None = None,
         limit: int | None = 10,
     ) -> Iterator[CheckpointTuple]:
+        if limit is not None and type(limit) is not int:
+            raise TypeError("limit must be an integer or None")
         if limit is not None and limit <= 0:
             return iter([])  # Return an empty iterator if limit is non-positive
         
@@ -384,14 +426,20 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if before:
             checkpoint_id = before.get("configurable", {}).get("checkpoint_id", None)
 
-        query = f"SELECT * FROM {self._table_name} \
-                                    WHERE \
-                                        thread_id = '{thread_id}' AND \
-                                        checkpoint_ns = '{checkpoint_ns}' "
-        query += f"                     AND checkpoint_id < '{checkpoint_id}' " if checkpoint_id else ""
-        query += f"                 ORDER BY checkpoint_id DESC {'LIMIT ' + str(limit) if limit and limit > 0 else ''}"
+        query = (
+            f"SELECT * FROM {self._table_name} "
+            "WHERE thread_id = $thread_id "
+            "AND checkpoint_ns = $checkpoint_ns "
+        )
+        bind_variables = {"thread_id": thread_id, "checkpoint_ns": checkpoint_ns}
+        if checkpoint_id:
+            query += "AND checkpoint_id < $checkpoint_id "
+            bind_variables["checkpoint_id"] = checkpoint_id
+        query += "ORDER BY checkpoint_id DESC"
+        if limit is not None:
+            query += f" LIMIT {limit}"
 
-        qReq = QueryRequest().set_statement(query)
+        qReq = self._query_request(query, bind_variables)
         
         while True:
             if self._debug:

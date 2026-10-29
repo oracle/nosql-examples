@@ -76,9 +76,11 @@ agent = create_agent(
         system_prompt=(
             "You are a helpful assistant."
         ),
-        checkpointer = OracleNoSqlDbCheckpointer.create_from_db_endpoint(ORACLE_NOSQL_DB_ENDPOINT,
-            tableName: str = "checkpoints",
-            drop_tables=True),
+        checkpointer=OracleNoSqlDbCheckpointer.create_from_db_endpoint(
+            ORACLE_NOSQL_DB_ENDPOINT,
+            tableName="checkpoints",
+            drop_tables=False,
+        ),
     )
 ```
 
