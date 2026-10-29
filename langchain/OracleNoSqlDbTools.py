@@ -472,13 +472,20 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if configurable is not None
             else None
         )
+        config_checkpoint_id = (
+            configurable.get("checkpoint_id")
+            if configurable is not None
+            else None
+        )
 
         if self._debug:
             print(f"DBG: list: thread_id={thread_id}, checkpoint_ns={checkpoint_ns}")
 
-        checkpoint_id = None
+        before_checkpoint_id = None
         if before:
-            checkpoint_id = before.get("configurable", {}).get("checkpoint_id", None)
+            before_checkpoint_id = before.get("configurable", {}).get(
+                "checkpoint_id"
+            )
 
         query = f"SELECT * FROM {self._table_name} "
         where_clauses = []
@@ -490,9 +497,12 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if checkpoint_ns is not None:
                 where_clauses.append("checkpoint_ns = $checkpoint_ns")
                 bind_variables["checkpoint_ns"] = checkpoint_ns
-        if checkpoint_id:
-            where_clauses.append("checkpoint_id < $checkpoint_id")
-            bind_variables["checkpoint_id"] = checkpoint_id
+            if config_checkpoint_id is not None:
+                where_clauses.append("checkpoint_id = $config_checkpoint_id")
+                bind_variables["config_checkpoint_id"] = config_checkpoint_id
+        if before_checkpoint_id is not None:
+            where_clauses.append("checkpoint_id < $before_checkpoint_id")
+            bind_variables["before_checkpoint_id"] = before_checkpoint_id
 
         has_filter = bool(filter)
         if has_filter:
