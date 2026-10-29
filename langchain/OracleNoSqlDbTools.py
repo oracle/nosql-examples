@@ -66,7 +66,14 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             elif type(value) is bool:
                 sql_type = "BOOLEAN"
             elif type(value) is int:
-                sql_type = "INTEGER"
+                if -(2**31) <= value < 2**31:
+                    sql_type = "INTEGER"
+                elif -(2**63) <= value < 2**63:
+                    sql_type = "LONG"
+                else:
+                    raise ValueError(
+                        f"Integer bind value for ${name} is outside Oracle NoSQL's LONG range"
+                    )
             elif type(value) is float:
                 sql_type = "DOUBLE"
             else:
