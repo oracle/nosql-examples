@@ -468,7 +468,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         configurable = config.get("configurable", {}) if config is not None else None
         thread_id = configurable.get("thread_id") if configurable is not None else None
         checkpoint_ns = (
-            configurable.get("checkpoint_ns", "")
+            configurable.get("checkpoint_ns")
             if configurable is not None
             else None
         )
