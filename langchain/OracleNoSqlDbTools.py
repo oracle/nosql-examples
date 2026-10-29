@@ -60,8 +60,12 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         for name, value in bind_variables.items():
             if isinstance(value, str):
                 sql_type = "STRING"
+            elif type(value) is bool:
+                sql_type = "BOOLEAN"
             elif type(value) is int:
                 sql_type = "INTEGER"
+            elif type(value) is float:
+                sql_type = "DOUBLE"
             else:
                 raise TypeError(
                     f"Unsupported bind value type for ${name}: {type(value).__name__}"
@@ -100,6 +104,21 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 "checkpoint_id": parent_id,
             }
         }
+
+    def _metadata_from_row(self, row: dict[str, Any]) -> CheckpointMetadata:
+        """Read metadata maps, including rows written with the old encoding."""
+        value = row.get("val_", {})
+        metadata = value.get("metadata", {})
+        if isinstance(metadata, dict):
+            return metadata
+
+        # Keep existing checkpoint tables readable after metadata switches to JSON.
+        metadata_type = value.get("metadata_type")
+        if isinstance(metadata, str) and isinstance(metadata_type, str):
+            return self.serde.loads_typed(
+                (metadata_type, base64.b64decode(metadata.encode("utf-8")))
+            )
+        return metadata
 
     def create_table(self, table_name: str, drop_tables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
@@ -240,11 +259,10 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         parent_id = config.get("configurable", {}).get("checkpoint_id")
 
         type_, blob = self.serde.dumps_typed(checkpoint)
-        meta_type, serialized_metadata = self.serde.dumps_typed(metadata)
 
         if self._debug:
             print(f"DBG: put: thread_id={thread_id}, checkpoint_ns={checkpoint_ns}, checkpoint_id={checkpoint_id}, parent_id={parent_id}, type_={type_}")
-            print(f"DBG: put: blob size={len(blob)}, serialized_metadata size={len(serialized_metadata)}")
+            print(f"DBG: put: blob size={len(blob)}")
 
         row = {
             "thread_id" : thread_id,
@@ -254,8 +272,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 "parent_id": parent_id,
                 "type": type_,
                 "blob": base64.b64encode(blob).decode('utf-8'),
-                "metadata_type": meta_type,
-                "metadata": base64.b64encode(serialized_metadata).decode('utf-8'),
+                "metadata": dict(metadata),
                 "ts": Datetime.now().isoformat()
             }
         }
@@ -400,7 +417,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 break
 
         checkpoint = self.serde.loads_typed((row["val_"]["type"], base64.b64decode(row["val_"]["blob"].encode('utf-8'))))
-        metadata = self.serde.loads_typed((row["val_"]["metadata_type"], base64.b64decode(row["val_"]["metadata"].encode('utf-8'))))
+        metadata = self._metadata_from_row(row)
 
 
         return CheckpointTuple(
@@ -449,8 +466,44 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if checkpoint_id:
             query += "AND checkpoint_id < $checkpoint_id "
             bind_variables["checkpoint_id"] = checkpoint_id
+
+        has_filter = bool(filter)
+        if has_filter:
+            filter_predicates = []
+            for index, (key, value) in enumerate(filter.items()):
+                # Oracle NoSQL field paths use identifiers, so only push down
+                # keys that can safely be represented as one. Other keys are
+                # still matched against the decoded metadata below.
+                if not isinstance(key, str) or not re.fullmatch(
+                    r"[A-Za-z_][A-Za-z0-9_]*", key
+                ):
+                    continue
+                if not isinstance(value, str) and type(value) not in (
+                    int,
+                    bool,
+                    float,
+                ):
+                    continue
+
+                bind_name = f"filter_{index}"
+                bind_variables[bind_name] = value
+                filter_predicates.append(
+                    f"val_.metadata.{key} = ${bind_name}"
+                )
+
+            if filter_predicates:
+                # Rows written before metadata became a JSON map still need to
+                # be checked after deserialization.
+                query += (
+                    "AND (val_.metadata_type IS NOT NULL OR ("
+                    + " AND ".join(filter_predicates)
+                    + ")) "
+                )
+
         query += "ORDER BY checkpoint_id DESC"
-        if limit is not None:
+        # Apply the limit after metadata matching. The SQL query can include
+        # legacy rows that need to be checked using their decoded metadata.
+        if limit is not None and not has_filter:
             query += " LIMIT $limit"
             bind_variables["limit"] = limit
 
@@ -464,7 +517,12 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             qRecs = qRes.get_results()
             for r in qRecs:
                 checkpoint = self.serde.loads_typed((r["val_"]["type"], base64.b64decode(r["val_"]["blob"].encode('utf-8'))))
-                metadata = self.serde.loads_typed((r["val_"]["metadata_type"], base64.b64decode(r["val_"]["metadata"].encode('utf-8'))))
+                metadata = self._metadata_from_row(r)
+
+                if has_filter and any(
+                    metadata.get(key) != value for key, value in filter.items()
+                ):
+                    continue
 
                 # yield  # make this an async generator
                 yield CheckpointTuple(
@@ -481,6 +539,11 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                     parent_config = self._parent_config(r),
                     pending_writes = None,
                 )
+
+                if has_filter and limit is not None:
+                    limit -= 1
+                    if limit == 0:
+                        return
 
             if qReq.is_done():
                 break
