@@ -372,11 +372,18 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 }
             }
 
-            wmReq.add(PutRequest().set_table_name(self._table_name + ".writes").set_value(row), False)
+            wmReq.add(PutRequest().set_table_name(self._table_name + ".writes").set_value(row), True)
 
         wmRes = self._handle.write_multiple(wmReq)
         if self._debug:
             print(f"DBG: put_writes result: {wmRes}")
+        if not wmRes.get_success():
+            failed_operation_index = wmRes.get_failed_operation_index()
+            raise RuntimeError(
+                "Oracle NoSQL failed to persist pending writes for "
+                f"checkpoint {checkpoint_id!r}; operation "
+                f"{failed_operation_index} failed"
+            )
       
 
     def get_tuple(self, config: RunnableConfig) -> CheckpointTuple | None:
