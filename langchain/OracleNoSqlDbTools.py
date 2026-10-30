@@ -2,9 +2,11 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at
 # https://oss.oracle.com/licenses/upl/
 
+import asyncio
 import base64
 import re
-from collections.abc import Iterator, Sequence
+from collections.abc import AsyncIterator, Iterator, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime as Datetime
 from typing import Any
 from langchain_core.runnables import RunnableConfig
@@ -491,7 +493,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 "checkpoint_id"
             )
 
-        query = f"SELECT * FROM {self._table_name} "
+        query = f"SELECT * FROM {self._table_name} AS cp "
         where_clauses = []
         bind_variables = {}
         if configurable is not None:
@@ -529,14 +531,14 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 bind_name = f"filter_{index}"
                 bind_variables[bind_name] = value
                 filter_predicates.append(
-                    f"val_.metadata.{key} = ${bind_name}"
+                    f'cp.val_.metadata."{key}" = ${bind_name}'
                 )
 
             if filter_predicates:
                 # Rows written before metadata became a JSON map still need to
                 # be checked after deserialization.
                 where_clauses.append(
-                    "(val_.metadata_type IS NOT NULL OR ("
+                    "(cp.val_.metadata_type IS NOT NULL OR ("
                     + " AND ".join(filter_predicates)
                     + "))"
                 )
@@ -634,3 +636,116 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
 
         if self._debug:
             print(f"  DBG: delete_thread: deleted {delRes.get_num_deletions()} writes for '{thread_id}'")
+
+
+    ### Async API
+
+    async def aget(self, config: RunnableConfig) -> Checkpoint | None:
+        """Asynchronously fetch a checkpoint using the given configuration.
+
+        Args:
+            config: Configuration specifying which checkpoint to retrieve.
+
+        Returns:
+            The requested checkpoint, or `None` if not found.
+        """
+        if value := await self.aget_tuple(config):
+            return value.checkpoint
+
+    async def aget_tuple(self, config: RunnableConfig) -> CheckpointTuple | None:
+        """Asynchronously fetch a checkpoint tuple using the given configuration.
+
+        Args:
+            config: Configuration specifying which checkpoint to retrieve.
+
+        Returns:
+            The requested checkpoint tuple, or `None` if not found. Its
+                `pending_writes` must be in `writes_sort_key` order.
+        """
+        return await asyncio.to_thread(self.get_tuple, config)
+
+    async def alist(
+        self,
+        config: RunnableConfig | None,
+        *,
+        filter: dict[str, Any] | None = None,
+        before: RunnableConfig | None = None,
+        limit: int | None = None,
+    ) -> AsyncIterator[CheckpointTuple]:
+        """Asynchronously list checkpoints that match the given criteria.
+
+        Args:
+            config: Base configuration for filtering checkpoints.
+            filter: Additional filtering criteria for metadata.
+            before: List checkpoints created before this configuration.
+            limit: Maximum number of checkpoints to return.
+
+        Returns:
+            Async iterator of matching checkpoint tuples.
+        """
+        iterator = self.list(config, filter=filter, before=before, limit=limit)
+        sentinel = object()
+        loop = asyncio.get_running_loop()
+        executor = ThreadPoolExecutor(max_workers=1)
+        try:
+            while True:
+                checkpoint_tuple = await loop.run_in_executor(
+                    executor, next, iterator, sentinel
+                )
+                if checkpoint_tuple is sentinel:
+                    break
+                yield checkpoint_tuple
+        finally:
+            await asyncio.to_thread(executor.shutdown, wait=True)
+
+    async def aput(
+        self,
+        config: RunnableConfig,
+        checkpoint: Checkpoint,
+        metadata: CheckpointMetadata,
+        new_versions: ChannelVersions,
+    ) -> RunnableConfig:
+        """Asynchronously store a checkpoint with its configuration and metadata.
+
+        Args:
+            config: Configuration for the checkpoint.
+            checkpoint: The checkpoint to store.
+            metadata: Additional metadata for the checkpoint.
+            new_versions: New channel versions as of this write.
+
+        Returns:
+            RunnableConfig: Updated configuration after storing the checkpoint.
+        """
+        return await asyncio.to_thread(
+            self.put, config, checkpoint, metadata, new_versions
+        )
+
+    async def aput_writes(
+        self,
+        config: RunnableConfig,
+        writes: Sequence[tuple[str, Any]],
+        task_id: str,
+        task_path: str = "",
+    ) -> None:
+        """Asynchronously store intermediate writes linked to a checkpoint.
+
+        Args:
+            config: Configuration of the related checkpoint.
+            writes: List of writes to store.
+            task_id: Identifier for the task creating the writes.
+            task_path: Path of the task creating the writes.
+        """
+        await asyncio.to_thread(
+            self.put_writes, config, writes, task_id, task_path
+        )
+
+    async def adelete_thread(
+        self,
+        thread_id: str,
+    ) -> None:
+        """Delete all checkpoints and writes associated with a specific thread ID.
+
+        Args:
+            thread_id: The thread ID whose checkpoints should be deleted.
+        """
+        await asyncio.to_thread(self.delete_thread, thread_id)
