@@ -2,7 +2,12 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at
 # https://oss.oracle.com/licenses/upl/
 
-from collections.abc import Iterator, Sequence
+import asyncio
+import base64
+import re
+from collections.abc import AsyncIterator, Iterator, Sequence
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime as Datetime
 from typing import Any
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.base import (
@@ -14,11 +19,9 @@ from langgraph.checkpoint.base import (
     CheckpointTuple,
 )
 from borneo import MultiDeleteRequest, GetTableRequest, NoSQLHandle, NoSQLHandleConfig, QueryRequest, \
-    TableRequest, PutRequest, GetRequest, WriteMultipleRequest, \
-    GetResult
+    TableRequest, PutRequest, GetRequest, PrepareRequest, WriteMultipleRequest, \
+    GetResult, TableNotFoundException
 from borneo.kv import StoreAccessTokenProvider
-import base64
-from datetime import datetime as Datetime
 
 
 class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
@@ -38,56 +41,171 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                  debug: bool = False,
                  serde: Any = None):
         super().__init__(serde = serde)  # Use default serde
+        tableName = self._validate_table_name(tableName)
         self._table_name = tableName
         self._table_created = False
         self._debug = debug
 
         self._handle = NoSQLHandle(dbConfig)
-        self.create_table(tableName, drop_tables=drop_tables)
+        if not self.create_table(tableName, drop_tables=drop_tables):
+            raise RuntimeError(
+                f"Failed to initialize Oracle NoSQL tables for '{tableName}'."
+            )
+
+    def _query_request(
+        self,
+        statement: str,
+        bind_variables: dict[str, Any] | None = None,
+    ) -> QueryRequest:
+        """Build a query request with values bound separately from its SQL."""
+        if not bind_variables:
+            return QueryRequest().set_statement(statement)
+
+        declarations = []
+        for name, value in bind_variables.items():
+            if isinstance(value, str):
+                sql_type = "STRING"
+            elif type(value) is bool:
+                sql_type = "BOOLEAN"
+            elif type(value) is int:
+                if -(2**31) <= value < 2**31:
+                    sql_type = "INTEGER"
+                elif -(2**63) <= value < 2**63:
+                    sql_type = "LONG"
+                else:
+                    raise ValueError(
+                        f"Integer bind value for ${name} is outside Oracle NoSQL's LONG range"
+                    )
+            elif type(value) is float:
+                sql_type = "DOUBLE"
+            else:
+                raise TypeError(
+                    f"Unsupported bind value type for ${name}: {type(value).__name__}"
+                )
+            declarations.append(f"${name} {sql_type};")
+        prepared = self._handle.prepare(
+            PrepareRequest().set_statement(
+                f"DECLARE {' '.join(declarations)} {statement}"
+            )
+        ).get_prepared_statement()
+        for name, value in bind_variables.items():
+            prepared.set_variable(f"${name}", value)
+        return QueryRequest().set_prepared_statement(prepared)
+
+    @staticmethod
+    def _validate_table_name(table_name: str) -> str:
+        if not isinstance(table_name, str) or not re.fullmatch(
+            r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*", table_name
+        ):
+            raise ValueError(
+                "table name must contain only SQL identifier segments "
+                "separated by dots."
+            )
+        return table_name
+
+    @staticmethod
+    def _parent_config(row: dict[str, Any]) -> RunnableConfig | None:
+        value = row.get("val_", {})
+        parent_id = value.get("parent_id") or value.get("parent_checkpoint_id")
+        if not parent_id:
+            return None
+        return {
+            "configurable": {
+                "thread_id": row.get("thread_id"),
+                "checkpoint_ns": row.get("checkpoint_ns", ""),
+                "checkpoint_id": parent_id,
+            }
+        }
+
+    def _metadata_from_row(self, row: dict[str, Any]) -> CheckpointMetadata:
+        """Read metadata maps, including rows written with the old encoding."""
+        value = row.get("val_", {})
+        metadata = value.get("metadata", {})
+        if isinstance(metadata, dict):
+            return metadata
+
+        # Keep existing checkpoint tables readable after metadata switches to JSON.
+        metadata_type = value.get("metadata_type")
+        if isinstance(metadata, str) and isinstance(metadata_type, str):
+            return self.serde.loads_typed(
+                (metadata_type, base64.b64decode(metadata.encode("utf-8")))
+            )
+        return metadata
+
+    def _pending_writes_for_checkpoint(
+        self,
+        thread_id: str,
+        checkpoint_ns: str,
+        checkpoint_id: str,
+    ) -> list[tuple[str, str, Any]]:
+        """Load writes associated with one checkpoint."""
+        q_req = self._query_request(
+            f"SELECT w.task_path, w.task_id, w.val_.channel as channel, "
+            f"w.val_.type as type, w.val_.value as value "
+            f"FROM {self._table_name}.writes as w "
+            "WHERE thread_id = $thread_id "
+            "AND checkpoint_ns = $checkpoint_ns "
+            "AND checkpoint_id = $checkpoint_id "
+            "ORDER BY w.task_path, w.task_id, w.idx",
+            {
+                "thread_id": thread_id,
+                "checkpoint_ns": checkpoint_ns,
+                "checkpoint_id": checkpoint_id,
+            },
+        )
+
+        pending_writes = []
+        while True:
+            q_res = self._handle.query(q_req)
+            q_recs = q_res.get_results()
+            pending_writes.extend(
+                (
+                    row["task_id"],
+                    row["channel"],
+                    self.serde.loads_typed(
+                        (row["type"], base64.b64decode(row["value"]))
+                    ),
+                )
+                for row in q_recs
+            )
+            if q_req.is_done():
+                break
+        return pending_writes
 
     def create_table(self, table_name: str, drop_tables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
            Only first time at init, drop the table if drop_tables is True.
         """
+        table_name = self._validate_table_name(table_name)
         if self._table_created:
             return False  # Table already created, no need to create again
         if not self._handle:
             raise ValueError("NoSQL DB handle is not initialized.")
 
         if drop_tables:
-            try:
-                if self._debug:
-                    print(f"   ...Dropping table '{table_name}.writes' if it exists...")
-                ddl = f"""DROP TABLE IF EXISTS {table_name}.writes"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}.writes' dropped.")
-                self._table_created = False
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error dropping table '{table_name}.writes': {e}")
-                self._table_created = False
-        
-            try:
-                if self._debug:
-                    print(f"   ...Dropping table '{table_name}' if it exists...")
-                ddl = f"""DROP TABLE IF EXISTS {table_name}"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}' dropped.")
-                self._table_created = False
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error dropping table '{table_name}': {e}")
-                self._table_created = False
+            if self._debug:
+                print(f"   ...Dropping table '{table_name}.writes' if it exists...")
+            ddl = f"""DROP TABLE IF EXISTS {table_name}.writes"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}.writes' dropped.")
+            self._table_created = False
+
+            if self._debug:
+                print(f"   ...Dropping table '{table_name}' if it exists...")
+            ddl = f"""DROP TABLE IF EXISTS {table_name}"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}' dropped.")
+            self._table_created = False
 
         parent_table_created = False
         child_table_created = False
@@ -98,29 +216,24 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if self._debug:
                 print(f"   ...Table '{table_name}' already exists.")
             parent_table_created = True
-        except Exception:
-            try:
-                if self._debug:
-                    print(f"   ...Creating table '{table_name}'...")
-                ddl = f"""CREATE TABLE IF NOT EXISTS {table_name} (
-                            thread_id     string,
-                            checkpoint_ns string,
-                            checkpoint_id string,
-                            val_        JSON,
-                            PRIMARY KEY(SHARD(thread_id), checkpoint_ns, checkpoint_id)
-                    )"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}' created.")
-                parent_table_created = True
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error creating table '{table_name}': {e}")
-                parent_table_created = False
+        except TableNotFoundException:
+            if self._debug:
+                print(f"   ...Creating table '{table_name}'...")
+            ddl = f"""CREATE TABLE IF NOT EXISTS {table_name} (
+                        thread_id     string,
+                        checkpoint_ns string,
+                        checkpoint_id string,
+                        val_        JSON,
+                        PRIMARY KEY(SHARD(thread_id), checkpoint_ns, checkpoint_id)
+                )"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}' created.")
+            parent_table_created = True
 
         try:
             request = GetTableRequest().set_table_name(table_name + ".writes")
@@ -128,31 +241,30 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if self._debug:
                 print(f"   ...Table '{table_name}.writes' already exists.")
             child_table_created = True
-        except Exception:
-            try:
-                if self._debug:
-                    print(f"   ...Creating table '{table_name}.writes'...")
-                ddl = f"""CREATE TABLE IF NOT EXISTS {table_name}.writes (
-                            task_id       string,
-                            task_path     string,
-                            idx           INTEGER,
-                            val_        JSON,
-                            PRIMARY KEY(task_id, task_path, idx)
-                    )"""
-                result = self._handle.table_request(
-                    TableRequest()
-                    .set_statement(ddl)
-                )
-                result.wait_for_completion(self._handle, 40000, 3000)
-                if self._debug:
-                    print(f"Table '{table_name}.writes' created.")
-                child_table_created = True
-            except Exception as e:
-                if self._debug:
-                    print(f"   ...Error creating table '{table_name}.writes': {e}")
-                child_table_created = False
+        except TableNotFoundException:
+            if self._debug:
+                print(f"   ...Creating table '{table_name}.writes'...")
+            ddl = f"""CREATE TABLE IF NOT EXISTS {table_name}.writes (
+                        task_id       string,
+                        task_path     string,
+                        idx           INTEGER,
+                        val_        JSON,
+                        PRIMARY KEY(task_id, task_path, idx)
+                )"""
+            result = self._handle.table_request(
+                TableRequest()
+                .set_statement(ddl)
+            )
+            result.wait_for_completion(self._handle, 40000, 3000)
+            if self._debug:
+                print(f"Table '{table_name}.writes' created.")
+            child_table_created = True
 
         self._table_created = parent_table_created and child_table_created
+        if not self._table_created:
+            raise RuntimeError(
+                f"Failed to initialize Oracle NoSQL tables for '{table_name}'."
+            )
         return self._table_created
 
 
@@ -183,11 +295,10 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         parent_id = config.get("configurable", {}).get("checkpoint_id")
 
         type_, blob = self.serde.dumps_typed(checkpoint)
-        meta_type, serialized_metadata = self.serde.dumps_typed(metadata)
 
         if self._debug:
             print(f"DBG: put: thread_id={thread_id}, checkpoint_ns={checkpoint_ns}, checkpoint_id={checkpoint_id}, parent_id={parent_id}, type_={type_}")
-            print(f"DBG: put: blob size={len(blob)}, serialized_metadata size={len(serialized_metadata)}")
+            print(f"DBG: put: blob size={len(blob)}")
 
         row = {
             "thread_id" : thread_id,
@@ -197,8 +308,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 "parent_id": parent_id,
                 "type": type_,
                 "blob": base64.b64encode(blob).decode('utf-8'),
-                "metadata_type": meta_type,
-                "metadata": base64.b64encode(serialized_metadata).decode('utf-8'),
+                "metadata": dict(metadata),
                 "ts": Datetime.now().isoformat()
             }
         }
@@ -225,6 +335,9 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         task_id: str,
         task_path: str = "",
     ) -> None:
+        if not writes:
+            return
+
         thread_id = config.get("configurable", {}).get("thread_id")
         checkpoint_ns = config.get("configurable", {}).get("checkpoint_ns", "")
         checkpoint_id = config.get("configurable", {}).get("checkpoint_id")
@@ -258,11 +371,18 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 }
             }
 
-            wmReq.add(PutRequest().set_table_name(self._table_name + ".writes").set_value(row), False)
+            wmReq.add(PutRequest().set_table_name(self._table_name + ".writes").set_value(row), True)
 
         wmRes = self._handle.write_multiple(wmReq)
         if self._debug:
             print(f"DBG: put_writes result: {wmRes}")
+        if not wmRes.get_success():
+            failed_operation_index = wmRes.get_failed_operation_index()
+            raise RuntimeError(
+                "Oracle NoSQL failed to persist pending writes for "
+                f"checkpoint {checkpoint_id!r}; operation "
+                f"{failed_operation_index} failed"
+            )
       
 
     def get_tuple(self, config: RunnableConfig) -> CheckpointTuple | None:
@@ -297,55 +417,32 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             if row is None:
                 return None
         else:
-            qRes = self._handle.query(
-                QueryRequest().set_statement(
-                    f"SELECT * FROM {self._table_name} \
-                      WHERE thread_id = '{thread_id}' and checkpoint_ns = '{checkpoint_ns}' \
-                      ORDER BY checkpoint_id DESC LIMIT 1"
-                )
+            qReq = self._query_request(
+                f"SELECT * FROM {self._table_name} "
+                "WHERE thread_id = $thread_id "
+                "AND checkpoint_ns = $checkpoint_ns "
+                "ORDER BY checkpoint_id DESC LIMIT 1",
+                {"thread_id": thread_id, "checkpoint_ns": checkpoint_ns},
             )
-            row = qRes.get_results()
-            if not row:
+            row = None
+            while True:
+                qRes = self._handle.query(qReq)
+                rows = qRes.get_results()
+                if len(rows) > 0:
+                    row = rows[0]
+                    break
+                if qReq.is_done():
+                    break
+            if row is None:
                 return None
-            row = row[0]
 
-        # read writes associated with the checkpoint
-        qReq = QueryRequest().set_statement(
-            f"SELECT w.task_id, w.val_.channel as channel, w.val_.type as type, w.val_.value as value \
-                FROM {self._table_name}.writes as w \
-                WHERE thread_id='{thread_id}' AND \
-                    checkpoint_ns='{checkpoint_ns}' AND \
-                    checkpoint_id='{row["checkpoint_id"]}' \
-                ORDER BY task_id, idx"
+        pending_writes = self._pending_writes_for_checkpoint(
+            row["thread_id"], row["checkpoint_ns"], row["checkpoint_id"]
         )
 
-        pending_writes = []
-        while True:
-            qRes = self._handle.query(qReq)
-            qRecs = qRes.get_results()
-            if qReq.is_done():
-                break
-            else: 
-                pending_writes.append([
-                    (r["task_id"], r["channel"], self.serde.loads_typed((r["type"], r["value"])))
-                    for r in qRecs
-                ])
-        else:
-            pending_writes = []
-
         checkpoint = self.serde.loads_typed((row["val_"]["type"], base64.b64decode(row["val_"]["blob"].encode('utf-8'))))
-        metadata = self.serde.loads_typed((row["val_"]["metadata_type"], base64.b64decode(row["val_"]["metadata"].encode('utf-8'))))
+        metadata = self._metadata_from_row(row)
 
-
-        # parent_config = None
-        # if row["val_"].get("parent_checkpoint_id"):
-        #     parent_config = {
-        #         "configurable": {
-        #             "thread_id": thread_id,
-        #             "checkpoint_ns": checkpoint_ns,
-        #             "checkpoint_id": row["val_"].get("parent_checkpoint_id"),
-        #         }
-        #     }
 
         return CheckpointTuple(
             config={
@@ -357,7 +454,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             },
             checkpoint = checkpoint,         
             metadata = metadata,             
-            parent_config = None, 
+            parent_config = self._parent_config(row),
             pending_writes = pending_writes,
         )
 
@@ -369,26 +466,94 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         before: RunnableConfig | None = None,
         limit: int | None = None,
     ) -> Iterator[CheckpointTuple]:
-        thread_id = config.get("configurable", {}).get("thread_id")
-        checkpoint_ns = config.get("configurable", {}).get("checkpoint_ns", "")
+        if limit is not None and type(limit) is not int:
+            raise TypeError("limit must be an integer or None")
+        if limit is not None and limit <= 0:
+            return iter([])  # Return an empty iterator if limit is non-positive
+        
+        configurable = config.get("configurable", {}) if config is not None else None
+        thread_id = configurable.get("thread_id") if configurable is not None else None
+        checkpoint_ns = (
+            configurable.get("checkpoint_ns")
+            if configurable is not None
+            else None
+        )
+        config_checkpoint_id = (
+            configurable.get("checkpoint_id")
+            if configurable is not None
+            else None
+        )
 
         if self._debug:
             print(f"DBG: list: thread_id={thread_id}, checkpoint_ns={checkpoint_ns}")
 
-        checkpoint_id = None
+        before_checkpoint_id = None
         if before:
-            checkpoint_id = before.get("configurable", {}).get("checkpoint_id", None)
+            before_checkpoint_id = before.get("configurable", {}).get(
+                "checkpoint_id"
+            )
 
-        query = f"SELECT * FROM {self._table_name} \
-                                    WHERE \
-                                        thread_id = '{thread_id}' AND \
-                                        checkpoint_ns = '{checkpoint_ns}' "
-        query += f"                     AND checkpoint_id < '{checkpoint_id}' " if checkpoint_id else ""
-        query += f"                 ORDER BY checkpoint_id DESC LIMIT {limit if limit else 10}"
+        query = f"SELECT * FROM {self._table_name} AS cp "
+        where_clauses = []
+        bind_variables = {}
+        if configurable is not None:
+            if thread_id is not None:
+                where_clauses.append("thread_id = $thread_id")
+                bind_variables["thread_id"] = thread_id
+            if checkpoint_ns is not None:
+                where_clauses.append("checkpoint_ns = $checkpoint_ns")
+                bind_variables["checkpoint_ns"] = checkpoint_ns
+            if config_checkpoint_id is not None:
+                where_clauses.append("checkpoint_id = $config_checkpoint_id")
+                bind_variables["config_checkpoint_id"] = config_checkpoint_id
+        if before_checkpoint_id is not None:
+            where_clauses.append("checkpoint_id < $before_checkpoint_id")
+            bind_variables["before_checkpoint_id"] = before_checkpoint_id
 
-        qReq = QueryRequest().set_statement(query)
-        qRes = self._handle.query(qReq)
+        has_filter = bool(filter)
+        if has_filter:
+            filter_predicates = []
+            for index, (key, value) in enumerate(filter.items()):
+                # Oracle NoSQL field paths use identifiers, so only push down
+                # keys that can safely be represented as one. Other keys are
+                # still matched against the decoded metadata below.
+                if not isinstance(key, str) or not re.fullmatch(
+                    r"[A-Za-z_][A-Za-z0-9_]*", key
+                ):
+                    continue
+                if not isinstance(value, str) and type(value) not in (
+                    int,
+                    bool,
+                    float,
+                ):
+                    continue
 
+                bind_name = f"filter_{index}"
+                bind_variables[bind_name] = value
+                filter_predicates.append(
+                    f'cp.val_.metadata."{key}" = ${bind_name}'
+                )
+
+            if filter_predicates:
+                # Rows written before metadata became a JSON map still need to
+                # be checked after deserialization.
+                where_clauses.append(
+                    "(cp.val_.metadata_type IS NOT NULL OR ("
+                    + " AND ".join(filter_predicates)
+                    + "))"
+                )
+
+        if where_clauses:
+            query += "WHERE " + " AND ".join(where_clauses) + " "
+        query += "ORDER BY checkpoint_id DESC"
+        # Apply the limit after metadata matching. The SQL query can include
+        # legacy rows that need to be checked using their decoded metadata.
+        if limit is not None and not has_filter:
+            query += " LIMIT $limit"
+            bind_variables["limit"] = limit
+
+        qReq = self._query_request(query, bind_variables)
+        
         while True:
             if self._debug:
                 print(f"DBG: list: querying...")
@@ -397,13 +562,22 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
             qRecs = qRes.get_results()
             for r in qRecs:
                 checkpoint = self.serde.loads_typed((r["val_"]["type"], base64.b64decode(r["val_"]["blob"].encode('utf-8'))))
-                metadata = self.serde.loads_typed((r["val_"]["metadata_type"], base64.b64decode(r["val_"]["metadata"].encode('utf-8'))))
+                metadata = self._metadata_from_row(r)
+
+                if has_filter and any(
+                    metadata.get(key) != value for key, value in filter.items()
+                ):
+                    continue
+
+                pending_writes = self._pending_writes_for_checkpoint(
+                    r["thread_id"], r["checkpoint_ns"], r["checkpoint_id"]
+                )
 
                 # yield  # make this an async generator
                 yield CheckpointTuple(
                     config={
                         "configurable": {
-                            "thread_id": thread_id,
+                            "thread_id": r.get("thread_id"),
                             "checkpoint_ns": r.get("checkpoint_ns"),
                             "checkpoint_id": r.get("checkpoint_id"),
                             "ts": r.get("val_", {}).get("ts")
@@ -411,8 +585,14 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                     },
                     checkpoint = checkpoint,
                     metadata = metadata,
-                    pending_writes = None,
+                    parent_config = self._parent_config(r),
+                    pending_writes = pending_writes,
                 )
+
+                if has_filter and limit is not None:
+                    limit -= 1
+                    if limit == 0:
+                        return
 
             if qReq.is_done():
                 break
@@ -430,20 +610,142 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if self._debug:
             print(f"DBG: delete_thread: thread_id={thread_id}")
 
-        delRes = self._handle.multi_delete(
-            MultiDeleteRequest().set_table_name(self._table_name).set_key({ 
-                "thread_id": thread_id
-            })
-        )
+        req = MultiDeleteRequest().set_table_name(self._table_name).set_key({ 
+                        "thread_id": thread_id
+                    })
+        while True:
+            delRes = self._handle.multi_delete(req)
+            if delRes.get_continuation_key() is None:
+                break
+            req.set_continuation_key(delRes.get_continuation_key())
+
 
         if self._debug:
             print(f"  DBG: delete_thread: deleted {delRes.get_num_deletions()} checkpoints for '{thread_id}'")
 
-        delRes = self._handle.multi_delete(
-            MultiDeleteRequest().set_table_name(self._table_name + ".writes").set_key({ 
+
+        req = MultiDeleteRequest().set_table_name(self._table_name + ".writes").set_key({ 
                 "thread_id": thread_id
             })
-        )
+
+        while True:
+            delRes = self._handle.multi_delete(req)
+            if delRes.get_continuation_key() is None:
+                break
+            req.set_continuation_key(delRes.get_continuation_key())
 
         if self._debug:
             print(f"  DBG: delete_thread: deleted {delRes.get_num_deletions()} writes for '{thread_id}'")
+
+
+    ### Async API
+
+    async def aget(self, config: RunnableConfig) -> Checkpoint | None:
+        """Asynchronously fetch a checkpoint using the given configuration.
+
+        Args:
+            config: Configuration specifying which checkpoint to retrieve.
+
+        Returns:
+            The requested checkpoint, or `None` if not found.
+        """
+        if value := await self.aget_tuple(config):
+            return value.checkpoint
+
+    async def aget_tuple(self, config: RunnableConfig) -> CheckpointTuple | None:
+        """Asynchronously fetch a checkpoint tuple using the given configuration.
+
+        Args:
+            config: Configuration specifying which checkpoint to retrieve.
+
+        Returns:
+            The requested checkpoint tuple, or `None` if not found. Its
+                `pending_writes` must be in `writes_sort_key` order.
+        """
+        return await asyncio.to_thread(self.get_tuple, config)
+
+    async def alist(
+        self,
+        config: RunnableConfig | None,
+        *,
+        filter: dict[str, Any] | None = None,
+        before: RunnableConfig | None = None,
+        limit: int | None = None,
+    ) -> AsyncIterator[CheckpointTuple]:
+        """Asynchronously list checkpoints that match the given criteria.
+
+        Args:
+            config: Base configuration for filtering checkpoints.
+            filter: Additional filtering criteria for metadata.
+            before: List checkpoints created before this configuration.
+            limit: Maximum number of checkpoints to return.
+
+        Returns:
+            Async iterator of matching checkpoint tuples.
+        """
+        iterator = self.list(config, filter=filter, before=before, limit=limit)
+        sentinel = object()
+        loop = asyncio.get_running_loop()
+        executor = ThreadPoolExecutor(max_workers=1)
+        try:
+            while True:
+                checkpoint_tuple = await loop.run_in_executor(
+                    executor, next, iterator, sentinel
+                )
+                if checkpoint_tuple is sentinel:
+                    break
+                yield checkpoint_tuple
+        finally:
+            await asyncio.to_thread(executor.shutdown, wait=True)
+
+    async def aput(
+        self,
+        config: RunnableConfig,
+        checkpoint: Checkpoint,
+        metadata: CheckpointMetadata,
+        new_versions: ChannelVersions,
+    ) -> RunnableConfig:
+        """Asynchronously store a checkpoint with its configuration and metadata.
+
+        Args:
+            config: Configuration for the checkpoint.
+            checkpoint: The checkpoint to store.
+            metadata: Additional metadata for the checkpoint.
+            new_versions: New channel versions as of this write.
+
+        Returns:
+            RunnableConfig: Updated configuration after storing the checkpoint.
+        """
+        return await asyncio.to_thread(
+            self.put, config, checkpoint, metadata, new_versions
+        )
+
+    async def aput_writes(
+        self,
+        config: RunnableConfig,
+        writes: Sequence[tuple[str, Any]],
+        task_id: str,
+        task_path: str = "",
+    ) -> None:
+        """Asynchronously store intermediate writes linked to a checkpoint.
+
+        Args:
+            config: Configuration of the related checkpoint.
+            writes: List of writes to store.
+            task_id: Identifier for the task creating the writes.
+            task_path: Path of the task creating the writes.
+        """
+        await asyncio.to_thread(
+            self.put_writes, config, writes, task_id, task_path
+        )
+
+    async def adelete_thread(
+        self,
+        thread_id: str,
+    ) -> None:
+        """Delete all checkpoints and writes associated with a specific thread ID.
+
+        Args:
+            thread_id: The thread ID whose checkpoints should be deleted.
+        """
+        await asyncio.to_thread(self.delete_thread, thread_id)
