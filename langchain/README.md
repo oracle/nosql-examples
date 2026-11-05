@@ -61,7 +61,7 @@ Use ```OracleNoSqlDbCheckpointer.create_from_db_endpoint()``` method to connect 
   - debug - For verbose output.
 
 
-## Examples
+## Example
 
 The following example shows how to use it in an application:
 
@@ -76,10 +76,27 @@ agent = create_agent(
         system_prompt=(
             "You are a helpful assistant."
         ),
-        checkpointer = OracleNoSqlDbCheckpointer.create_from_db_endpoint(ORACLE_NOSQL_DB_ENDPOINT,
-            tableName: str = "checkpoints",
-            drop_tables=True),
+        checkpointer=OracleNoSqlDbCheckpointer.create_from_db_endpoint(
+            ORACLE_NOSQL_DB_ENDPOINT,
+            tableName="checkpoints",
+            drop_tables=False,
+        ),
     )
 ```
 
 For a full example see [example.py](example.py).
+
+
+## LangChain Checkpoint Conformance test
+
+To run the [LangChain Checkpoint Conformance](https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-conformance) test install the test packages and setup PYTHONPATH:
+
+```shell
+pip install langgraph-checkpoint-conformance pytest
+export PYTHONPATH=$PYTHONPATH:
+```
+
+Run the test:
+```shell
+pythest
+```
