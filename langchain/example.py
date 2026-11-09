@@ -7,7 +7,7 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 
-from OracleNoSqlDbTools import OracleNoSqlDbCheckpointer
+from OracleNoSqlDbCheckpointer import OracleNoSqlDbCheckpointer
 
 
 ORACLE_NOSQL_DB_ENDPOINT = os.getenv("ORACLE_NOSQL_DB_ENDPOINT", "http://localhost:8080")

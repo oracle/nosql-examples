@@ -28,32 +28,32 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
     # static method for creating a checkpointer from an endpoint string
     @staticmethod
     def create_from_db_endpoint(dbEndpoint: str,
-                 tableName: str = "checkpoints",
+                 table_name: str = "lc_checkpoints",
                  drop_tables: bool = False,
                  debug: bool = False,
                  serde: Any = None):
         dbConfig = NoSQLHandleConfig(dbEndpoint,  StoreAccessTokenProvider())
-        return OracleNoSqlDbCheckpointer(dbConfig, tableName, drop_tables, debug, serde)
+        return OracleNoSqlDbCheckpointer(dbConfig, table_name, drop_tables, debug, serde)
 
     def __init__(self, dbConfig: NoSQLHandleConfig, 
-                 tableName: str = "checkpoints",
+                 table_name: str = "lc_checkpoints",
                  dropTables: bool = False,
                  debug: bool = False,
                  serde: Any = None,
                  checkpointsTableLimits: TableLimits = TableLimits(5, 5, 5),
                  writesTableLimits: TableLimits = TableLimits(10, 10, 5)):
         super().__init__(serde = serde)  # Use default serde
-        tableName = self._validate_table_name(tableName)
-        self._table_name = tableName
+        table_name = self._validate_table_name(table_name)
+        self._table_name = table_name
         self._tables_exist = False
         self._debug = debug
         self._checkpoints_table_limits = checkpointsTableLimits
         self._writes_table_limits = writesTableLimits
 
         self._handle = NoSQLHandle(dbConfig)
-        if not self.create_tables(tableName, dropTables=dropTables):
+        if not self.create_tables(table_name, dropTables=dropTables):
             raise RuntimeError(
-                f"Failed to initialize Oracle NoSQL tables for '{tableName}'."
+                f"Failed to initialize Oracle NoSQL tables for '{table_name}'."
             )
 
     def _query_request(

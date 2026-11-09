@@ -26,7 +26,7 @@ Install them using:
 ```shell
 python3.14 -m venv venv
 source ./venv/bin/activate
-pip install borneo langchain langgraph langgraph-checkpoint oci
+pip install borneo langchain langgraph langgraph-checkpoint oci langchain_openai
 ```
 
 Make sure the NoSQL DB and Model are configured corectly.
@@ -78,7 +78,7 @@ agent = create_agent(
         ),
         checkpointer=OracleNoSqlDbCheckpointer.create_from_db_endpoint(
             ORACLE_NOSQL_DB_ENDPOINT,
-            tableName="checkpoints",
+            table_name="checkpoints",
             drop_tables=False,
         ),
     )
@@ -92,7 +92,7 @@ For a full example see [example.py](example.py).
 To run the [LangChain Checkpoint Conformance](https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-conformance) test install the test packages and setup PYTHONPATH:
 
 ```shell
-pip install langgraph-checkpoint-conformance pytest
+pip install langgraph-checkpoint-conformance pytest pytest-asyncio
 export PYTHONPATH=$PYTHONPATH:
 ```
 
