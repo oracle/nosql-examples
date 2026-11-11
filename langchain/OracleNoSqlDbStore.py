@@ -39,13 +39,12 @@ class OracleNoSqlDbStore(BaseStore):
     """LangGraph store backed by an Oracle NoSQL Database table."""
 
     def __init__(self,
-                dbConfig: NoSQLHandleConfig,
+                db_handle: NoSQLHandle,
                 table_name: str = "langchainStore",
                 debug: bool = False,
                 drop_tables: bool = False,
                 storeTableLimits: TableLimits = TableLimits(10, 10, 5)) -> None:
-        """Initialize the database-backed store."""
-        self._dbConfig = dbConfig
+        """Initialize the database-backed store given a NoSQL handle."""
         self._table_name = table_name
         self._debug = debug
         self._drop_tables = drop_tables
@@ -53,24 +52,33 @@ class OracleNoSqlDbStore(BaseStore):
 
         self._table_exists = False
 
-        self._handle = NoSQLHandle(dbConfig)
+        self._handle = db_handle
         if not self.create_tables(self._table_name, dropTables=self._drop_tables):
             raise RuntimeError(
                 f"Failed to initialize Oracle NoSQL tables for '{self._table_name}'."
             )
 
-
-    @classmethod
+    @staticmethod
+    def create_from_db_config(
+        db_config: NoSQLHandleConfig,
+        table_name: str = "langchainStore",
+        debug: bool = False,
+        drop_tables: bool = False
+    ) -> "OracleNoSqlDbStore":
+        """Create an instance of OracleNoSqlDbStore from a NoSQLHandleConfig."""
+        db_handle = NoSQLHandle(db_config)
+        return OracleNoSqlDbStore(db_handle, table_name, debug, drop_tables)
+    
+    @staticmethod
     def create_from_db_endpoint(
-        cls,
         db_endpoint: str = "http://localhost:8080",
         table_name: str = "langchainStore",
         debug: bool = False,
         drop_tables: bool = False
     ) -> "OracleNoSqlDbStore":
         """Create an instance of OracleNoSqlDbStore from a database endpoint."""
-        dbConfig = NoSQLHandleConfig(db_endpoint,  StoreAccessTokenProvider())
-        return OracleNoSqlDbStore(dbConfig, table_name, debug, drop_tables)
+        db_config = NoSQLHandleConfig(db_endpoint,  StoreAccessTokenProvider())
+        return OracleNoSqlDbStore.create_from_db_config(db_config, table_name, debug, drop_tables)
 
 
     def create_tables(self, table_name: str, dropTables: bool = False) -> bool:
