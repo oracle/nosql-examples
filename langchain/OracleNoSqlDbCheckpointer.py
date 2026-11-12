@@ -23,9 +23,24 @@ from borneo import MultiDeleteRequest, GetTableRequest, NoSQLHandle, NoSQLHandle
     WriteMultipleRequest, GetResult, TableNotFoundException
 from borneo.kv import StoreAccessTokenProvider
 
+from OracleNoSqlDbConnectionString import OracleNoSqlDbConnectionString
+
 
 class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
+    """LangGraph Checkpointer backed by an Oracle NoSQL Database."""
     
+    @staticmethod
+    def create_from_db_connection_string(
+        connection_string: str,
+        table_name: str = "lc_checkpoints",
+        drop_tables: bool = False,
+        debug: bool = False,
+        serde: Any = None
+    ) -> "OracleNoSqlDbCheckpointer":
+        """Create a checkpointer from a NoSQL Database connection string."""
+        db_config = OracleNoSqlDbConnectionString(connection_string).get_nosql_handle_config()
+        return OracleNoSqlDbCheckpointer.create_from_db_config(db_config)
+
     @staticmethod
     def create_from_db_endpoint(db_endpoint: str,
                  table_name: str = "lc_checkpoints",
@@ -50,7 +65,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
     def __init__(self, 
                  db_handle: NoSQLHandle, 
                  table_name: str = "lc_checkpoints",
-                 dropTables: bool = False,
+                 drop_tables: bool = False,
                  debug: bool = False,
                  serde: Any = None,
                  checkpointsTableLimits: TableLimits = TableLimits(5, 5, 5),
@@ -64,10 +79,14 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         self._checkpoints_table_limits = checkpointsTableLimits
         self._writes_table_limits = writesTableLimits
         self._handle = db_handle
-        if not self.create_tables(table_name, dropTables=dropTables):
+        if not self.create_tables(table_name, drop_tables=drop_tables):
             raise RuntimeError(
                 f"Failed to initialize Oracle NoSQL tables for '{table_name}'."
             )
+
+    def get_db_handle(self) -> NoSQLHandle:
+        """Get the underlying NoSQL handle."""
+        return self._handle
 
     def _query_request(
         self,
@@ -189,9 +208,9 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
                 break
         return pending_writes
 
-    def create_tables(self, table_name: str, dropTables: bool = False) -> bool:
+    def create_tables(self, table_name: str, drop_tables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
-           Only first time at init, drop the table if dropTables is True.
+           Only first time at init, drop the table if drop_tables is True.
         """
         table_name = self._validate_table_name(table_name)
         if self._tables_exist:
@@ -199,7 +218,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
         if not self._handle:
             raise ValueError("NoSQL DB handle is not initialized.")
 
-        if dropTables:
+        if drop_tables:
             if self._debug:
                 print(f"   ...Dropping table '{table_name}.writes' if it exists...")
             ddl = f"""DROP TABLE IF EXISTS {table_name}.writes"""

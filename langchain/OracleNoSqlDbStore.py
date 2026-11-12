@@ -34,52 +34,68 @@ from langgraph.store.base import (
     SearchOp,
 )
 
+from OracleNoSqlDbConnectionString import OracleNoSqlDbConnectionString
+
 
 class OracleNoSqlDbStore(BaseStore):
     """LangGraph store backed by an Oracle NoSQL Database table."""
 
+    @staticmethod
+    def create_from_db_connection_string(
+        connection_string: str,
+        table_name: str = "lc_store",
+        debug: bool = False,
+        drop_table: bool = False
+    ) -> "OracleNoSqlDbStore":
+        """Create a store from a NoSQL Database connection string."""
+        db_config = OracleNoSqlDbConnectionString(connection_string).get_nosql_handle_config()
+        return OracleNoSqlDbStore.create_from_db_config(db_config)
+
+    @staticmethod
+    def create_from_db_config(
+        db_config: NoSQLHandleConfig,
+        table_name: str = "lc_store",
+        debug: bool = False,
+        drop_table: bool = False
+    ) -> "OracleNoSqlDbStore":
+        """Create an instance of OracleNoSqlDbStore from a NoSQLHandleConfig."""
+        db_handle = NoSQLHandle(db_config)
+        return OracleNoSqlDbStore(db_handle, table_name, debug, drop_table)
+    
+    @staticmethod
+    def create_from_db_endpoint(
+        db_endpoint: str = "http://localhost:8080",
+        table_name: str = "lc_store",
+        debug: bool = False,
+        drop_table: bool = False
+    ) -> "OracleNoSqlDbStore":
+        """Create an instance of OracleNoSqlDbStore from a database endpoint."""
+        db_config = NoSQLHandleConfig(db_endpoint,  StoreAccessTokenProvider())
+        return OracleNoSqlDbStore.create_from_db_config(db_config, table_name, debug, drop_table)
+
     def __init__(self,
                 db_handle: NoSQLHandle,
-                table_name: str = "langchainStore",
+                table_name: str = "lc_store",
                 debug: bool = False,
-                drop_tables: bool = False,
+                drop_table: bool = False,
                 storeTableLimits: TableLimits = TableLimits(10, 10, 5)) -> None:
         """Initialize the database-backed store given a NoSQL handle."""
         self._table_name = table_name
         self._debug = debug
-        self._drop_tables = drop_tables
+        self._drop_table = drop_table
         self._store_table_limits = storeTableLimits
 
         self._table_exists = False
 
         self._handle = db_handle
-        if not self.create_tables(self._table_name, dropTables=self._drop_tables):
+        if not self.create_tables(self._table_name, dropTables=self._drop_table):
             raise RuntimeError(
                 f"Failed to initialize Oracle NoSQL tables for '{self._table_name}'."
             )
 
-    @staticmethod
-    def create_from_db_config(
-        db_config: NoSQLHandleConfig,
-        table_name: str = "langchainStore",
-        debug: bool = False,
-        drop_tables: bool = False
-    ) -> "OracleNoSqlDbStore":
-        """Create an instance of OracleNoSqlDbStore from a NoSQLHandleConfig."""
-        db_handle = NoSQLHandle(db_config)
-        return OracleNoSqlDbStore(db_handle, table_name, debug, drop_tables)
-    
-    @staticmethod
-    def create_from_db_endpoint(
-        db_endpoint: str = "http://localhost:8080",
-        table_name: str = "langchainStore",
-        debug: bool = False,
-        drop_tables: bool = False
-    ) -> "OracleNoSqlDbStore":
-        """Create an instance of OracleNoSqlDbStore from a database endpoint."""
-        db_config = NoSQLHandleConfig(db_endpoint,  StoreAccessTokenProvider())
-        return OracleNoSqlDbStore.create_from_db_config(db_config, table_name, debug, drop_tables)
-
+    def get_db_handle(self) -> NoSQLHandle:
+        """Get the underlying NoSQL handle."""
+        return self._handle
 
     def create_tables(self, table_name: str, dropTables: bool = False) -> bool:
         """Create the Oracle NoSQL Database table if it doesn't exist.
@@ -241,6 +257,8 @@ class OracleNoSqlDbStore(BaseStore):
             if isinstance(op, PutOp):
                 key = self._item_key(op.namespace, op.key)
                 if op.value is None:
+                    if self._debug:
+                        print(f"S   ...Deleting item with key '{key}'...")
                     self._handle.delete(DeleteRequest().set_table_name(self._table_name)
                                         .set_key({"key": key}))
                 else:
@@ -252,12 +270,18 @@ class OracleNoSqlDbStore(BaseStore):
                         "created_at": (previous.created_at if previous else now).isoformat(),
                         "updated_at": now.isoformat(),
                     }}
+                    if self._debug:
+                        print(f"S   ...Updating item with key '{key}'...")
                     self._handle.put(PutRequest().set_table_name(self._table_name)
                                      .set_value(row))
                 results.append(None)
             elif isinstance(op, GetOp):
+                if self._debug:
+                    print(f"S   ...Getting item with key '{key}'...")
                 results.append(self._get_item(op.namespace, op.key))
             elif isinstance(op, SearchOp):
+                if self._debug:
+                    print(f"S   ...Searching items with namespace prefix '{op.namespace_prefix}'...")
                 matches = [
                     SearchItem(namespace=item.namespace, key=item.key, value=item.value,
                                created_at=item.created_at, updated_at=item.updated_at)
@@ -269,6 +293,8 @@ class OracleNoSqlDbStore(BaseStore):
                 ]
                 results.append(matches[op.offset:op.offset + op.limit])
             elif isinstance(op, ListNamespacesOp):
+                if self._debug:
+                    print(f"S   ...Listing namespaces with match conditions '{op.match_conditions}'...")    
                 namespaces = {item.namespace for item in self._items()
                               if self._matches_namespace(item.namespace, op.match_conditions)}
                 if op.max_depth is not None:
