@@ -3,15 +3,15 @@
 # https://oss.oracle.com/licenses/upl/
 
 import os
-
+from dataclasses import dataclass
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
+from langgraph.runtime import Runtime
+from OracleNoSqlDbCheckpointer import OracleNoSqlDbCheckpointer
 
-from OracleNoSqlDbTools import OracleNoSqlDbCheckpointer
 
-
-ORACLE_NOSQL_DB_ENDPOINT = os.getenv("ORACLE_NOSQL_DB_ENDPOINT", "http://localhost:8080")
-LMSTUDIO_MODEL = os.getenv("LMSTUDIO_MODEL", "lfm2.5-1.2b-thinking-mlx")
+ORACLE_NOSQL_DB_CONNECTION_STRING = os.getenv("ORACLE_NOSQL_DB_CONNECTION_STRING", "nosqldb+on_prem+http://localhost:8080")
+LMSTUDIO_MODEL = os.getenv("LMSTUDIO_MODEL", "google/gemma-4-e4b")
 LMSTUDIO_BASE_URL = os.getenv("LMSTUDIO_BASE_URL", "http://localhost:1234/v1")
 
 
@@ -27,7 +27,8 @@ def build_llm():
 def main() -> None:
     print("=== List checkpoints ===")
 
-    checkpointer = OracleNoSqlDbCheckpointer.create_from_db_endpoint(ORACLE_NOSQL_DB_ENDPOINT, debug=True, drop_tables=False)
+    # Setup Checkpointer with Oracle NoSQL Database endpoint
+    checkpointer = OracleNoSqlDbCheckpointer.create_from_db_connection_string(ORACLE_NOSQL_DB_CONNECTION_STRING, debug=True, drop_tables=False)
 
     cpIter = checkpointer.list(
         config={"configurable": {"thread_id": "thread_1"}},
@@ -51,6 +52,7 @@ def main() -> None:
     checkpointer.delete_thread("thread_1")
 
 
+    # Setup LLM and Agent with Checkpointer
     llm = build_llm()
     agent = create_agent(
         model=llm,

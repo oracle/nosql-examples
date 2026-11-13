@@ -1,3 +1,9 @@
-/langchain/logs/
 __pycache__/
+.pytest_cache/
 .vscode/
+/langchain/bin/
+/langchain/include/
+/langchain/logs/
+/langchain/lib/
+/langchain/venv/
+/langchain/pyvenv.cfg
