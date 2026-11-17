@@ -51,18 +51,17 @@ def save_my_memory(
 
 
 @tool
-def search_my_memories(
-    query: str,
+def list_my_memories(
     runtime: ToolRuntime[UserContext],
 ) -> str:
-    """Search the current user's saved memories for information relevant to a question."""
+    """List the current user's saved memories."""
 
     user_id = runtime.context.user_id if runtime and runtime.context else "Unknown"
 
-    print(f"TOOL: Searching for memories for user_id: '{user_id}' with query: {query}")
+    print(f"TOOL: Listing memories for user_id: '{user_id}'")
     matches = runtime.store.search(
         (user_id, "memories"),
-        query=query,
+        query=None,  # Semantic search is not supported in OracleNoSqlDbStore
         limit=5,
     )
     return "\n".join(
@@ -92,10 +91,13 @@ def main() -> None:
     # Setup Store with Oracle NoSQL Database
     store = OracleNoSqlDbStore.create_from_db_connection_string(ORACLE_NOSQL_DB_CONNECTION_STRING, debug=True, drop_table=False)
 
-    mems = store.search(("user-42", "memories"))
-    for m in mems:
-        print(f"Deleting memory: {m.key} -> {m.value}")
-        store.delete(("user-42", "memories"), m.key)
+    for namespace in store.list_namespaces():
+        print(f"Existing namespace: {namespace}")
+
+    # mems = store.search(("user-42", "memories"))
+    # for m in mems:
+    #     print(f"Deleting memory: {m.key} -> {m.value}")
+    #     store.delete(("user-42", "memories"), m.key)
 
 
     # Setup LLM and Agent with Checkpointer and Store
@@ -106,7 +108,7 @@ def main() -> None:
             "You are a helpful assistant. Use the memory tools to save, delete, search user memories."
         ),
         store = store,
-        tools=[save_my_memory, search_my_memories, delete_my_memory],
+        tools=[save_my_memory, list_my_memories, delete_my_memory],
     )
 
     print("\n=== LLM Invocation 1 ===")

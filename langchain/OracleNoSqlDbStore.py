@@ -17,6 +17,7 @@ from borneo import (
     NoSQLHandleConfig,
     TableLimits,
     NoSQLHandle,
+    PrepareRequest,
     TableRequest,
     GetTableRequest,
     TableNotFoundException
@@ -185,11 +186,48 @@ class OracleNoSqlDbStore(BaseStore):
         row = self._handle.get(request).get_value()
         return self._item_from_row(row) if row is not None else None
 
-    def _items(self) -> Iterable[Item]:
-        request = QueryRequest().set_statement(f"SELECT * FROM {self._table_name}")
+    def _items(self, namespace_prefix: tuple[str, ...] | None, limit: int | None, offset: int | None) -> Iterable[Item]:
+        stmt = f"SELECT * FROM {self._table_name} $t"
+        bindings = {}
+        predicates = []
+        for part_no, part in enumerate(namespace_prefix or ()):
+            if not isinstance(part, str):
+                raise ValueError("namespace prefix must contain only strings.")
+            variable = f"$ns{part_no}"
+            bindings[variable] = part
+            predicates.append(f"$t.val_.'namespace'[{part_no}] = {variable}")
+        if predicates:
+            declarations = " ".join(f"{variable} STRING;" for variable in bindings)
+            stmt = "DECLARE " + declarations + " " + stmt + " WHERE " + " AND ".join(predicates)
+        if limit is not None:
+            stmt += f" LIMIT {limit}"
+        if offset is not None:
+            stmt += f" OFFSET {offset}"
+        if bindings:
+            prepared = self._handle.prepare(
+                PrepareRequest().set_statement(stmt)
+            ).get_prepared_statement()
+            for variable, value in bindings.items():
+                prepared.set_variable(variable, value)
+            request = QueryRequest().set_prepared_statement(prepared)
+        else:
+            request = QueryRequest().set_statement(stmt)
         while True:
             for row in self._handle.query(request).get_results():
                 yield self._item_from_row(row)
+            if request.is_done():
+                break
+
+    def _list_namespaces(self, limit: int | None, offset: int | None) -> Iterable[tuple[str, ...]]:
+        stmt = f"SELECT $t.val_.'namespace' as ns FROM {self._table_name} $t GROUP BY $t.val_.'namespace'"
+        if limit is not None:
+            stmt += f" LIMIT {limit}"
+        if offset is not None:
+            stmt += f" OFFSET {offset}"
+        request = QueryRequest().set_statement(stmt)
+        while True:
+            for row in self._handle.query(request).get_results():
+                yield tuple(row["ns"])
             if request.is_done():
                 break
 
@@ -282,21 +320,23 @@ class OracleNoSqlDbStore(BaseStore):
             elif isinstance(op, SearchOp):
                 if self._debug:
                     print(f"S   ...Searching items with namespace prefix '{op.namespace_prefix}'...")
+                if op.query is not None:
+                    raise ValueError("Semanic search is not supported in OracleNoSqlDbStore.")
                 matches = [
                     SearchItem(namespace=item.namespace, key=item.key, value=item.value,
                                created_at=item.created_at, updated_at=item.updated_at)
-                    for item in self._items()
-                    if item.namespace[:len(op.namespace_prefix)] == op.namespace_prefix
-                    and (op.filter is None or all(
-                        self._matches_filter_value(item.value.get(k), v)
-                        for k, v in op.filter.items()))
+                    for item in self._items(op.namespace_prefix, op.limit, op.offset)
+                        if item.namespace[:len(op.namespace_prefix)] == op.namespace_prefix
+                            and (op.filter is None or
+                                all(self._matches_filter_value(item.value.get(k), v)
+                                    for k, v in op.filter.items()))
                 ]
-                results.append(matches[op.offset:op.offset + op.limit])
+                results.append(matches)
             elif isinstance(op, ListNamespacesOp):
                 if self._debug:
                     print(f"S   ...Listing namespaces with match conditions '{op.match_conditions}'...")    
-                namespaces = {item.namespace for item in self._items()
-                              if self._matches_namespace(item.namespace, op.match_conditions)}
+                namespaces = {namespace for namespace in self._list_namespaces(None, None)
+                              if self._matches_namespace(namespace, op.match_conditions)}
                 if op.max_depth is not None:
                     namespaces = {ns[:op.max_depth] for ns in namespaces}
                 results.append(sorted(namespaces)[op.offset:op.offset + op.limit])
