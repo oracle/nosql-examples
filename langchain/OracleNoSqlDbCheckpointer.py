@@ -39,7 +39,7 @@ class OracleNoSqlDbCheckpointer(BaseCheckpointSaver):
     ) -> "OracleNoSqlDbCheckpointer":
         """Create a checkpointer from a NoSQL Database connection string."""
         db_config = OracleNoSqlDbConnectionString(connection_string).get_nosql_handle_config()
-        return OracleNoSqlDbCheckpointer.create_from_db_config(db_config)
+        return OracleNoSqlDbCheckpointer.create_from_db_config(db_config, table_name, drop_tables, debug, serde)
 
     @staticmethod
     def create_from_db_endpoint(db_endpoint: str,

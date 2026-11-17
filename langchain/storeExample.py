@@ -9,7 +9,6 @@ from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 from langchain.tools import tool, ToolRuntime
 from OracleNoSqlDbStore import OracleNoSqlDbStore
-from uuid_utils import uuid7
 
 
 ORACLE_NOSQL_DB_CONNECTION_STRING = os.getenv("ORACLE_NOSQL_DB_CONNECTION_STRING", "nosqldb+on_prem+http://localhost:8080")
@@ -45,7 +44,7 @@ def save_my_memory(
     print(f"TOOL: Saving memory for user_id: '{user_id}' with memory: {memory_key} -> {memory_value}")
     runtime.store.put(
         (user_id, "memories"),
-        str(uuid7()),
+        memory_key,
         {memory_key: memory_value}
     )
 
@@ -94,10 +93,10 @@ def main() -> None:
     for namespace in store.list_namespaces():
         print(f"Existing namespace: {namespace}")
 
-    # mems = store.search(("user-42", "memories"))
-    # for m in mems:
-    #     print(f"Deleting memory: {m.key} -> {m.value}")
-    #     store.delete(("user-42", "memories"), m.key)
+    mems = store.search(("user-42", "memories"))
+    for m in mems:
+        print(f"Deleting memory: {m.key} -> {m.value}")
+        store.delete(("user-42", "memories"), m.key)
 
 
     # Setup LLM and Agent with Checkpointer and Store
@@ -138,8 +137,8 @@ def main() -> None:
     user_id = "user-42"
     namespace_for_memory = (user_id, "memories")
 
-    memory_id = str(uuid7())
-    memory = {"food_preference" : "I like pizza"}
+    memory_id = "food_preference"
+    memory = { memory_id: "I like pizza"}
     store.put(namespace_for_memory, memory_id, memory)
 
     memories = store.search(namespace_for_memory)
