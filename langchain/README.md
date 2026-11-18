@@ -171,6 +171,50 @@ Run the connection-string tests without a database:
 PYTHONPATH=. venv/bin/python -m pytest test/test_connection_string.py -q
 ```
 
+## NoSQL Database connection string
+
+`NoSqlDbConnectionString` parses the Oracle NoSQL Database Connection String format:
+
+Format:
+```text
+nosqldb[+cloud|+on_prem][+http|+https]://[auth@]host[:port][,host[:port]...][/compartment_or_namespace[/reserved_path]][?options]
+```
+
+The default connection type is `cloud`, and the default protocol is `https`
+(port 443; explicit `http` uses port 80). Known cloud region names resolve to
+service endpoints; other hosts are direct endpoints. Host lists are preserved;
+`get_nosql_handle_config(host_index=0)` selects one host for a Borneo handle. Use
+`get_endpoints()` to inspect all endpoints.
+
+Authentication supports username/password for on-prem, OCI config files and profiles,
+inline OCI credentials, session tokens, instance principals `+instance_principal`, 
+resource principals `+resource_principal`, OKE workload identity `+oke_workload`, 
+and `+cloudsim`. `OracleNoSqlDbConnectionString` parsing does not access credential 
+files or connect. `get_nosql_handle_config()` creates the authorization provider, 
+which may read credentials or contact an identity service. An existing Borneo 
+authorization provider can be passed as `get_nosql_handle_config(provider=provider)`.
+
+Separate options with commas or `&`; percent-encode separators inside values.
+Names are case insensitive and the first duplicate wins. `compartment` and
+`namespace` override the first path segment; the service-specific name wins if
+both are present. `configFile` (including a bare `?configFile`) overrides inline
+cloud credentials and defaults to `~/.oci/config`, with profile `DEFAULT`.
+
+`get_nosql_handle_config()` applies compartment/namespace, consistency (default `EVENTUAL`),
+`timeout`, `ddlTimeout`, `rateLimiter` (boolean), `rateLimiterPercent`,
+`retryMaxRetries`, and on-prem PEM certificates. A PEM file without a password
+sets the CA bundle; with `pemCertificatePassword` it loads an encrypted client
+certificate/key into an SSL context. Remaining options, including polling,
+durability, query memory, HTTP options, and SDK-specific retry settings, remain
+available through `get_options()` for application or request-level use. Unknown
+and options are ignored.
+
+Run the connection-string tests without a database:
+
+```shell
+PYTHONPATH=. venv/bin/python -m pytest test/test_connection_string.py -q
+```
+
 
 ## LangChain Checkpoint Conformance test
 
