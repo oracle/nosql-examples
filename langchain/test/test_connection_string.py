@@ -8,7 +8,7 @@ import pytest
 from borneo import AuthorizationProvider, Consistency, NoSQLHandleConfig
 from borneo.kv import StoreAccessTokenProvider
 
-from NoSqlDbConnectionString import NoSqlDbConnectionString
+from OracleNoSqlDbConnectionString import OracleNoSqlDbConnectionString
 
 
 @pytest.mark.parametrize("uri,connection_type,auth_type,protocol", [
@@ -24,7 +24,7 @@ from NoSqlDbConnectionString import NoSqlDbConnectionString
     ("nosqldb://nosql.us-newreg-1.oci.oraclecloud.com", "cloud", "user_principal", "https"),
 ])
 def test_proposal_examples(uri, connection_type, auth_type, protocol):
-    parsed = NoSqlDbConnectionString(uri)
+    parsed = OracleNoSqlDbConnectionString(uri)
     assert parsed.get_connection_string() == uri
     assert parsed.get_connection_type() == connection_type
     assert parsed.get_auth_type() == auth_type
@@ -35,7 +35,7 @@ def test_proposal_examples(uri, connection_type, auth_type, protocol):
 
 
 def test_case_escaping_path_options_and_duplicate_policy():
-    parsed = NoSqlDbConnectionString(
+    parsed = OracleNoSqlDbConnectionString(
         "NoSqLdB+ON_PREM+HtTp://Us%40er:Pa%3Ass%2B%2C%26@LOCALHOST:8080/"
         "Name%2FSpace/Table/PK?TIMEOUT=100,timeout=200&namespace=Override%20Ns"
         "&pass_phrase=a%2Bb%2Cc%26d&unknown=ignored&configFile")
@@ -64,22 +64,22 @@ def test_case_escaping_path_options_and_duplicate_policy():
     ("on_prem", "namespace=Ns,compartment=Comp", "Ns"),
 ])
 def test_database_options_override_path(service, query, expected):
-    parsed = NoSqlDbConnectionString(f"nosqldb+{service}://localhost/PathDB/table/pk?{query}")
+    parsed = OracleNoSqlDbConnectionString(f"nosqldb+{service}://localhost/PathDB/table/pk?{query}")
     assert parsed.get_namespace() == parsed.get_compartment() == expected
 
 
 def test_region_resolution_protocols_default_ports_and_multiple_hosts():
-    parsed = NoSqlDbConnectionString("nosqldb+http://US-ASHBURN-1,example.org:1234,[::1]/db")
+    parsed = OracleNoSqlDbConnectionString("nosqldb+http://US-ASHBURN-1,example.org:1234,[::1]/db")
     assert parsed.get_region().get_region_id() == "us-ashburn-1"
     assert parsed.get_region(1) is None
     assert parsed.get_endpoints() == [
         "http://nosql.us-ashburn-1.oci.oraclecloud.com:80",
         "http://example.org:1234", "http://[::1]:80"]
-    assert NoSqlDbConnectionString("nosqldb://example.org").get_endpoint() == "https://example.org:443"
-    local = NoSqlDbConnectionString("nosqldb+on_prem://us-ashburn-1")
+    assert OracleNoSqlDbConnectionString("nosqldb://example.org").get_endpoint() == "https://example.org:443"
+    local = OracleNoSqlDbConnectionString("nosqldb+on_prem://us-ashburn-1")
     assert local.get_region() is None
     assert local.get_endpoint() == "https://us-ashburn-1:443"
-    assert NoSqlDbConnectionString("nosqldb://+cloudsim@us-ashburn-1").get_region() is None
+    assert OracleNoSqlDbConnectionString("nosqldb://+cloudsim@us-ashburn-1").get_region() is None
 
 
 @pytest.mark.parametrize("uri", [
@@ -100,17 +100,17 @@ def test_region_resolution_protocols_default_ports_and_multiple_hosts():
 ])
 def test_rejects_invalid_uris(uri):
     with pytest.raises(ValueError):
-        NoSqlDbConnectionString(uri)
+        OracleNoSqlDbConnectionString(uri)
 
 
 @pytest.mark.parametrize("value", [None, 123, b"nosqldb://host", [], {}])
 def test_rejects_non_strings(value):
     with pytest.raises(TypeError):
-        NoSqlDbConnectionString(value)
+        OracleNoSqlDbConnectionString(value)
 
 
 def test_plain_username_and_optional_password_can_be_parsed():
-    parsed = NoSqlDbConnectionString("nosqldb+on_prem://User@host")
+    parsed = OracleNoSqlDbConnectionString("nosqldb+on_prem://User@host")
     assert parsed.get_user_name() == "User"
     assert parsed.get_password() is None
     with pytest.raises(ValueError, match="both a username and password"):
@@ -121,12 +121,12 @@ def test_constructing_parser_never_reads_credentials(monkeypatch):
     import builtins
 
     monkeypatch.setattr(builtins, "open", Mock(side_effect=AssertionError("Unexpected file read")))
-    parsed = NoSqlDbConnectionString("nosqldb://us-ashburn-1/?configFile=/missing")
+    parsed = OracleNoSqlDbConnectionString("nosqldb://us-ashburn-1/?configFile=/missing")
     assert parsed.get_options()["configfile"] == "/missing"
 
 
 def test_on_prem_borneo_configuration_and_host_selection():
-    parsed = NoSqlDbConnectionString(
+    parsed = OracleNoSqlDbConnectionString(
         "nosqldb+on_prem+http://host1,host2:8080/PathNs?namespace=QueryNs,"
         "timeout=1234,ddlTimeout=4321,consistency=ABSOLUTE,rateLimiter=true,"
         "rateLimiterPercent=42.5,retryMaxRetries=0,pemCertificateFile=~/cert.pem,"
@@ -151,7 +151,7 @@ def test_secure_on_prem_provider(monkeypatch):
 
     factory = Mock(wraps=StoreAccessTokenProvider)
     monkeypatch.setattr(borneo.kv, "StoreAccessTokenProvider", factory)
-    config = NoSqlDbConnectionString("nosqldb+on_prem://User:Secret@host/Ns").get_nosql_handle_config()
+    config = OracleNoSqlDbConnectionString("nosqldb+on_prem://User:Secret@host/Ns").get_nosql_handle_config()
     provider = config.get_authorization_provider()
     assert isinstance(provider, StoreAccessTokenProvider)
     factory.assert_called_once_with("User", "Secret")
@@ -159,7 +159,7 @@ def test_secure_on_prem_provider(monkeypatch):
 
 
 def test_cloudsim_ignores_cloud_credentials():
-    config = NoSqlDbConnectionString(
+    config = OracleNoSqlDbConnectionString(
         "nosqldb+http://+cloudsim@localhost:8000/Comp?configFile=/missing,"
         "tenancy=ignored,user=ignored,security_token_file=/missing").get_nosql_handle_config()
     assert isinstance(config, NoSQLHandleConfig)
@@ -171,7 +171,7 @@ def test_cloudsim_ignores_cloud_credentials():
 
 def test_existing_authorization_provider_bypasses_credential_loading():
     provider = Mock(spec=AuthorizationProvider)
-    config = NoSqlDbConnectionString("nosqldb://us-ashburn-1/Comp?configFile=/missing").get_nosql_handle_config(provider=provider)
+    config = OracleNoSqlDbConnectionString("nosqldb://us-ashburn-1/Comp?configFile=/missing").get_nosql_handle_config(provider=provider)
     assert config.get_authorization_provider() is provider
     assert config.get_default_compartment() == "Comp"
     assert config.get_service_url().hostname == "nosql.us-ashburn-1.oci.oraclecloud.com"
@@ -187,7 +187,7 @@ def signature_factory(monkeypatch):
 
 
 def test_inline_cloud_credentials(signature_factory):
-    parsed = NoSqlDbConnectionString(
+    parsed = OracleNoSqlDbConnectionString(
         "nosqldb://us-ashburn-1/?tenancy=Tenant,user=User,fingerprint=Fingerprint,"
         "key_file=~/key.pem,pass_phrase=Secret")
     parsed.get_nosql_handle_config()
@@ -209,7 +209,7 @@ def test_config_file_defaults_and_precedence(monkeypatch, signature_factory, que
     monkeypatch.setattr(oci.config, "from_file", loader)
     if query:
         query += ",tenancy=Ignored,user=Ignored,key_file=Ignored,security_token_file=/ignored"
-    NoSqlDbConnectionString("nosqldb://us-ashburn-1/?" + query).get_nosql_handle_config()
+    OracleNoSqlDbConnectionString("nosqldb://us-ashburn-1/?" + query).get_nosql_handle_config()
     assert loader.call_args.kwargs["profile_name"] == profile
     assert loader.call_args.kwargs["file_location"].endswith("/custom" if profile == "Team" else "/.oci/config")
     assert signature_factory.call_args.kwargs["tenant_id"] == "FileTenant"
@@ -224,7 +224,7 @@ def test_principal_authentication(monkeypatch, signature_factory, auth):
     monkeypatch.setattr(oci.auth.signers, "get_oke_workload_identity_resource_principal_signer", signer_factory)
     signature_factory.create_with_instance_principal.return_value = Mock(spec=AuthorizationProvider)
     signature_factory.create_with_resource_principal.return_value = Mock(spec=AuthorizationProvider)
-    NoSqlDbConnectionString(f"nosqldb://+{auth}@us-ashburn-1/?compartment=ocid").get_nosql_handle_config()
+    OracleNoSqlDbConnectionString(f"nosqldb://+{auth}@us-ashburn-1/?compartment=ocid").get_nosql_handle_config()
     if auth == "instance_principal":
         assert signature_factory.create_with_instance_principal.call_args.kwargs["region"].get_region_id() == "us-ashburn-1"
     elif auth == "resource_principal":
@@ -244,7 +244,7 @@ def test_session_token_authentication(tmp_path, monkeypatch, signature_factory):
     signer_factory = Mock(return_value=object())
     monkeypatch.setattr(oci.signer, "load_private_key_from_file", key_loader)
     monkeypatch.setattr(oci.auth.signers, "SecurityTokenSigner", signer_factory)
-    NoSqlDbConnectionString(
+    OracleNoSqlDbConnectionString(
         f"nosqldb://us-ashburn-1/?security_token_file={token},key_file=/key,pass_phrase=Secret").get_nosql_handle_config()
     key_loader.assert_called_once_with("/key", "Secret")
     signer_factory.assert_called_once_with("session-token", key_loader.return_value)
@@ -275,7 +275,7 @@ def test_real_oci_provider_with_local_credentials(tmp_path, auth_source):
         token_path = tmp_path / "session-token"
         token_path.write_text("local-test-token\n")
         query = f"security_token_file={token_path},key_file={key_path}"
-    config = NoSqlDbConnectionString("nosqldb://us-ashburn-1/Comp?" + query).get_nosql_handle_config()
+    config = OracleNoSqlDbConnectionString("nosqldb://us-ashburn-1/Comp?" + query).get_nosql_handle_config()
     provider = config.get_authorization_provider()
     assert isinstance(provider, SignatureProvider)
     assert provider.get_region().get_region_id() == "us-ashburn-1"
@@ -290,7 +290,7 @@ def test_encrypted_pem_certificate_configuration(monkeypatch):
     loader = Mock()
     monkeypatch.setattr(context, "load_cert_chain", loader)
     monkeypatch.setattr(ssl, "create_default_context", Mock(return_value=context))
-    config = NoSqlDbConnectionString(
+    config = OracleNoSqlDbConnectionString(
         "nosqldb+on_prem://host/?pemCertificateFile=/client.pem,pemCertificatePassword=Secret").get_nosql_handle_config()
     loader.assert_called_once_with("/client.pem", password="Secret")
     assert config.get_ssl_context() is context
@@ -298,9 +298,9 @@ def test_encrypted_pem_certificate_configuration(monkeypatch):
 
 def test_incomplete_inline_credentials_do_not_fall_back_to_config_file():
     with pytest.raises(ValueError, match="Missing cloud credentials: fingerprint, key_file, user"):
-        NoSqlDbConnectionString("nosqldb://host/?tenancy=Tenant").get_nosql_handle_config()
+        OracleNoSqlDbConnectionString("nosqldb://host/?tenancy=Tenant").get_nosql_handle_config()
     with pytest.raises(ValueError, match="requires key_file"):
-        NoSqlDbConnectionString("nosqldb://host/?security_token_file=/token").get_nosql_handle_config()
+        OracleNoSqlDbConnectionString("nosqldb://host/?security_token_file=/token").get_nosql_handle_config()
 
 
 @pytest.mark.parametrize("option", ["timeout=0", "timeout=no", "ddlTimeout=-1", "consistency=weak",
@@ -308,10 +308,10 @@ def test_incomplete_inline_credentials_do_not_fall_back_to_config_file():
                                    "retryMaxRetries=-1"])
 def test_invalid_borneo_option_values(option):
     with pytest.raises(ValueError):
-        NoSqlDbConnectionString("nosqldb+on_prem://localhost/?" + option).get_nosql_handle_config()
+        OracleNoSqlDbConnectionString("nosqldb+on_prem://localhost/?" + option).get_nosql_handle_config()
 
 
 @pytest.mark.parametrize("host_index,error", [(-1, IndexError), (2, IndexError), (True, TypeError), ("0", TypeError)])
 def test_invalid_host_selection(host_index, error):
     with pytest.raises(error):
-        NoSqlDbConnectionString("nosqldb://host").get_endpoint(host_index)
+        OracleNoSqlDbConnectionString("nosqldb://host").get_endpoint(host_index)

@@ -20,7 +20,7 @@ def store():
     table_name = f"test_lc_store_{uuid4().hex}"
     backend = OracleNoSqlDbStore.create_from_db_endpoint(
         ORACLE_NOSQL_DB_ENDPOINT, table_name=table_name,
-        debug=False, drop_tables=False,
+        debug=False, drop_table=False,
     )
     try:
         yield backend
@@ -77,3 +77,43 @@ async def test_search_prefix(store, reference):
     s_results = await store.asearch(("user", "memories", "m1"))
     r_results = await reference.asearch(("user", "memories", "m1"))
     assert {r.key for r in s_results} == {r.key for r in r_results}
+
+
+async def test_bound_namespace_components(store):
+    # Exercise the database parser and bindings, which the unit fake cannot validate.
+    components = ["O'Reilly", "x' OR true OR 'x'='x", "用户", r"a\b"]
+    for index, component in enumerate(components):
+        namespace = (component, "memories", "nested")
+        await store.aput(namespace, str(index), {"text": component})
+
+    for index, component in enumerate(components):
+        for prefix in [(component,), (component, "memories"),
+                       (component, "memories", "nested")]:
+            matches = await store.asearch(prefix)
+            assert [item.key for item in matches] == [str(index)]
+            assert matches[0].value == {"text": component}
+
+    assert {item.key for item in await store.asearch(())} == {
+        str(index) for index in range(len(components))
+    }
+
+
+async def test_list_namespaces_matches_reference(store, reference):
+    for backend in (store, reference):
+        for index, namespace in enumerate([
+            ("users", "profile"), ("users", "profile"),
+            ("users", "memories"), ("teams", "memories"), ("docs",),
+        ]):
+            await backend.aput(namespace, str(index), {"n": index})
+
+    for options in [
+        {},
+        {"prefix": ("users",)},
+        {"suffix": ("memories",)},
+        {"prefix": ("*", "memories")},
+        {"max_depth": 1, "limit": 1, "offset": 1},
+        {"suffix": ("memories",), "limit": 1, "offset": 1},
+    ]:
+        expected = reference.list_namespaces(**options)
+        assert store.list_namespaces(**options) == expected
+        assert await store.alist_namespaces(**options) == expected
